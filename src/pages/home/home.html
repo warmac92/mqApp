@@ -1,14 +1,44 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+  <div align="center">   
+  <ion-navbar >
+    <ion-title>Acme Inc. machineQ Control Panel</ion-title>
+    <button color="danger" ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    <ion-buttons round outline end> <button color="danger" ion-button round outline (click)="logout()"> Logout </button> </ion-buttons>
   </ion-navbar>
+</div> 
 </ion-header>
 
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+
+
+
+<ion-content class="card-background-page">
+<p align="center" style="color:white"><b>Last Refresh: {{date | date : 'mediumTime'}}</b></p>
+    <!-- <ion-card *ngFor="let device of panel" >
+      <img src="assets/imgs/orange.jpg"/>
+      <div class="card-title">{{device.name}}</div>
+      <div class="card-subtitle">{{device.temperature}}°C</div>
+    </ion-card> -->
+
+    <ion-card *ngFor="let device of panel; let i = index" >
+      <ion-card-header [ngStyle]="{'background':device.color}" style="font-size: 0.9em" (click)="toogleAccordion(i)">
+        <b>{{device.name}} &nbsp;&nbsp; {{device.temperature | number:'1.0-1'}}°F &nbsp;&nbsp; {{device.humidity}}% &nbsp;&nbsp;&nbsp;&nbsp;<i *ngIf="device.water<0.45 && device.water>=0" class="fa fa-tint"></i> <i *ngIf="device.water<=1 && device.water>=0.75" class="fa fa-tint" style="color:red"></i><i *ngIf="device.water>=0.45 && device.water<0.75" class="fa fa-tint" style="color:blue"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+          <i *ngIf="device.healthStatus==='ACTIVE'" class="fa fa-check" style="color:green"></i><i *ngIf="device.healthStatus && device.healthStatus!=='ACTIVE'" class="fa fa-times" style="color:red"></i></b>
+      </ion-card-header>
+
+      <ion-card-content  [ngStyle]="{'background':device.color}" (click)="toogleAccordion(i)" *ngIf="show[i]">
+        <div>
+         <p>Device ID: {{device.id}}<br>Water Level: {{device.waterStatus}}<br>Status: {{device.healthStatus}}<br>Battery Level: {{device.batteryLevel}}<br>Last 24 HR Uplink: {{device.uplink}}<br>Last 24 HR Downlink: {{device.downlink}}<br><i (click)="showStats(device.id)" class="fa fa-line-chart" aria-hidden="true">View 7 Days Data</i></p>
+        </div>
+      </ion-card-content>
+
+
+    </ion-card>
+    <br>
+    <ion-card>
+    <agm-map  [zoom]="6" [latitude]="42.096578" [longitude]="-71.345812">
+        <agm-marker *ngFor="let device of panel;let j=index;" [latitude]="device.lat" [longitude]="device.long" (markerClick)="toogleAccordion(j)"></agm-marker>
+      </agm-map>
+    </ion-card>
 </ion-content>

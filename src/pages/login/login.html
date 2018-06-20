@@ -1,0 +1,55 @@
+
+<ion-content class="bg-style">
+      <!-- Logo -->
+    <section align="center" class="section-logo">
+        <img src="assets/imgs/logo.png" width="300px" title="Machine Q Central">
+    </section>
+      <!-- Logo -->
+
+  
+      <!-- Login -->
+    <div *ngIf="!showForgotPassword">
+    <form (submit)="doLogin()">
+    <ion-list  class="section-login" align="center">
+      <ion-item>
+        <ion-label fixed>{{ 'USERNAME' }}</ion-label>
+        <ion-input type="email" [(ngModel)]="account.username" name="username"></ion-input>
+      </ion-item>
+      <br>
+      <ion-item>
+        <ion-label fixed>{{ 'PASSWORD' }}</ion-label>
+        <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>
+      </ion-item>
+      <br>
+  
+          <ion-label style="color:white;">Remember Login?
+          <ion-checkbox (click)="stayLogged(stayLoggedIn)"color="dark" [checked]="stayLoggedIn" [(ngModel)]="stayLoggedIn" name="loggedIn"></ion-checkbox>
+          </ion-label>
+          <ion-label (click)="showForgot()" style="color:white;">Forgot your password? Click here to reset.</ion-label>
+      <div padding>
+        <button ion-button color="secondary" block>{{ 'LOGIN' }}</button>
+      </div>
+    </ion-list>
+  </form>
+  </div>
+
+  <div *ngIf="showForgotPassword">
+      <form (submit)="doForgotPassword()">
+          <ion-list  class="section-login" align="center">
+            <ion-label style="color:white;" align="center" >{{ 'FORGOT PASSWORD' }}</ion-label>
+            <ion-item>
+              <ion-label fixed>{{ 'USERNAME' }}</ion-label>
+              <ion-input type="email" [(ngModel)]="account.username" name="username"></ion-input>
+            </ion-item>
+            <br>
+            <ion-label (click) = "showForgot()" style="color:white;">Already have an account? Click here to login.</ion-label>
+            <div padding>
+              <button ion-button color="secondary" block>{{ 'SUBMIT' }}</button>
+            </div>
+          </ion-list>
+        </form>
+  </div>
+    <!-- Login -->
+
+
+</ion-content>

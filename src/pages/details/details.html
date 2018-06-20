@@ -1,0 +1,52 @@
+<!--
+  Generated template for the DetailsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <div align="center">   
+    <ion-navbar >
+      <ion-title>Settings</ion-title>
+      <button color="danger" ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+      <ion-buttons round outline end> <button color="danger" ion-button round outline (click)="logout()"> Logout </button> </ion-buttons>
+    </ion-navbar>
+  </div> 
+  </ion-header>
+
+
+<ion-content padding>
+<ion-list>
+    <ion-item>
+        <ion-label><b>Temperature Limits</b></ion-label>
+        <ion-range color="danger" dualKnobs="true" [(ngModel)]="tempKnobValues" pin="true" min="-10" max="120" step="1">
+            <ion-icon color="danger" range-left small name="thermometer"></ion-icon> <ion-label range-left>-10°F</ion-label>
+            <ion-icon color="danger" range-right large name="thermometer"></ion-icon> <ion-label range-right>120°F</ion-label>
+        </ion-range>
+        <ion-label>Minimum: {{tempKnobValues.lower}}°F &nbsp;&nbsp;&nbsp;Maximum: {{tempKnobValues.upper}}°F</ion-label>
+      </ion-item>
+
+      <br>
+      <br>
+      <br>
+      <ion-item>
+          <ion-label><b>Humidity Limits</b></ion-label>
+          
+          <ion-range color="danger" dualKnobs="true" [(ngModel)]="humidityKnobValues" pin="true" min="0" max="100" step="1">
+              <ion-icon color="danger" range-left small name="water"></ion-icon> <ion-label range-left>0%</ion-label>
+              <ion-icon color="danger" range-right large name="water"></ion-icon> <ion-label range-right>100%</ion-label>
+          </ion-range>
+          <ion-label>Minimum: {{humidityKnobValues.lower}}% &nbsp;&nbsp;&nbsp;Maximum: {{humidityKnobValues.upper}}%</ion-label>
+
+        </ion-item>
+        <br>
+        <div align="center">
+
+                <button  (click)="saveLimits()" ion-button color="danger">{{ 'SAVE LIMITS' }}</button>
+                <button  (click)="resetLimits()" ion-button color="danger">{{ 'SET TO DEFAULT' }}</button>
+        </div>
+</ion-list>    
+     
+</ion-content>

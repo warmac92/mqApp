@@ -3,25 +3,37 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-
+import {HttpClientModule} from '@angular/common/http';
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
+import { LoginPage } from '../pages/login/login';
+import { LoginService } from '../services/login.service';
+import { IonicStorageModule } from '@ionic/storage';
+import { CookieService } from 'ngx-cookie-service';
+import { Util } from '../constants/util';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    LoginPage
   ],
   imports: [
+    AngularFontAwesomeModule,
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    HttpClientModule,
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    LoginPage
   ],
   providers: [
+    Util,
+    CookieService,
+    LoginService,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

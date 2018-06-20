@@ -1,0 +1,45 @@
+<!--
+  Generated template for the LegendPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <div align="center">   
+    <ion-navbar >
+      <ion-title>Legend</ion-title>
+      <button color="danger" ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+      <ion-buttons round outline end> <button color="danger" ion-button round outline (click)="logout()"> Logout </button> </ion-buttons>
+    </ion-navbar>
+  </div> 
+  </ion-header>
+
+
+
+<ion-content style="background-color: #F64D25" padding>
+    <ion-card>
+        <ion-card-header align="center">
+          <ion-label> <b>GATEWAY STATUS</b></ion-label>
+          <i class="fa fa-check" style="font-size:2em;color:green"></i><i>Gateway Active</i><div class="divider"></div><i class="fa fa-times" style="font-size:2em;color:red"></i><i> Gateway Inactive</i>
+        </ion-card-header>
+      </ion-card>
+
+      <ion-card>
+          <ion-card-header align="center">
+            <ion-label><b>WATER LEVEL STATUS</b></ion-label>
+            <i class="fa fa-tint" style="font-size:2em;"></i><i> No Water</i><div class="divider"></div><i class="fa fa-tint" style="font-size:2em;color:blue"></i><i> Rain</i><div class="divider"></div><i class="fa fa-tint" style="font-size:2em;color:red"></i><i> Flooding</i>
+          </ion-card-header>
+        </ion-card>
+
+        <ion-card>
+            <ion-card-header align="center">
+              <ion-label><b>TEMPERATURE COLOR</b></ion-label>
+              <i class="fa fa-square" style="font-size:2em;color:salmon"></i><i> Temp. > Maximum Limit</i><div class="divider"></div><i class="fa fa-square" style="font-size:2em;color:lightblue"></i><i> Temp. < Minimum Limit</i>
+            </ion-card-header>
+          </ion-card>
+  
+  
+
+</ion-content>
