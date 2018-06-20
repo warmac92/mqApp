@@ -4,6 +4,8 @@ import { HomePage } from './home';
 import { DeviceService } from '../../services/device.service';
 import { IonicStorageModule } from '@ionic/storage';
 import { AgmCoreModule } from '@agm/core';
+import { Geolocation } from '@ionic-native/geolocation';
+
 @NgModule({
   declarations: [
     HomePage
@@ -17,7 +19,7 @@ import { AgmCoreModule } from '@agm/core';
     })
   ],
   providers: [
-    DeviceService
+    DeviceService,Geolocation
   ]
 })
 export class HomePageModule {}

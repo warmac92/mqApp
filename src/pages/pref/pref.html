@@ -6,10 +6,15 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>pref</ion-title>
-  </ion-navbar>
-
+    <div align="center">   
+        <ion-navbar >
+          <ion-title>Preferences</ion-title>
+          <button color="danger" ion-button menuToggle>
+              <ion-icon name="menu"></ion-icon>
+            </button>
+          <ion-buttons round outline end> <button color="danger" ion-button round outline (click)="logout()"> Logout </button> </ion-buttons>
+        </ion-navbar>
+      </div>  
 </ion-header>
 
 

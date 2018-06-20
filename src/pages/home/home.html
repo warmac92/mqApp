@@ -39,6 +39,9 @@
     <ion-card>
     <agm-map  [zoom]="6" [latitude]="42.096578" [longitude]="-71.345812">
         <agm-marker *ngFor="let device of panel;let j=index;" [latitude]="device.lat" [longitude]="device.long" (markerClick)="toogleAccordion(j)"></agm-marker>
+        <agm-circle  [radius]="10" [fillColor]="'blue'" [circleDraggable]="false"
+        [editable]="true" [latitude]="userLat" [longitude]="userLong"></agm-circle>
+
       </agm-map>
     </ion-card>
 </ion-content>

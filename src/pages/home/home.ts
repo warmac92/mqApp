@@ -5,6 +5,7 @@ import { DeviceInfo } from '../../model/DeviceInfo';
 import { AlertController } from 'ionic-angular';
 import {LoginPage} from '../login/login';
 import {CookieService} from 'ngx-cookie-service';
+import { Geolocation } from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
@@ -21,9 +22,18 @@ export class HomePage {
   tMax:number;
   hMin:number;
   hMax:number;
-  constructor(private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
+  userLat:number;
+  userLong:number;
+  iconObject:string;
+  constructor(private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
    this.date = new Date();
-   
+   this.geolocation.getCurrentPosition().then((resp)=>{
+    this.userLat = resp.coords.latitude;
+    this.userLong = resp.coords.longitude;
+    this.iconObject= 'https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png';
+  }).catch((error)=>{
+    console.log("error");
+  })
 
     if(!this.cookieService.get('tMin') || !this.cookieService.get('tMax') || !this.cookieService.get('hMin') || !this.cookieService.get('hMax'))
     {
@@ -53,6 +63,7 @@ export class HomePage {
     this.date = new Date();
     this.panel=[];
     this.show=[];
+
     this.deviceService.getAllGateways().subscribe((gatewaysFromApi:any[])=>{
       
       this.gateways=gatewaysFromApi['Gateways'];
