@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {CookieService} from 'ngx-cookie-service';
+import { AlertController } from 'ionic-angular';
 
 /**
  * Generated class for the PrefPage page.
@@ -17,8 +18,40 @@ import {CookieService} from 'ngx-cookie-service';
 export class PrefPage {
   companyName: any;
   unit:string;
-  constructor(public navCtrl: NavController, public cookieService: CookieService, public navParams: NavParams) {
-    this.unit="celsius";
+  isCelChecked:boolean;
+  isFarChecked:boolean;
+  constructor(private alertCtrl: AlertController, public navCtrl: NavController, public cookieService: CookieService, public navParams: NavParams) {
+   
+    if(!this.cookieService.get('unit'))
+   {
+     this.unit='celsius';
+     this.isCelChecked=true;
+     this.isFarChecked=false;
+   }
+   else
+   {
+     this.unit=this.cookieService.get('unit');
+     if(this.unit=='celsius')
+     {
+       this.isCelChecked=true;
+       this.isFarChecked=false;
+     }
+     else
+     {
+       this.isFarChecked=true;
+       this.isCelChecked=false;
+     }
+   }
+
+
+   if(!this.cookieService.get('compaName'))
+   {
+     this.companyName="Acme Inc."
+   }
+   else
+   {
+     this.companyName=this.cookieService.get('compaName');
+   }
   }
 
   ionViewDidLoad() {
@@ -26,10 +59,30 @@ export class PrefPage {
   }
 
   saveChanges(){
+    if(this.companyName=='' || this.companyName==null)
+    {
+      this.showEmptyValuesAlert();
+      return;
+    }
     this.cookieService.set('compaName',this.companyName);
     console.log(this.cookieService.get('compaName'));
     this.cookieService.set('unit',this.unit);
     console.log(this.cookieService.get('unit'));
+    let alert = this.alertCtrl.create({
+      title: 'Preferences saved successfully!',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
+
+  showEmptyValuesAlert()
+  {
+    let alert = this.alertCtrl.create({
+      title: 'Company name cannot be empty.',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+
   }
 
   changeTemp(value)

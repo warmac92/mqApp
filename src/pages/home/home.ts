@@ -29,7 +29,7 @@ export class HomePage {
   unit:string;
   constructor(private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
    this.date = new Date();
-   if(!this.cookieService.get('compaName')){
+   if(this.cookieService.get('compaName')){
          this.companyName = "Acme Inc.";
         }else{
          this.companyName = this.cookieService.get('compaName');
