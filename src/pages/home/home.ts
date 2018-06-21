@@ -4,7 +4,6 @@ import { DeviceService } from '../../services/device.service';
 import { DeviceInfo } from '../../model/DeviceInfo';
 import { AlertController } from 'ionic-angular';
 import {LoginPage} from '../login/login';
-import { LocalNotifications } from '@ionic-native/local-notifications';
 import {CookieService} from 'ngx-cookie-service';
 import { Geolocation } from '@ionic-native/geolocation';
 
@@ -28,9 +27,9 @@ export class HomePage {
   iconObject:string;
   companyName:string;
   unit:string;
-  constructor(private localNotifications: LocalNotifications, private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
    this.date = new Date();
-   if(!this.cookieService.get('compaName')){
+   if(this.cookieService.get('compaName')){
          this.companyName = "Acme Inc.";
         }else{
          this.companyName = this.cookieService.get('compaName');
