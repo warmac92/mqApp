@@ -24,7 +24,6 @@ export class LoginPage {
       password: ''
     }
     this.showForgotPassword = false;
-    
 
     if(this.cookieService.get('stayLoggedIn'))
     {

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {CookieService} from 'ngx-cookie-service';
 
 /**
  * Generated class for the PrefPage page.
@@ -14,12 +15,26 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'pref.html',
 })
 export class PrefPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  companyName: any;
+  unit:string;
+  constructor(public navCtrl: NavController, public cookieService: CookieService, public navParams: NavParams) {
+    this.unit="celsius";
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PrefPage');
+  }
+
+  saveChanges(){
+    this.cookieService.set('compaName',this.companyName);
+    console.log(this.cookieService.get('compaName'));
+    this.cookieService.set('unit',this.unit);
+    console.log(this.cookieService.get('unit'));
+  }
+
+  changeTemp(value)
+  {
+    this.unit=value;
   }
 
 }
