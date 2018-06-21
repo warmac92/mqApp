@@ -18,14 +18,14 @@
 
 
 <ion-content padding>
-    
+    <h3 align="center">Update Company Name</h3>
       <ion-list>
           <ion-item>
-            <ion-label color="danger">Edit Company Name: </ion-label>
+            <ion-label color="danger">Company Name: </ion-label>
             <ion-input [(ngModel)]="companyName" name="companyName" placeholder="Please enter Company Name"></ion-input>
           </ion-item>
       </ion-list>
-      <br><br><h3 align="center">Change between Fahrenheit or Celsius</h3>
+      <br><br><h3 align="center">Select Temperature Unit</h3>
       <ion-list radio-group>
           <ion-item>
             <ion-label color="black">Fahrenheit</ion-label>
@@ -35,8 +35,8 @@
             <ion-label color="black">Celsius</ion-label>
             <ion-radio color="danger" (click)="changeTemp('celsius')" [checked]="isFarChecked" ></ion-radio>
           </ion-item>
-      </ion-list><br><br>
+      </ion-list>
       <div align="center">
-      <button ion-button color="danger" (click)="saveChanges()">Save Changes</button>
+      <button ion-button color="danger" (click)="saveChanges()">SAVE CHANGES</button>
       </div>
 </ion-content>
