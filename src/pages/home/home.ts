@@ -25,8 +25,17 @@ export class HomePage {
   userLat:number;
   userLong:number;
   iconObject:string;
+  companyName:string;
+  unit:string;
   constructor(private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
    this.date = new Date();
+   if(!this.cookieService.get('compaName')){
+         this.companyName = "Acme Inc.";
+        }else{
+         this.companyName = this.cookieService.get('compaName');
+         console.log("companyName");
+       }
+
    this.geolocation.getCurrentPosition().then((resp)=>{
     this.userLat = resp.coords.latitude;
     this.userLong = resp.coords.longitude;
@@ -95,7 +104,14 @@ export class HomePage {
             
             if(deviceInf.Payload[0].Data.temperature)
             {
-            currentPanel.temperature = ((deviceInf.Payload[0].Data.temperature)*(9/5) + (32) );
+              console.log(this.cookieService.get('unit'));
+              if(this.cookieService.get('unit')=="celsius"){
+                currentPanel.temperature = deviceInf.Payload[0].Data.temperature;
+                this.unit="°C";
+              }else{
+                currentPanel.temperature = ((deviceInf.Payload[0].Data.temperature)*(9/5) + (32) );
+                this.unit="°F";
+              }
             }
             else
             {
