@@ -46,40 +46,90 @@ export class DetailsPage {
     console.log('ionViewDidLoad DetailsPage');
   }
 
-  saveLimits()
+  saveHumidLimits()
   {
-    this.cookieService.set('tMax',this.tempKnobValues.upper);
-    this.cookieService.set('tMin',this.tempKnobValues.lower);
     this.cookieService.set('hMin',this.humidityKnobValues.lower);
     this.cookieService.set('hMax',this.humidityKnobValues.upper);
-    this.showLimitsAlert();  
+    this.showHumidsLimitsAlert();
   }
 
-  resetLimits()
+  saveTempLimits()
   {
-    this.tempKnobValues.upper="100";
-    this.tempKnobValues.lower="32";
+    this.cookieService.set('tMax',this.tempKnobValues.upper);
+    this.cookieService.set('tMin',this.tempKnobValues.lower);
+    this.showTempsLimitsAlert();
+  }
 
-    this.humidityKnobValues.lower="10";
-    this.humidityKnobValues.upper="90";
+
+  
+  resetTempLimits()
+  {
+
+    this.tempKnobValues = {
+      upper: 100,
+      lower:32
+    }
 
     this.cookieService.set('tMax',this.tempKnobValues.upper);
     this.cookieService.set('tMin',this.tempKnobValues.lower);
+
+    this.showTempsResetAlert();
+  }
+
+  resetHumidLimits()
+  {
+
+    this.humidityKnobValues = {
+      upper:90,
+      lower:10
+    }
+
     this.cookieService.set('hMin',this.humidityKnobValues.lower);
     this.cookieService.set('hMax',this.humidityKnobValues.upper);
 
+    this.showHumidsResetAlert();
   
   }
 
-  showLimitsAlert()
+  showTempsLimitsAlert()
   {
     let alert = this.alertCtrl.create({
-      title: 'Limits saved!',
-      subTitle: 'Temperature and humidty limits set successfully.',
+      title: 'Temperature limits saved!',
       buttons: ['Ok']
     });
     alert.present();
   }
+
+  showHumidsLimitsAlert()
+  {
+    let alert = this.alertCtrl.create({
+      title: 'Humidity limits saved!',
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
+
+
+  showTempsResetAlert()
+  {
+    let alert = this.alertCtrl.create({
+      title: 'Temperature limits set to default successfully!',
+      buttons: ['Ok']
+    });
+    alert.present();
+
+  }
+
+  showHumidsResetAlert()
+  {
+    let alert = this.alertCtrl.create({
+      title: 'Humidity limits set to default successfully!',
+      buttons: ['Ok']
+    });
+    alert.present();
+
+  }
+
 
   logout()
   {

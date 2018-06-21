@@ -26,8 +26,13 @@
             <ion-icon color="danger" range-right large name="thermometer"></ion-icon> <ion-label range-right>120°F</ion-label>
         </ion-range>
         <ion-label>Minimum: {{tempKnobValues.lower}}°F &nbsp;&nbsp;&nbsp;Maximum: {{tempKnobValues.upper}}°F</ion-label>
-      </ion-item>
 
+      </ion-item>
+      <div align="center">
+
+          <button  (click)="saveTempLimits()" ion-button color="danger">{{ 'SAVE LIMITS' }}</button>
+          <button  (click)="resetTempLimits()" ion-button color="danger">{{ 'SET TO DEFAULT' }}</button>
+  </div>
       <br>
       <br>
       <br>
@@ -41,12 +46,13 @@
           <ion-label>Minimum: {{humidityKnobValues.lower}}% &nbsp;&nbsp;&nbsp;Maximum: {{humidityKnobValues.upper}}%</ion-label>
 
         </ion-item>
-        <br>
         <div align="center">
 
-                <button  (click)="saveLimits()" ion-button color="danger">{{ 'SAVE LIMITS' }}</button>
-                <button  (click)="resetLimits()" ion-button color="danger">{{ 'SET TO DEFAULT' }}</button>
-        </div>
+            <button  (click)="saveHumidLimits()" ion-button color="danger">{{ 'SAVE LIMITS' }}</button>
+            <button  (click)="resetHumidLimits()" ion-button color="danger">{{ 'SET TO DEFAULT' }}</button>
+       </div>
+        <br>
+        
 </ion-list>    
      
 </ion-content>
