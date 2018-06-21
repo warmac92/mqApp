@@ -89,4 +89,5 @@
     </edit-config>
     <engine name="ios" spec="4.5.4" />
     <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-plugin-local-notification" spec="^0.9.0-beta.2" />
 </widget>

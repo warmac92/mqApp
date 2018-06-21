@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {CookieService} from 'ngx-cookie-service';
+import { AlertController } from 'ionic-angular';
 
 /**
  * Generated class for the PrefPage page.
@@ -17,7 +18,7 @@ import {CookieService} from 'ngx-cookie-service';
 export class PrefPage {
   companyName: any;
   unit:string;
-  constructor(public navCtrl: NavController, public cookieService: CookieService, public navParams: NavParams) {
+  constructor(private alertCtrl: AlertController, public navCtrl: NavController, public cookieService: CookieService, public navParams: NavParams) {
     this.unit="celsius";
   }
 
@@ -30,6 +31,11 @@ export class PrefPage {
     console.log(this.cookieService.get('compaName'));
     this.cookieService.set('unit',this.unit);
     console.log(this.cookieService.get('unit'));
+    let alert = this.alertCtrl.create({
+      title: 'Preferences Saved',
+      buttons: ['Dismiss']
+    });
+    alert.present();
   }
 
   changeTemp(value)
