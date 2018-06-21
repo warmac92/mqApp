@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {CookieService} from 'ngx-cookie-service';
 import {LoginPage} from '../login/login';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AlertController } from 'ionic-angular';
 
 /**
@@ -18,7 +19,7 @@ import { AlertController } from 'ionic-angular';
 })
 export class LegendPage {
 
-  constructor(private alertCtrl: AlertController,private cookieService: CookieService,public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private localNotifications: LocalNotifications,private alertCtrl: AlertController,private cookieService: CookieService,public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {

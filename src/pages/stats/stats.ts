@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 /**
  * Generated class for the StatsPage page.
@@ -15,7 +16,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class StatsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private localNotifications: LocalNotifications,public navCtrl: NavController,public navParams: NavParams) {
   }
 
   ionViewDidLoad() {

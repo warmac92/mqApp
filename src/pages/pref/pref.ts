@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {CookieService} from 'ngx-cookie-service';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 /**
  * Generated class for the PrefPage page.
@@ -17,7 +18,7 @@ import {CookieService} from 'ngx-cookie-service';
 export class PrefPage {
   companyName: any;
   unit:string;
-  constructor(public navCtrl: NavController, public cookieService: CookieService, public navParams: NavParams) {
+  constructor(private localNotifications: LocalNotifications,public navCtrl: NavController,public cookieService: CookieService,public navParams: NavParams) {
     this.unit="celsius";
   }
 

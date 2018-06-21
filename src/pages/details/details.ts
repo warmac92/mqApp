@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {CookieService} from 'ngx-cookie-service';
+import { DeviceInfo } from '../../model/DeviceInfo';
 import {LoginPage} from '../login/login';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import { AlertController } from 'ionic-angular';
 
 /**
@@ -19,7 +21,7 @@ import { AlertController } from 'ionic-angular';
 export class DetailsPage {
   tempKnobValues:any;
   humidityKnobValues:any;
-  constructor(private alertCtrl: AlertController,private cookieService: CookieService,public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private localNotifications: LocalNotifications,private alertCtrl: AlertController,private cookieService: CookieService,public navCtrl: NavController, public navParams: NavParams) {
   
   this.tempKnobValues = {
     upper:null,
@@ -53,6 +55,22 @@ export class DetailsPage {
     this.cookieService.set('hMin',this.humidityKnobValues.lower);
     this.cookieService.set('hMax',this.humidityKnobValues.upper);
     this.showLimitsAlert();  
+  }
+
+  showNotifications(){
+    let curPan = new DeviceInfo();
+    if(parseFloat(this.cookieService.get('tMin'))>curPan.temperature){
+      this.localNotifications.schedule({
+        title: 'mQCentral App',
+        text: 'The weather is cold outside.'
+      });
+    }
+    if(parseFloat(this.cookieService.get('tMax'))<curPan.temperature){
+      this.localNotifications.schedule({
+        title: 'mQCentral App',
+        text: 'The weather is very hot outside.'
+      });
+    }
   }
 
   resetLimits()

@@ -9,6 +9,7 @@ import { LoginPage } from '../pages/login/login';
 import { LoginService } from '../services/login.service';
 import { IonicStorageModule } from '@ionic/storage';
 import { CookieService } from 'ngx-cookie-service';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Util } from '../constants/util';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
@@ -33,6 +34,7 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
   providers: [
     Util,
     CookieService,
+    LocalNotifications,
     LoginService,
     StatusBar,
     SplashScreen,
