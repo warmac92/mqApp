@@ -19,7 +19,7 @@
 
 <ion-content padding>
 <ion-list>
-    <ion-item>
+    <ion-item *ngIf="!showCelsius">
         <ion-label><b>Temperature Limits</b></ion-label>
         <ion-range color="danger" dualKnobs="true" [(ngModel)]="tempKnobValues" pin="true" min="-10" max="120" step="1">
             <ion-icon color="danger" range-left small name="thermometer"></ion-icon> <ion-label range-left>-10°F</ion-label>
@@ -28,6 +28,15 @@
         <ion-label>Minimum: {{tempKnobValues.lower}}°F &nbsp;&nbsp;&nbsp;Maximum: {{tempKnobValues.upper}}°F</ion-label>
 
       </ion-item>
+      <ion-item *ngIf="showCelsius">
+            <ion-label><b>Temperature Limits</b></ion-label>
+            <ion-range color="danger" dualKnobs="true" [(ngModel)]="tempKnobValues" pin="true" min="-23" max="48" step="1">
+                <ion-icon color="danger" range-left small name="thermometer"></ion-icon> <ion-label range-left>-23°C</ion-label>
+                <ion-icon color="danger" range-right large name="thermometer"></ion-icon> <ion-label range-right>48°C</ion-label>
+            </ion-range>
+            <ion-label>Minimum: {{tempKnobValues.lower | number:'1.0-0'}}°C &nbsp;&nbsp;&nbsp;Maximum: {{tempKnobValues.upper}}°C</ion-label>
+    
+          </ion-item>
       <div align="center">
 
           <button  (click)="saveTempLimits()" ion-button color="danger">{{ 'SAVE LIMITS' }}</button>

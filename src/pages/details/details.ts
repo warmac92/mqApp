@@ -19,7 +19,10 @@ import { AlertController } from 'ionic-angular';
 export class DetailsPage {
   tempKnobValues:any;
   humidityKnobValues:any;
+  showCelsius:boolean;
   constructor(private alertCtrl: AlertController,private cookieService: CookieService,public navCtrl: NavController, public navParams: NavParams) {
+  
+  this.showCelsius=false;
   
   this.tempKnobValues = {
     upper:null,
@@ -31,6 +34,9 @@ export class DetailsPage {
     lower:null
   };
 
+
+ 
+
   this.tempKnobValues.upper = this.cookieService.get('tMax');
   this.tempKnobValues.lower = this.cookieService.get('tMin');
   
@@ -38,7 +44,10 @@ export class DetailsPage {
   this.humidityKnobValues.upper = this.cookieService.get('hMax');
   this.humidityKnobValues.lower = this.cookieService.get('hMin');
 
-
+  if(this.cookieService.get('unit')=='celsius')
+  {
+    this.showCelsius = true;
+  }
 
   }
 
@@ -64,11 +73,23 @@ export class DetailsPage {
   
   resetTempLimits()
   {
+    if(this.cookieService.get('unit')=='celsius')
+    {
+      this.tempKnobValues = {
+        upper: 38,
+        lower:0
+      }
+  
+
+    }
+    else
+    {
 
     this.tempKnobValues = {
       upper: 100,
       lower:32
     }
+  }
 
     this.cookieService.set('tMax',this.tempKnobValues.upper);
     this.cookieService.set('tMin',this.tempKnobValues.lower);

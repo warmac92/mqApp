@@ -44,7 +44,7 @@ export class HomePage {
     console.log("error");
   })
 
-    if(!this.cookieService.get('tMin') || !this.cookieService.get('tMax') || !this.cookieService.get('hMin') || !this.cookieService.get('hMax'))
+    if(!this.cookieService.get('tMin') || !this.cookieService.get('tMax') || !this.cookieService.get('hMin') || !this.cookieService.get('hMax') || !this.cookieService.get('unit'))
     {
       this.cookieService.set('tMin',"32");
       this.cookieService.set('tMax',"100");
@@ -52,6 +52,8 @@ export class HomePage {
       this.cookieService.set('hMax',"90");
 
     }
+
+
 
       this.tMin = parseFloat(this.cookieService.get('tMin'));
       this.tMax = parseFloat(this.cookieService.get('tMax'));
