@@ -76,11 +76,11 @@ export class PrefPage {
       this.cookieService.set('tMin',tmin);
       this.cookieService.set('tMax',tmax);
     }
-    else if(this.unit=='fahrenheit' && this.cookieService.get('unit')=='fahrenheit ')
+    else if(this.unit==="fahrenheit" && this.cookieService.get('unit'))
     {
       this.cookieService.set('unit',this.unit);
-      var tmin = Math.round(((parseFloat(this.cookieService.get('tMin')) *(9/5))+(32))).toString();
-      var tmax = Math.round(((parseFloat(this.cookieService.get('tMax')) *(9/5))+(32))).toString();
+      var tmin = Math.round(((parseFloat(this.cookieService.get('tMin')))*(9/5))+32).toString();
+      var tmax = Math.round(((parseFloat(this.cookieService.get('tMax'))) *(9/5))+32).toString();
       this.cookieService.set('tMin',tmin);
       this.cookieService.set('tMax',tmax);
     }
