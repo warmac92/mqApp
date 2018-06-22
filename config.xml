@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.ionic.mqcentral" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>mQCentral App</name>
     <description>A mobile app for mQcentral</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <author email="macdevdeploy@gmail.com" href="http://macrosoftinc.com/">Macrosoft Inc Team</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
