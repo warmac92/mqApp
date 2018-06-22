@@ -5,14 +5,38 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>pref</ion-title>
-  </ion-navbar>
-
+  <div align="center">   
+    <ion-navbar >
+      <ion-title>Preferences</ion-title>
+      <button color="danger" ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+      <ion-buttons round outline end> <button color="danger" ion-button round outline (click)="logout()"> Logout </button> </ion-buttons>
+    </ion-navbar>
+  </div> 
 </ion-header>
 
 
 <ion-content padding>
-
+    <h3 align="center">Update Company Name</h3>
+      <ion-list>
+          <ion-item>
+            <ion-label color="danger">Company Name: </ion-label>
+            <ion-input [(ngModel)]="companyName" name="companyName" placeholder="Please enter Company Name"></ion-input>
+          </ion-item>
+      </ion-list>
+      <br><br><h3 align="center">Select Temperature Unit</h3>
+      <ion-list radio-group>
+          <ion-item>
+            <ion-label color="black">Fahrenheit</ion-label>
+            <ion-radio color="danger" (click)="changeTemp('farhenient')" [checked]="isCelChecked"></ion-radio>
+          </ion-item>
+          <ion-item>
+            <ion-label color="black">Celsius</ion-label>
+            <ion-radio color="danger" (click)="changeTemp('celsius')" [checked]="isFarChecked" ></ion-radio>
+          </ion-item>
+      </ion-list>
+      <div align="center">
+      <button ion-button color="danger" (click)="saveChanges()">SAVE CHANGES</button>
+      </div>
 </ion-content>

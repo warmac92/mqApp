@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import {LoginPage} from '../login/login';
+
 /**
- * Generated class for the LegendPage page.
+ * Generated class for the StatsPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -10,23 +10,16 @@ import {LoginPage} from '../login/login';
 
 @IonicPage()
 @Component({
-  selector: 'page-legend',
-  templateUrl: 'legend.html',
+  selector: 'page-stats',
+  templateUrl: 'stats.html',
 })
-export class LegendPage {
+export class StatsPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad LegendPage');
-  }
-
-  logout()
-  {
-    this.navCtrl.setRoot(LoginPage);
-
-
+    console.log('ionViewDidLoad StatsPage');
   }
 
 }

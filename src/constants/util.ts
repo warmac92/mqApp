@@ -1,5 +1,5 @@
 import {CookieService} from 'ngx-cookie-service';
-import {HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 
 
