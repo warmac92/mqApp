@@ -29,7 +29,9 @@
 
       <ion-card-content  [ngStyle]="{'background':device.color}" (click)="toogleAccordion(i)" *ngIf="show[i]">
         <div>
-         <p>Device ID: {{device.id}}<br>Water Level: {{device.waterStatus}}<br>Status: {{device.healthStatus}}<br>Battery Level: {{device.batteryLevel}}<br>Last 24 HR Uplink: {{device.uplink}}<br>Last 24 HR Downlink: {{device.downlink}}<br><i (click)="showStats(device.id)" class="fa fa-line-chart" aria-hidden="true">View 7 Days Data</i></p>
+         <p>Device ID: {{device.id}}<br>Water Level: {{device.waterStatus}}<br>Status: {{device.healthStatus}}<br>Battery Level: {{device.batteryLevel}}<br>Last 24 HR Uplink: {{device.uplink}}
+          <br>Last 24 HR Downlink: {{device.downlink}}<br>
+          <i (click)="showStats(device.id)" class="fa fa-line-chart" aria-hidden="true">View 7 Days Data</i></p>
         </div>
       </ion-card-content>
 

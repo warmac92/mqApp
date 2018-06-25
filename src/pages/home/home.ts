@@ -19,6 +19,7 @@ export class HomePage {
   show:boolean[];
   date: Date;
   tMin:number;
+  machineId:any;
   tMax:number;
   hMin:number;
   hMax:number;
@@ -198,10 +199,13 @@ export class HomePage {
 
   showStats(id)
   {
-    this.deviceService.getPayloadData(id).subscribe((payloads)=>{
-      console.log(payloads);
-    })
-    
+    this.machineId=id;
+    // this.getPayloadData(id).subscribe((payloads)=>{
+    //   console.log(payloads);
+    // })
+    this.cookieService.set('machineId',this.machineId);
+    console.log(this.cookieService.get('machineId'));
+    this.navCtrl.setRoot('StatsPage');
   }
 
   openPage()
