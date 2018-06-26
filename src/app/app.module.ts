@@ -4,6 +4,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import {HttpClientModule} from '@angular/common/http';
+import { LoadingController } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login';
 import { LoginService } from '../services/login.service';
@@ -39,6 +40,7 @@ import { ChartsModule } from 'ng2-charts';
     CookieService,
     LoginService,
     DeviceService,
+    LoadingController,
     DatePipe,
     StatusBar,
     SplashScreen,

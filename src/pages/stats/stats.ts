@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DeviceService } from '../../services/device.service';
 import {CookieService} from 'ngx-cookie-service';
 import { Chart } from 'chart.js';
+import { LoadingController } from 'ionic-angular';
 
 /**
  * Generated class for the StatsPage page.
@@ -36,7 +37,7 @@ export class StatsPage {
   showFahr: boolean;
   payloadData: any[];
   temperatures: number[];
-  constructor(public cookieService: CookieService,private deviceService: DeviceService, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public cookieService: CookieService,private deviceService: DeviceService, public navCtrl: NavController, public navParams: NavParams,public loadingCtrl: LoadingController) {
 
     this.payloadData=[];
     this.temperatures=[];
@@ -60,7 +61,7 @@ export class StatsPage {
     const utcTime = date.getUTCFullYear().toString()+"-"+dateMonthString+"-"+date.getUTCDate().toString()+"T00:00:00.000Z";
     
     this.deviceService.getPayloadData(macId,utcTime).subscribe((payloads:any[])=>{
-      
+      this.loading();
       this.payloadData=payloads['Payloads'];
       if(this.cookieService.get('unit')=="celsius")
       {
@@ -113,6 +114,14 @@ export class StatsPage {
   }
   }
 
+  loading(){
+    let load = this.loadingCtrl.create({
+      content:'Loading Please Wait....',
+      duration: 3000
+    });
+    load.present();
+  }
+
   doughnutCentigrade(){
     this.doughnutChart = new Chart(this.doughnutCentigradeCanvas.nativeElement, {
       type: 'doughnut',
@@ -122,9 +131,9 @@ export class StatsPage {
           label: '# of Votes',
           data: [this.a,this.b,this.c],
           backgroundColor: [
-            'rgba(255,99,132,0.2)',
-            'rgba(54,162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)'
+            'rgba(255,99,132,0.5)',
+            'rgba(54,162, 235, 0.5)',
+            'rgba(255, 206, 86, 0.5)'
           ],
           hoverBackgroundColor:[
             "#FF6384",
@@ -145,9 +154,9 @@ export class StatsPage {
           label: '# of Votes',
           data: [this.d,this.e,this.f],
           backgroundColor: [
-            'rgba(255,99,132,0.2)',
-            'rgba(54,162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)'
+            'rgba(255,99,132,0.5)',
+            'rgba(54,162, 235, 0.5)',
+            'rgba(255, 206, 86, 0.5)'
           ],
           hoverBackgroundColor:[
             "#FF6384",
