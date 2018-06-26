@@ -59,9 +59,8 @@ export class StatsPage {
       dateMonthString = "0"+date.getUTCMonth().toString();
     }
     const utcTime = date.getUTCFullYear().toString()+"-"+dateMonthString+"-"+date.getUTCDate().toString()+"T00:00:00.000Z";
-    
+    this.loading();
     this.deviceService.getPayloadData(macId,utcTime).subscribe((payloads:any[])=>{
-      this.loading();
       this.payloadData=payloads['Payloads'];
       if(this.cookieService.get('unit')=="celsius")
       {
@@ -117,7 +116,7 @@ export class StatsPage {
   loading(){
     let load = this.loadingCtrl.create({
       content:'Loading Please Wait....',
-      duration: 3000
+      duration: 4000
     });
     load.present();
   }
