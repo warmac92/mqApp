@@ -20,13 +20,13 @@ import { LoadingController } from 'ionic-angular';
 
 export class StatsPage {
 
-  @ViewChild('barCanvas') barCanvas;
   @ViewChild('doughnutCentigradeCanvas') doughnutCentigradeCanvas;
   @ViewChild('doughnutFahrenheitCanvas') doughnutFahrenheitCanvas;
 
-  barChart: any;
   doughnutChart: any;
   a: number;
+  tmax: number;
+  tmin: number;
   b: number;
   c: number;
   d: number;
@@ -38,9 +38,14 @@ export class StatsPage {
   payloadData: any[];
   temperatures: number[];
   constructor(public cookieService: CookieService,private deviceService: DeviceService, public navCtrl: NavController, public navParams: NavParams,public loadingCtrl: LoadingController) {
-
     this.payloadData=[];
     this.temperatures=[];
+    this.tmax = parseFloat(this.cookieService.get('tMax'));
+    console.log("tMax");
+    console.log(this.tmax);
+    this.tmin = parseFloat(this.cookieService.get('tMin'));
+    console.log("tMin");
+    console.log(this.tmin);
     this.a=0;
     this.b=0;
     this.c=0;
@@ -69,11 +74,11 @@ export class StatsPage {
       for(var i=0;i<this.payloadData.length;i++)
       {
         //this.temperatures.push(this.payloadData[i].Data.temperature); 
-        if(parseFloat(this.payloadData[i].Data.temperature)<=-15.00){
+        if(parseFloat(this.payloadData[i].Data.temperature)<=this.tmin){
           this.a++
-        }else if(parseFloat(this.payloadData[i].Data.temperature)>-15.00 && parseFloat(this.payloadData[i].Data.temperature)<25.00){
+        }else if(parseFloat(this.payloadData[i].Data.temperature)>this.tmin && parseFloat(this.payloadData[i].Data.temperature)<this.tmax){
           this.b++;
-        }else if(parseFloat(this.payloadData[i].Data.temperature)>=25.00){
+        }else if(parseFloat(this.payloadData[i].Data.temperature)>=this.tmax){
           this.c++;
         }
       }
@@ -87,7 +92,7 @@ export class StatsPage {
     if(this.cookieService.get('unit')=="celsius"){
     setTimeout(()=>{
       this.doughnutCentigrade();
-    }, 4000);
+    }, 4500);
     }else if(this.cookieService.get('unit')=="fahrenheit"){
       this.showCenti=true;
       this.showFahr=false;
@@ -100,11 +105,11 @@ export class StatsPage {
           this.g=(((parseFloat(this.payloadData[i].Data.temperature))*1.8)+32);
           }
           //this.temperatures.push(this.payloadData[i].Data.temperature); 
-          if((this.g)<=0.00){
+          if((this.g)<=this.tmin){
             this.d++
-          }else if((this.g)>0.00 && (this.g)<75.00){
+          }else if((this.g)>this.tmin && (this.g)<this.tmax){
             this.e++;
-          }else if((this.g)>=75.00){
+          }else if((this.g)>=this.tmax){
             this.f++;
           }
     }
@@ -116,7 +121,7 @@ export class StatsPage {
   loading(){
     let load = this.loadingCtrl.create({
       content:'Loading Please Wait....',
-      duration: 4000
+      duration: 5000
     });
     load.present();
   }
@@ -125,7 +130,7 @@ export class StatsPage {
     this.doughnutChart = new Chart(this.doughnutCentigradeCanvas.nativeElement, {
       type: 'doughnut',
       data:{
-        labels: ["<=-15","<-15 & 25>",">=25"],
+        labels: ["<="+this.tmin+"℃",">"+this.tmin+"℃ & <"+this.tmax+"℃",">="+this.tmax+"℃"],
         datasets: [{
           label: '# of Votes',
           data: [this.a,this.b,this.c],
@@ -148,7 +153,7 @@ export class StatsPage {
     this.doughnutChart = new Chart(this.doughnutFahrenheitCanvas.nativeElement, {
       type: 'doughnut',
       data:{
-        labels: ["<=0","<0 & 75>",">=75"],
+        labels: ["<="+this.tmin+"°F",">"+this.tmin+"°F & <"+this.tmax+"°F",">="+this.tmax+"°F"],
         datasets: [{
           label: '# of Votes',
           data: [this.d,this.e,this.f],
@@ -171,4 +176,10 @@ export class StatsPage {
     console.log('ionViewDidLoad StatsPage');
   }
 
+  goBar(){
+    this.navCtrl.setRoot('BarPage');
+  }
+
+  // this is the place from where line is starting
+  
 }
