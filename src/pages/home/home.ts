@@ -45,6 +45,10 @@ export class HomePage {
     console.log("error");
   })
 
+  if(!this.cookieService.get('unit'))
+  {
+    this.cookieService.set('unit',"celsius");
+  }
     if(!this.cookieService.get('tMin') || !this.cookieService.get('tMax') || !this.cookieService.get('hMin') || !this.cookieService.get('hMax') || !this.cookieService.get('unit'))
     {
       this.cookieService.set('tMin',"32");
