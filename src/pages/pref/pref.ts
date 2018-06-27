@@ -27,6 +27,7 @@ export class PrefPage {
      this.unit='celsius';
      this.isCelChecked=true;
      this.isFarChecked=false;
+     this.cookieService.set('unit','celsius');
    }
    else
    {
