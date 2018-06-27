@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,OnDestroy } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DeviceService } from '../../services/device.service';
 import { DeviceInfo } from '../../model/DeviceInfo';
@@ -19,6 +19,7 @@ export class HomePage {
   show:boolean[];
   date: Date;
   tMin:number;
+  machineId:any;
   tMax:number;
   hMin:number;
   hMax:number;
@@ -27,6 +28,7 @@ export class HomePage {
   iconObject:string;
   companyName:string;
   unit:string;
+  setIntervalId:any;
   constructor(private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
    this.date = new Date();
    if(!this.cookieService.get('compaName')){
@@ -61,12 +63,20 @@ export class HomePage {
 
   this.updateData();
 
-   setInterval(()=>{
+  this.setIntervalId= setInterval(()=>{
     this.updateData();
    },50000)
   }
 
   ionViewDidLoad() {
+  }
+
+  ngOnDestroy()
+  {
+    console.log('onDestroy Triggered');
+    if (this.setIntervalId) {
+      clearInterval(this.setIntervalId);
+    }
   }
 
   updateData()
@@ -200,10 +210,13 @@ export class HomePage {
 
   showStats(id)
   {
-    this.deviceService.getPayloadData(id).subscribe((payloads)=>{
-      console.log(payloads);
-    })
-    
+    this.machineId=id;
+    // this.getPayloadData(id).subscribe((payloads)=>{
+    //   console.log(payloads);
+    // })
+    this.cookieService.set('machineId',this.machineId);
+    console.log(this.cookieService.get('machineId'));
+    this.navCtrl.setRoot('StatsPage');
   }
 
   openPage()

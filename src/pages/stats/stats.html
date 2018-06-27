@@ -5,14 +5,40 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>stats</ion-title>
+  <div align="center">   
+  <ion-navbar >
+    <ion-title>7 Days Data</ion-title>
+    <button color="danger" ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    <ion-buttons round outline end> <button color="danger" ion-button round outline (click)="logout()"> Logout </button> </ion-buttons>
   </ion-navbar>
-
+</div> 
 </ion-header>
 
-
 <ion-content padding>
+
+  <div align="center">
+    <button ion-button color="danger" (click)="goBar()">Bar Graph</button>
+  </div>
+
+  <ion-card [hidden]="showCenti" >
+    <ion-card-header>
+      <h2 align="center"><b>Temperature in Centigrade</b></h2>
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #doughnutCentigradeCanvas></canvas>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card [hidden]="showFahr" >
+      <ion-card-header>
+        <h2 align="center"><b>Temperature in Fahrenheit</b></h2>
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #doughnutFahrenheitCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+    
 
 </ion-content>
