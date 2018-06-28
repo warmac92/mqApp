@@ -181,7 +181,7 @@ export class BarPage {
       data: {
         labels: this.dateStringArray,
         datasets: [{
-          label: 'Maximum Temperature in Centigrade',
+          label: 'Max Temperature',
           data: [this.myCustomPayloadData[0].maxTemp,this.myCustomPayloadData[1].maxTemp,this.myCustomPayloadData[2].maxTemp,this.myCustomPayloadData[3].maxTemp,this.myCustomPayloadData[4].maxTemp,this.myCustomPayloadData[5].maxTemp,this.myCustomPayloadData[6].maxTemp],
           backgroundColor: [
             'rgba(255, 99, 132, 0.5)',
@@ -207,8 +207,18 @@ export class BarPage {
       options: {
         scales: {
           yAxes: [{
+            scaleLabel:{
+              display:true,
+              labelString:'Temperature'
+            },
             ticks: {
               beginAtZero: true
+            }
+          }],
+          xAxes: [{
+            scaleLabel:{
+              display:true,
+              labelString:'Day'
             }
           }]
         }
