@@ -5,6 +5,8 @@ import {CookieService} from 'ngx-cookie-service';
 import { Chart } from 'chart.js';
 import { LoadingController } from 'ionic-angular';
 import {MyCustomPayload} from '../../model/MyCustomPayload';
+import {LoginPage} from '../login/login';
+
 /**
  * Generated class for the BarPage page.
  *
@@ -280,6 +282,18 @@ export class BarPage {
       }
     });
 
+  }
+
+  logout()
+  {
+    this.navCtrl.setRoot(LoginPage);
+
+
+  }
+
+  goBack()
+  {
+    this.navCtrl.setRoot('HomePage');
   }
 
 }

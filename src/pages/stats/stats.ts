@@ -4,6 +4,7 @@ import { DeviceService } from '../../services/device.service';
 import {CookieService} from 'ngx-cookie-service';
 import { Chart } from 'chart.js';
 import { LoadingController } from 'ionic-angular';
+import {LoginPage} from '../login/login';
 
 /**
  * Generated class for the StatsPage page.
@@ -188,6 +189,16 @@ export class StatsPage {
     this.navCtrl.setRoot('BarPage');
   }
 
+  logout()
+  {
+    this.navCtrl.setRoot(LoginPage);
+
+
+  }
+  goBack()
+  {
+    this.navCtrl.setRoot('HomePage');
+  }
   // this is the place from where line is starting
   
 }
