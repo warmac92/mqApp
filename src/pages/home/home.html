@@ -40,11 +40,12 @@
     </ion-card>
     <br>
     <ion-card>
-    <agm-map  [zoom]="6" [latitude]="42.096578" [longitude]="-71.345812">
+    <agm-map  [zoom]="defaultZoom" [latitude]="defaultLat" [longitude]="defaultLong">
         <agm-marker *ngFor="let device of panel;let j=index;" [latitude]="device.lat" [longitude]="device.long" (markerClick)="toogleAccordion(j)"></agm-marker>
-        <agm-circle  [radius]="10" [fillColor]="'blue'" [circleDraggable]="false"
-        [editable]="true" [latitude]="userLat" [longitude]="userLong"></agm-circle>
-
+        <!-- <agm-circle  [radius]="10" [fillColor]="'blue'" [circleDraggable]="false"
+        [editable]="true" [latitude]="userLat" [longitude]="userLong"></agm-circle> -->
+        <agm-marker [latitude]="userLat" [longitude]="userLong" iconUrl="https://maps.google.com/mapfiles/ms/icons/blue.png"></agm-marker>
       </agm-map>
+      <ion-buttons round outline middle> <button color="primary" ion-button round outline (click)="resetView()"> Reset Map View </button> </ion-buttons>
     </ion-card>
 </ion-content>

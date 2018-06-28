@@ -29,8 +29,14 @@ export class HomePage {
   companyName:string;
   unit:string;
   setIntervalId:any;
+  defaultZoom;
+  defaultLat;
+  defaultLong;
   constructor(private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
    this.date = new Date();
+   this.defaultLat=41.58;
+   this.defaultLong=-72.545812;
+   this.defaultZoom=7;
    if(!this.cookieService.get('compaName')){
          this.companyName = "Acme Inc.";
         }else{
@@ -238,6 +244,13 @@ export class HomePage {
   {
     this.navCtrl.setRoot(LoginPage);
     
+  }
+
+  resetView()
+  {
+   this.defaultLat=41.58;
+   this.defaultLong=-72.545812;
+   this.defaultZoom=7;
   }
 
   
