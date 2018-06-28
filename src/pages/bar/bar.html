@@ -1,0 +1,40 @@
+<!--
+  Generated template for the BarPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <div align="center">   
+    <ion-navbar >
+      <ion-title>7 Days Data</ion-title>
+      <button color="danger" ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+      <ion-buttons round outline end> <button color="danger" ion-button round outline (click)="logout()"> Logout </button> </ion-buttons>
+    </ion-navbar>
+  </div> 
+  </ion-header>
+
+<ion-content padding>
+    <div align="center">
+      <button ion-button color="danger" (click)="goStat()">Doughnut Graph</button>
+    </div>
+    <ion-card [hidden]="showFahr" >
+        <ion-card-header>
+          <h2 align="center"><b>Temperature in Fahrenheit</b></h2>
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #barFahrenheitCanvas></canvas>
+        </ion-card-content>
+      </ion-card>
+  
+      <ion-card [hidden]="showCenti" >
+        <ion-card-header>
+          <h2 align="center"><b>Temperature in Centigrade</b></h2>
+        </ion-card-header>
+        <ion-card-content>
+          <canvas #barCentigradeCanvas></canvas>
+        </ion-card-content>
+      </ion-card>
+</ion-content>
