@@ -41,9 +41,7 @@
     </ion-card>
     <br>
     <ion-card>
-    <agm-map  [zoom]="defaultZoom" [latitude]="defaultLat" [longitude]="defaultLong">
-      <agm-marker [latitude]="userLat" [longitude]="userLong" iconUrl="https://maps.google.com/mapfiles/ms/icons/blue.png"></agm-marker>
-  
+    <agm-map #AgmMap (mapReady)="mapReadyFun($event)" [latitude]="defaultLat" [longitude]="defaultLong">  
       <agm-marker *ngFor="let device of panel;let j=index;" [latitude]="device.lat" [longitude]="device.long" (markerClick)="toogleAccordion(j)">
           <agm-info-window>
             <strong>{{device.name}}</strong>
@@ -53,10 +51,13 @@
         <agm-circle [radius]="4000" [fillColor]="'blue'" [circleDraggable]="false"
         [editable]="false" [latitude]="userLat" [longitude]="userLong">
       </agm-circle>
+
+      <agm-marker [latitude]="userLat" [longitude]="userLong" iconUrl="https://maps.google.com/mapfiles/ms/icons/blue.png"></agm-marker>
+
       <!-- <agm-circle  [fillOpacity]="0.5" [radius]="400" [fillColor]="'blue'" [circleDraggable]="false"
       [editable]="false" [latitude]="userLat" [longitude]="userLong">
     </agm-circle> -->
       </agm-map>
-      <ion-buttons round outline middle> <button color="primary" ion-button round outline (click)="resetView()"> Reset Map View </button> </ion-buttons>
+      <!-- <ion-buttons round outline middle> <button color="primary" ion-button round outline (click)="resetView()"> Reset Map View </button> </ion-buttons> -->
     </ion-card>
 </ion-content>

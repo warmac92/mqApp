@@ -1,4 +1,4 @@
-import { Component,OnDestroy } from '@angular/core';
+import { Component,OnDestroy,ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DeviceService } from '../../services/device.service';
 import { DeviceInfo } from '../../model/DeviceInfo';
@@ -6,6 +6,9 @@ import { AlertController } from 'ionic-angular';
 import {LoginPage} from '../login/login';
 import {CookieService} from 'ngx-cookie-service';
 import { Geolocation } from '@ionic-native/geolocation';
+import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral} from '@agm/core';
+
+declare var google: any;
 
 @IonicPage()
 @Component({
@@ -32,6 +35,9 @@ export class HomePage {
   defaultZoom:number;
   defaultLat:number;
   defaultLong:number;
+  defaultLevels:any;
+  @ViewChild('AgmMap') agmMap: AgmMap;
+
   constructor(private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
    this.date = new Date();
    this.defaultLat=41.58;
@@ -79,6 +85,7 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
+    
   }
 
   ngOnDestroy()
@@ -88,6 +95,25 @@ export class HomePage {
       clearInterval(this.setIntervalId);
     }
   }
+
+  mapReadyFun(event)
+  {
+
+    
+    console.log(event);
+      const bounds: LatLngBounds = new google.maps.LatLngBounds();
+      setTimeout(()=>{
+        for (var i=0;i<this.panel.length;i++) {
+          console.log("HELLO");
+          bounds.extend(new google.maps.LatLng(this.panel[i].lat, this.panel[i].long));
+          event.fitBounds(bounds);
+          this.defaultLevels=event;
+        }
+      },1000);
+      
+  
+  }
+
 
   updateData()
   {
@@ -246,13 +272,6 @@ export class HomePage {
   {
     this.navCtrl.setRoot(LoginPage);
     
-  }
-
-  resetView()
-  {
-   this.defaultLat=41.58;
-   this.defaultLong=-72.545812;
-   this.defaultZoom=7;
   }
 
   
