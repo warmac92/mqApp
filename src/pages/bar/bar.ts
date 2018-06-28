@@ -31,7 +31,7 @@ export class BarPage {
   day5: number;
   day6: number;
   day7: number;
-  fah7:number[];
+  fah7:any[];
   macId:any;
   showCenti: boolean;
   showFahr: boolean;
@@ -72,6 +72,7 @@ export class BarPage {
     setTimeout(() => {
       this.barCentigrade();
     }, 5000);
+
     }else if(this.cookieService.get('unit')=="fahrenheit"){
       this.showCenti=true;
       this.showFahr=false;
@@ -82,9 +83,9 @@ export class BarPage {
         }, 1000);
       },5000);
     }
-    setTimeout(()=>{
+
       this.getMaxTemperatures();
-    },999);
+    
   }
 
   ionViewDidLoad() {
@@ -93,8 +94,10 @@ export class BarPage {
 
   getMaxTemperaturesFahrenheit(){
     //console.log(this.myCustomPayloadData[0].maxTemp);
+    this.getMaxTemperatures();
+
     for(var j=0; j<7;j++){
-    this.fah7[j]=(((parseFloat(this.myCustomPayloadData[j].maxTemp))*1.8)+32);
+    this.fah7[j]=(((this.myCustomPayloadData[j].maxTemp)*1.8)+32).toFixed(2);
     console.log(this.fah7[j]);
     }
   }
@@ -181,8 +184,8 @@ export class BarPage {
       data: {
         labels: this.dateStringArray,
         datasets: [{
-          label: 'Maximum Temperature in Centigrade',
-          data: [this.myCustomPayloadData[0].maxTemp,this.myCustomPayloadData[1].maxTemp,this.myCustomPayloadData[2].maxTemp,this.myCustomPayloadData[3].maxTemp,this.myCustomPayloadData[4].maxTemp,this.myCustomPayloadData[5].maxTemp,this.myCustomPayloadData[6].maxTemp],
+          label: 'Max Temperature',
+          data: [this.myCustomPayloadData[0].maxTemp.toFixed(2),this.myCustomPayloadData[1].maxTemp.toFixed(2),this.myCustomPayloadData[2].maxTemp.toFixed(2),this.myCustomPayloadData[3].maxTemp.toFixed(2),this.myCustomPayloadData[4].maxTemp.toFixed(2),this.myCustomPayloadData[5].maxTemp.toFixed(2),this.myCustomPayloadData[6].maxTemp.toFixed(2)],
           backgroundColor: [
             'rgba(255, 99, 132, 0.5)',
             'rgba(54, 162, 235, 0.5)',
@@ -207,8 +210,18 @@ export class BarPage {
       options: {
         scales: {
           yAxes: [{
+            scaleLabel:{
+              display:true,
+              labelString:'Temperature in ℃'
+            },
             ticks: {
               beginAtZero: true
+            }
+          }],
+          xAxes: [{
+            scaleLabel:{
+              display:true,
+              labelString:'Day'
             }
           }]
         }
@@ -223,7 +236,7 @@ export class BarPage {
       data: {
         labels: this.dateStringArray,
         datasets: [{
-          label: 'Maximum Temperature in Fahrenheit',
+          label: 'Max Temperature',
           data: [this.fah7[0],this.fah7[1],this.fah7[2],this.fah7[3],this.fah7[4],this.fah7[5],this.fah7[6]],
           backgroundColor: [
             'rgba(255, 99, 132, 0.5)',
@@ -249,8 +262,18 @@ export class BarPage {
       options: {
         scales: {
           yAxes: [{
+            scaleLabel:{
+              display:true,
+              labelString:'Temperature in °F'
+            },
             ticks: {
               beginAtZero: true
+            }
+          }],
+          xAxes: [{
+            scaleLabel:{
+              display:true,
+              labelString:'Day'
             }
           }]
         }

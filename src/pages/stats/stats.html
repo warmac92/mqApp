@@ -7,7 +7,7 @@
 <ion-header>
   <div align="center">   
   <ion-navbar >
-    <ion-title>7 Days Data</ion-title>
+    <ion-title>Analytics</ion-title>
     <button color="danger" ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
@@ -19,12 +19,15 @@
 <ion-content padding>
 
   <div align="center">
-    <button ion-button color="danger" (click)="goBar()">Bar Graph</button>
+    <button ion-button round color="danger" >Temperature Range Stats</button>
+    <button ion-button round outline color="danger" (click)="goBar()">Maximum Temperature Stats</button>
+
+
   </div>
 
   <ion-card [hidden]="showCenti" >
     <ion-card-header>
-      <h2 align="center"><b>Temperature in Centigrade</b></h2>
+      <h3 align="center">Shows the number of times temperature readings for the last 7 days were between a range. The range depends on the max and min values selected in preferences.</h3>
     </ion-card-header>
     <ion-card-content>
       <canvas #doughnutCentigradeCanvas></canvas>
@@ -33,7 +36,7 @@
 
   <ion-card [hidden]="showFahr" >
       <ion-card-header>
-        <h2 align="center"><b>Temperature in Fahrenheit</b></h2>
+        <h3 align="center">Shows the number of times temperature readings for the last 7 days were between a range. The range depends on the values selected in preferences.</h3>
       </ion-card-header>
       <ion-card-content>
         <canvas #doughnutFahrenheitCanvas></canvas>

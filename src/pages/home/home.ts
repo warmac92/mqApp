@@ -205,6 +205,7 @@ export class HomePage {
   }
 
   toogleAccordion(i)
+  {if(i!=="doNotToggle")
   {
     this.show[i]=!this.show[i];
 
@@ -216,6 +217,7 @@ export class HomePage {
       }
 
     }
+  }
   }
 
   showStats(id)
