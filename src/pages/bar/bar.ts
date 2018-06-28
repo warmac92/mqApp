@@ -65,14 +65,13 @@ export class BarPage {
       this.day6=parseInt(this.dateStringArray[5]);
       this.day7=parseInt(this.dateStringArray[6]);
       console.log(this.day1,this.day2,this.day3,this.day4,this.day5,this.day6,this.day7)
-    },1500);
+    },1000);
     if(this.cookieService.get('unit')=="celsius"){
       this.showFahr=true;
       this.showCenti=false;
     setTimeout(() => {
       this.barCentigrade();
     }, 5000);
-
     }else if(this.cookieService.get('unit')=="fahrenheit"){
       this.showCenti=true;
       this.showFahr=false;
@@ -81,7 +80,7 @@ export class BarPage {
         setTimeout(() => {
           this.barFahrenheit();
         }, 1000);
-      },5000);
+      },4500);
     }
 
       this.getMaxTemperatures();
@@ -178,8 +177,8 @@ export class BarPage {
   }
 
   barCentigrade(){
+    console.log("bar centi");
     this.barChart = new Chart(this.barCentigradeCanvas.nativeElement, {
-
       type: 'bar',
       data: {
         labels: this.dateStringArray,
@@ -231,6 +230,7 @@ export class BarPage {
   }
 
   barFahrenheit(){
+    console.log("bar fahrenheit");
     this.barChart = new Chart(this.barFahrenheitCanvas.nativeElement, {
       type: 'bar',
       data: {
