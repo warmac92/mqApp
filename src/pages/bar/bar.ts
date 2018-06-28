@@ -31,6 +31,7 @@ export class BarPage {
   day5: number;
   day6: number;
   day7: number;
+  fah7:number[];
   macId:any;
   showCenti: boolean;
   showFahr: boolean;
@@ -39,6 +40,8 @@ export class BarPage {
   constructor(public cookieService: CookieService,private deviceService: DeviceService,public loadingCtrl: LoadingController,public navCtrl: NavController, public navParams: NavParams) {
     this.payloadData=[];
     this.myCustomPayloadData=[];
+    this.fah7=[];
+    this.loading();
     this.showCenti=true;
     this.showFahr=true;
     this.macId;
@@ -63,14 +66,37 @@ export class BarPage {
       this.day7=parseInt(this.dateStringArray[6]);
       console.log(this.day1,this.day2,this.day3,this.day4,this.day5,this.day6,this.day7)
     },1500);
+    if(this.cookieService.get('unit')=="celsius"){
+      this.showFahr=true;
+      this.showCenti=false;
     setTimeout(() => {
       this.barCentigrade();
     }, 5000);
-    this.getMaxTemperatures();
+    }else if(this.cookieService.get('unit')=="fahrenheit"){
+      this.showCenti=true;
+      this.showFahr=false;
+      setTimeout(()=>{
+        this.getMaxTemperaturesFahrenheit();
+        setTimeout(() => {
+          this.barFahrenheit();
+        }, 1000);
+      },5000);
+    }
+    setTimeout(()=>{
+      this.getMaxTemperatures();
+    },999);
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad BarPage');
+  }
+
+  getMaxTemperaturesFahrenheit(){
+    //console.log(this.myCustomPayloadData[0].maxTemp);
+    for(var j=0; j<7;j++){
+    this.fah7[j]=(((parseFloat(this.myCustomPayloadData[j].maxTemp))*1.8)+32);
+    console.log(this.fah7[j]);
+    }
   }
 
   getMaxTemperatures(){
@@ -136,12 +162,19 @@ export class BarPage {
    },5000);
   }
 
+  loading(){
+    let load = this.loadingCtrl.create({
+      content:'Loading Please Wait....',
+      duration: 5000
+    });
+    load.present();
+  }
+
   goStat(){
     this.navCtrl.setRoot('StatsPage');
   }
 
   barCentigrade(){
-    this.showCenti=false;
     this.barChart = new Chart(this.barCentigradeCanvas.nativeElement, {
 
       type: 'bar',
@@ -149,7 +182,49 @@ export class BarPage {
         labels: this.dateStringArray,
         datasets: [{
           label: 'Maximum Temperature in Centigrade',
-          data: [30,75,76,77,73,58,75],
+          data: [this.myCustomPayloadData[0].maxTemp,this.myCustomPayloadData[1].maxTemp,this.myCustomPayloadData[2].maxTemp,this.myCustomPayloadData[3].maxTemp,this.myCustomPayloadData[4].maxTemp,this.myCustomPayloadData[5].maxTemp,this.myCustomPayloadData[6].maxTemp],
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.5)',
+            'rgba(54, 162, 235, 0.5)',
+            'rgba(255, 206, 86, 0.5)',
+            'rgba(75, 192, 192, 0.5)',
+            'rgba(153, 102, 255, 0.5)',
+            'rgba(255, 159, 64, 0.5)',
+            'rgba(143, 225, 99, 0.5)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+            'rgba(75, 206, 192, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+          }]
+        }
+      }
+    });
+
+  }
+
+  barFahrenheit(){
+    this.barChart = new Chart(this.barFahrenheitCanvas.nativeElement, {
+      type: 'bar',
+      data: {
+        labels: this.dateStringArray,
+        datasets: [{
+          label: 'Maximum Temperature in Fahrenheit',
+          data: [this.fah7[0],this.fah7[1],this.fah7[2],this.fah7[3],this.fah7[4],this.fah7[5],this.fah7[6]],
           backgroundColor: [
             'rgba(255, 99, 132, 0.5)',
             'rgba(54, 162, 235, 0.5)',
