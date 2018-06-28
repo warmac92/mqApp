@@ -98,8 +98,6 @@ export class HomePage {
 
   mapReadyFun(event)
   {
-
-    
     console.log(event);
       const bounds: LatLngBounds = new google.maps.LatLngBounds();
       setTimeout(()=>{
@@ -108,6 +106,7 @@ export class HomePage {
           bounds.extend(new google.maps.LatLng(this.panel[i].lat, this.panel[i].long));
           event.fitBounds(bounds);
           this.defaultLevels=event;
+
         }
       },1000);
       
@@ -272,6 +271,12 @@ export class HomePage {
   {
     this.navCtrl.setRoot(LoginPage);
     
+  }
+
+  resetView(value)
+  {
+    value=this.defaultLevels;
+    this.mapReadyFun(value);
   }
 
   
