@@ -85,48 +85,55 @@ export class StatsPage {
       console.log(this.a);
       console.log(this.b);
       console.log(this.c);
-      }
+      this.doughnutCentigrade();
+      }else if(this.cookieService.get('unit')=="fahrenheit"){
+        this.showCenti=true;
+        this.showFahr=false;
+      setTimeout(()=>{
+        for(var i=0;i<this.payloadData.length;i++)
+        {
+            this.g=0;
+            if(this.payloadData[i].Data)
+            {
+            this.g=(((parseFloat(this.payloadData[i].Data.temperature))*1.8)+32);
+            }
+            //this.temperatures.push(this.payloadData[i].Data.temperature); 
+            if((this.g)<=this.tmin){
+              this.d++
+            }else if((this.g)>this.tmin && (this.g)<this.tmax){
+              this.e++;
+            }else if((this.g)>=this.tmax){
+              this.f++;
+            }
+        }
+      console.log(this.d);
+      console.log(this.e);
+      console.log(this.f);
+      this.doughnutFahrenheit();
+      },2000);
+    }
       
     });
-
-    if(this.cookieService.get('unit')=="celsius"){
-    setTimeout(()=>{
-      this.doughnutCentigrade();
-    }, 4500);
-    }else if(this.cookieService.get('unit')=="fahrenheit"){
-      this.showCenti=true;
-      this.showFahr=false;
-    setTimeout(()=>{
-      for(var i=0;i<this.payloadData.length;i++)
-      {
-          this.g=0;
-          if(this.payloadData[i].Data)
-          {
-          this.g=(((parseFloat(this.payloadData[i].Data.temperature))*1.8)+32);
-          }
-          //this.temperatures.push(this.payloadData[i].Data.temperature); 
-          if((this.g)<=this.tmin){
-            this.d++
-          }else if((this.g)>this.tmin && (this.g)<this.tmax){
-            this.e++;
-          }else if((this.g)>=this.tmax){
-            this.f++;
-          }
-    }
-      this.doughnutFahrenheit();
-    },6000);
-  }
   }
 
   loading(){
-    let load = this.loadingCtrl.create({
-      content:'Loading Please Wait....',
-      duration: 5000
-    });
-    load.present();
+    if(this.cookieService.get('unit')=="celsius"){
+      let load = this.loadingCtrl.create({
+        content:'Loading Please Wait....',
+        duration: 3000
+      });
+      load.present();
+    }else{
+      let load = this.loadingCtrl.create({
+        content:'Loading Please Wait....',
+        duration: 5000
+      });
+      load.present();
+    }
   }
 
   doughnutCentigrade(){
+    console.log("centi graph");
     this.doughnutChart = new Chart(this.doughnutCentigradeCanvas.nativeElement, {
       type: 'doughnut',
       data:{
@@ -150,6 +157,7 @@ export class StatsPage {
   }
 
   doughnutFahrenheit(){
+    console.log("fahrenheit graph");
     this.doughnutChart = new Chart(this.doughnutFahrenheitCanvas.nativeElement, {
       type: 'doughnut',
       data:{
