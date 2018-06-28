@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,OnDestroy,ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DeviceService } from '../../services/device.service';
 import { DeviceInfo } from '../../model/DeviceInfo';
@@ -6,6 +6,9 @@ import { AlertController } from 'ionic-angular';
 import {LoginPage} from '../login/login';
 import {CookieService} from 'ngx-cookie-service';
 import { Geolocation } from '@ionic-native/geolocation';
+import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral} from '@agm/core';
+
+declare var google: any;
 
 @IonicPage()
 @Component({
@@ -19,6 +22,7 @@ export class HomePage {
   show:boolean[];
   date: Date;
   tMin:number;
+  machineId:any;
   tMax:number;
   hMin:number;
   hMax:number;
@@ -27,8 +31,18 @@ export class HomePage {
   iconObject:string;
   companyName:string;
   unit:string;
+  setIntervalId:any;
+  defaultZoom:number;
+  defaultLat:number;
+  defaultLong:number;
+  defaultLevels:any;
+  @ViewChild('AgmMap') agmMap: AgmMap;
+
   constructor(private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
    this.date = new Date();
+   this.defaultLat=41.58;
+   this.defaultLong=-72.545812;
+   this.defaultZoom=7;
    if(!this.cookieService.get('compaName')){
          this.companyName = "Acme Inc.";
         }else{
@@ -44,6 +58,10 @@ export class HomePage {
     console.log("error");
   })
 
+  if(!this.cookieService.get('unit'))
+  {
+    this.cookieService.set('unit',"celsius");
+  }
     if(!this.cookieService.get('tMin') || !this.cookieService.get('tMax') || !this.cookieService.get('hMin') || !this.cookieService.get('hMax') || !this.cookieService.get('unit'))
     {
       this.cookieService.set('tMin',"32");
@@ -61,13 +79,40 @@ export class HomePage {
 
   this.updateData();
 
-   setInterval(()=>{
+  this.setIntervalId= setInterval(()=>{
     this.updateData();
    },50000)
   }
 
   ionViewDidLoad() {
+    
   }
+
+  ngOnDestroy()
+  {
+    console.log('onDestroy Triggered');
+    if (this.setIntervalId) {
+      clearInterval(this.setIntervalId);
+    }
+  }
+
+  mapReadyFun(event)
+  {
+    console.log(event);
+      const bounds: LatLngBounds = new google.maps.LatLngBounds();
+      setTimeout(()=>{
+        for (var i=0;i<this.panel.length;i++) {
+          console.log("HELLO");
+          bounds.extend(new google.maps.LatLng(this.panel[i].lat, this.panel[i].long));
+          event.fitBounds(bounds);
+          this.defaultLevels=event;
+
+        }
+      },1000);
+      
+  
+  }
+
 
   updateData()
   {
@@ -185,6 +230,7 @@ export class HomePage {
   }
 
   toogleAccordion(i)
+  {if(i!=="doNotToggle")
   {
     this.show[i]=!this.show[i];
 
@@ -197,13 +243,17 @@ export class HomePage {
 
     }
   }
+  }
 
   showStats(id)
   {
-    this.deviceService.getPayloadData(id).subscribe((payloads)=>{
-      console.log(payloads);
-    })
-    
+    this.machineId=id;
+    // this.getPayloadData(id).subscribe((payloads)=>{
+    //   console.log(payloads);
+    // })
+    this.cookieService.set('machineId',this.machineId);
+    console.log(this.cookieService.get('machineId'));
+    this.navCtrl.setRoot('StatsPage');
   }
 
   openPage()
@@ -221,6 +271,12 @@ export class HomePage {
   {
     this.navCtrl.setRoot(LoginPage);
     
+  }
+
+  resetView(value)
+  {
+    value=this.defaultLevels;
+    this.mapReadyFun(value);
   }
 
   

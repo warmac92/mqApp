@@ -34,9 +34,9 @@ export class DeviceService {
     return this.http.get(this.mqApiString+'devices/'+id+'/statistics',{headers:this.util.SECURED_HEADER});
   }
 
-  getPayloadData(id)
+  getPayloadData(macId,lastDay)
   {
-      return this.http.get(this.mqApiString+'devices/'+id+'/payloads',{headers: this.util.SECURED_HEADER});
+      return this.http.get(this.mqApiString+'devices/'+macId+'/payloads?StartTime='+lastDay,{headers: this.util.SECURED_HEADER});
   }
 
 }

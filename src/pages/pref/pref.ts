@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {CookieService} from 'ngx-cookie-service';
 import { AlertController } from 'ionic-angular';
+import {LoginPage} from '../login/login';
 
 /**
  * Generated class for the PrefPage page.
@@ -27,6 +28,7 @@ export class PrefPage {
      this.unit='celsius';
      this.isCelChecked=true;
      this.isFarChecked=false;
+     this.cookieService.set('unit','celsius');
    }
    else
    {
@@ -111,6 +113,13 @@ export class PrefPage {
   changeTemp(value)
   {
     this.unit=value;
+  }
+
+  logout()
+  {
+    this.navCtrl.setRoot(LoginPage);
+
+
   }
 
 }

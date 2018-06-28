@@ -1,6 +1,7 @@
 <ion-header>
   <div align="center">   
   <ion-navbar >
+    <ion-title></ion-title>
     <ion-title>{{companyName}} machineQ Control Panel</ion-title>
     <button color="danger" ion-button menuToggle>
         <ion-icon name="menu"></ion-icon>
@@ -24,12 +25,15 @@
     <ion-card *ngFor="let device of panel; let i = index" >
       <ion-card-header [ngStyle]="{'background':device.color}" style="font-size: 0.9em" (click)="toogleAccordion(i)">
         <b>{{device.name}} &nbsp;&nbsp; {{device.temperature | number:'1.0-1'}}{{unit}} &nbsp;&nbsp; {{device.humidity}}% &nbsp;&nbsp;&nbsp;&nbsp;<i *ngIf="device.water<0.45 && device.water>=0" class="fa fa-tint"></i> <i *ngIf="device.water<=1 && device.water>=0.75" class="fa fa-tint" style="color:red"></i><i *ngIf="device.water>=0.45 && device.water<0.75" class="fa fa-tint" style="color:blue"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+          <i (click)="showStats(device.id) && toogleAccordion('doNotToggle')" class="fa fa-line-chart" style="color:red" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;
           <i *ngIf="device.healthStatus==='ACTIVE'" class="fa fa-check" style="color:green"></i><i *ngIf="device.healthStatus && device.healthStatus!=='ACTIVE'" class="fa fa-times" style="color:red"></i></b>
       </ion-card-header>
 
       <ion-card-content  [ngStyle]="{'background':device.color}" (click)="toogleAccordion(i)" *ngIf="show[i]">
         <div>
-         <p>Device ID: {{device.id}}<br>Water Level: {{device.waterStatus}}<br>Status: {{device.healthStatus}}<br>Battery Level: {{device.batteryLevel}}<br>Last 24 HR Uplink: {{device.uplink}}<br>Last 24 HR Downlink: {{device.downlink}}<br><i (click)="showStats(device.id)" class="fa fa-line-chart" aria-hidden="true">View 7 Days Data</i></p>
+         <p>Device ID: {{device.id}}<br>Water Level: {{device.waterStatus}}<br>Status: {{device.healthStatus}}<br>Battery Level: {{device.batteryLevel}}<br>Last 24 HR Uplink: {{device.uplink}}
+          <br>Last 24 HR Downlink: {{device.downlink}}<br>
+          </p>
         </div>
       </ion-card-content>
 
@@ -37,11 +41,23 @@
     </ion-card>
     <br>
     <ion-card>
-    <agm-map  [zoom]="6" [latitude]="42.096578" [longitude]="-71.345812">
-        <agm-marker *ngFor="let device of panel;let j=index;" [latitude]="device.lat" [longitude]="device.long" (markerClick)="toogleAccordion(j)"></agm-marker>
-        <agm-circle  [radius]="10" [fillColor]="'blue'" [circleDraggable]="false"
-        [editable]="true" [latitude]="userLat" [longitude]="userLong"></agm-circle>
+    <agm-map #AgmMap (mapReady)="mapReadyFun($event)" [latitude]="defaultLat" [longitude]="defaultLong">  
+      <agm-marker *ngFor="let device of panel;let j=index;" [latitude]="device.lat" [longitude]="device.long" (markerClick)="toogleAccordion(j)">
+          <agm-info-window>
+            <strong>{{device.name}}</strong>
+          </agm-info-window>
+        </agm-marker>
+        
+        <agm-circle [radius]="4000" [fillColor]="'blue'" [circleDraggable]="false"
+        [editable]="false" [latitude]="userLat" [longitude]="userLong">
+      </agm-circle>
 
+      <agm-marker [latitude]="userLat" [longitude]="userLong" iconUrl="https://maps.google.com/mapfiles/ms/icons/blue.png"></agm-marker>
+
+      <!-- <agm-circle  [fillOpacity]="0.5" [radius]="400" [fillColor]="'blue'" [circleDraggable]="false"
+      [editable]="false" [latitude]="userLat" [longitude]="userLong">
+    </agm-circle> -->
       </agm-map>
+      <ion-buttons round outline middle> <button color="primary" ion-button round outline (click)="resetView()"> Reset Map View </button> </ion-buttons>
     </ion-card>
 </ion-content>
