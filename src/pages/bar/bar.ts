@@ -212,7 +212,7 @@ export class BarPage {
           yAxes: [{
             scaleLabel:{
               display:true,
-              labelString:'Temperature'
+              labelString:'Temperature in ℃'
             },
             ticks: {
               beginAtZero: true
@@ -262,8 +262,18 @@ export class BarPage {
       options: {
         scales: {
           yAxes: [{
+            scaleLabel:{
+              display:true,
+              labelString:'Temperature in °F'
+            },
             ticks: {
               beginAtZero: true
+            }
+          }],
+          xAxes: [{
+            scaleLabel:{
+              display:true,
+              labelString:'Day'
             }
           }]
         }
