@@ -198,10 +198,6 @@ export class StatsPage {
   {
     this.navCtrl.setRoot('HomePage');
   }
-
-  goLocal(){
-    this.navCtrl.setRoot('NotificationsPage')
-  }
   // this is the place from where line is starting
   
 }
