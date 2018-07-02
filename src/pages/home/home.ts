@@ -32,6 +32,7 @@ export class HomePage {
   iconObject:string;
   companyName:string;
   unit:string;
+  online:boolean;
   setIntervalId:any;
   defaultZoom:number;
   defaultLat:number;
@@ -43,6 +44,8 @@ export class HomePage {
    this.date = new Date();
    this.defaultLat=41.58;
    this.defaultLong=-72.545812;
+   this.online = window.navigator.onLine;
+   console.log(this.online);
    this.defaultZoom=7;
    if(!this.cookieService.get('compaName')){
          this.companyName = "Acme Inc.";
@@ -234,11 +237,20 @@ export class HomePage {
       alert.present();
       this.navCtrl.setRoot(LoginPage);
     }
-    else
-    {
+    else if(!this.online){
       let alert = this.alertCtrl.create({
         title: 'Internet connection lost!',
         subTitle: 'Please make sure that you are connected to the internet.',
+        buttons: ['Dismiss']
+      });
+      alert.present();
+      this.navCtrl.setRoot(LoginPage);
+    }
+    else
+    {
+      let alert = this.alertCtrl.create({
+        title: 'Service temporarily down!',
+        subTitle: 'Please contact machineQ support at machineq_support@comcast.com.',
         buttons: ['Dismiss']
       });
       alert.present();
