@@ -158,10 +158,12 @@ export class HomePage {
           else if(currentPanel.water>=0.45 && currentPanel.water<0.75)
           {
             currentPanel.waterStatus="RAIN";
+            this.rainingLocal();
           }
           else
           {
-            currentPanel.waterStatus = "FLOODING"
+            currentPanel.waterStatus = "FLOODING";
+            this.floodingLocal();
           }
           this.deviceService.getDevice(this.devices[i].DevEUI).subscribe((deviceInf:any)=>{
             
@@ -250,6 +252,26 @@ export class HomePage {
   maxTempLocal(){
     this.localNotifications.schedule({
       text: 'Temperature is above the set limit of '+this.cookieService.get('tMax'),
+      title: 'mQApp',
+      trigger: {at: new Date(new Date().getTime() + 3600)},
+      led: 'FF0000',
+      sound: null
+   });
+  }
+
+  rainingLocal(){
+    this.localNotifications.schedule({
+      text: 'It is currently raining',
+      title: 'mQApp',
+      trigger: {at: new Date(new Date().getTime() + 3600)},
+      led: 'FF0000',
+      sound: null
+   });
+  }
+
+  floodingLocal(){
+    this.localNotifications.schedule({
+      text: 'It is currently flooding',
       title: 'mQApp',
       trigger: {at: new Date(new Date().getTime() + 3600)},
       led: 'FF0000',
