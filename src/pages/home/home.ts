@@ -4,6 +4,7 @@ import { DeviceService } from '../../services/device.service';
 import { DeviceInfo } from '../../model/DeviceInfo';
 import { AlertController } from 'ionic-angular';
 import {LoginPage} from '../login/login';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import {CookieService} from 'ngx-cookie-service';
 import { Geolocation } from '@ionic-native/geolocation';
 import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral} from '@agm/core';
@@ -38,7 +39,7 @@ export class HomePage {
   defaultLevels:any;
   @ViewChild('AgmMap') agmMap: AgmMap;
 
-  constructor(private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private localNotifications: LocalNotifications, private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
    this.date = new Date();
    this.defaultLat=41.58;
    this.defaultLong=-72.545812;
@@ -157,10 +158,12 @@ export class HomePage {
           else if(currentPanel.water>=0.45 && currentPanel.water<0.75)
           {
             currentPanel.waterStatus="RAIN";
+            this.rainingLocal();
           }
           else
           {
-            currentPanel.waterStatus = "FLOODING"
+            currentPanel.waterStatus = "FLOODING";
+            this.floodingLocal();
           }
           this.deviceService.getDevice(this.devices[i].DevEUI).subscribe((deviceInf:any)=>{
             
@@ -193,10 +196,12 @@ export class HomePage {
             if(currentPanel.temperature > this.tMax)
             {
               currentPanel.color="salmon";
+              this.maxTempLocal();
             }
             else if(currentPanel.temperature < this.tMin)
             {
               currentPanel.color="lightblue";
+              this.minTempLocal();
             }
             else
             {
@@ -242,6 +247,46 @@ export class HomePage {
   });
 
     console.log(this.panel);
+  }
+
+  maxTempLocal(){
+    this.localNotifications.schedule({
+      text: 'Temperature is above the set limit of '+this.cookieService.get('tMax'),
+      title: 'mQApp',
+      trigger: {at: new Date(new Date().getTime() + 3600)},
+      led: 'FF0000',
+      sound: null
+   });
+  }
+
+  rainingLocal(){
+    this.localNotifications.schedule({
+      text: 'It is currently raining',
+      title: 'mQApp',
+      trigger: {at: new Date(new Date().getTime() + 3600)},
+      led: 'FF0000',
+      sound: null
+   });
+  }
+
+  floodingLocal(){
+    this.localNotifications.schedule({
+      text: 'It is currently flooding',
+      title: 'mQApp',
+      trigger: {at: new Date(new Date().getTime() + 3600)},
+      led: 'FF0000',
+      sound: null
+   });
+  }
+
+  minTempLocal(){
+    this.localNotifications.schedule({
+      text: 'Temperature is below the set limit of '+this.cookieService.get('tMin'),
+      title: 'mQApp',
+      trigger: {at: new Date(new Date().getTime() + 3600)},
+      led: 'FF0000',
+      sound: null
+   });
   }
 
   toogleAccordion(i)

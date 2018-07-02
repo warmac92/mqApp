@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import {HttpClientModule} from '@angular/common/http';
 import { LoadingController } from 'ionic-angular';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login';
 import { LoginService } from '../services/login.service';
@@ -41,6 +42,7 @@ import { ChartsModule } from 'ng2-charts';
     LoginService,
     DeviceService,
     LoadingController,
+    LocalNotifications,
     DatePipe,
     StatusBar,
     SplashScreen,
