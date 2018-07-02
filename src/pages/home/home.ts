@@ -108,8 +108,23 @@ export class HomePage {
           this.defaultLevels=event;
 
         }
-      },1000);
+      },2000);
       
+  
+  }
+
+  mapReadyFunTwo(event)
+  {
+    console.log(event);
+      const bounds: LatLngBounds = new google.maps.LatLngBounds();
+        for (var i=0;i<this.panel.length;i++) 
+        {
+          console.log("HELLO");
+          bounds.extend(new google.maps.LatLng(this.panel[i].lat, this.panel[i].long));
+          event.fitBounds(bounds);
+          this.defaultLevels=event;
+
+        }
   
   }
 
@@ -276,7 +291,7 @@ export class HomePage {
   resetView(value)
   {
     value=this.defaultLevels;
-    this.mapReadyFun(value);
+    this.mapReadyFunTwo(value);
   }
 
   
