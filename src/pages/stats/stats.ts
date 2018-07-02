@@ -192,9 +192,8 @@ export class StatsPage {
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
-
-
   }
+
   goBack()
   {
     this.navCtrl.setRoot('HomePage');

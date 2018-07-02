@@ -4,6 +4,7 @@ import { DeviceService } from '../../services/device.service';
 import { DeviceInfo } from '../../model/DeviceInfo';
 import { AlertController } from 'ionic-angular';
 import {LoginPage} from '../login/login';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import {CookieService} from 'ngx-cookie-service';
 import { Geolocation } from '@ionic-native/geolocation';
 import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral} from '@agm/core';
@@ -31,6 +32,7 @@ export class HomePage {
   iconObject:string;
   companyName:string;
   unit:string;
+  online:boolean;
   setIntervalId:any;
   defaultZoom:number;
   defaultLat:number;
@@ -38,10 +40,12 @@ export class HomePage {
   defaultLevels:any;
   @ViewChild('AgmMap') agmMap: AgmMap;
 
-  constructor(private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
+  constructor(private localNotifications: LocalNotifications, private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
    this.date = new Date();
    this.defaultLat=41.58;
    this.defaultLong=-72.545812;
+   this.online = window.navigator.onLine;
+   console.log(this.online);
    this.defaultZoom=7;
    if(!this.cookieService.get('compaName')){
          this.companyName = "Acme Inc.";
@@ -108,8 +112,23 @@ export class HomePage {
           this.defaultLevels=event;
 
         }
-      },1000);
+      },2000);
       
+  
+  }
+
+  mapReadyFunTwo(event)
+  {
+    console.log(event);
+      const bounds: LatLngBounds = new google.maps.LatLngBounds();
+        for (var i=0;i<this.panel.length;i++) 
+        {
+          console.log("HELLO");
+          bounds.extend(new google.maps.LatLng(this.panel[i].lat, this.panel[i].long));
+          event.fitBounds(bounds);
+          this.defaultLevels=event;
+
+        }
   
   }
 
@@ -142,10 +161,12 @@ export class HomePage {
           else if(currentPanel.water>=0.45 && currentPanel.water<0.75)
           {
             currentPanel.waterStatus="RAIN";
+            this.rainingLocal();
           }
           else
           {
-            currentPanel.waterStatus = "FLOODING"
+            currentPanel.waterStatus = "FLOODING";
+            this.floodingLocal();
           }
           this.deviceService.getDevice(this.devices[i].DevEUI).subscribe((deviceInf:any)=>{
             
@@ -178,10 +199,12 @@ export class HomePage {
             if(currentPanel.temperature > this.tMax)
             {
               currentPanel.color="salmon";
+              this.maxTempLocal();
             }
             else if(currentPanel.temperature < this.tMin)
             {
               currentPanel.color="lightblue";
+              this.minTempLocal();
             }
             else
             {
@@ -214,8 +237,7 @@ export class HomePage {
       alert.present();
       this.navCtrl.setRoot(LoginPage);
     }
-    else
-    {
+    else if(!this.online){
       let alert = this.alertCtrl.create({
         title: 'Internet connection lost!',
         subTitle: 'Please make sure that you are connected to the internet.',
@@ -224,9 +246,59 @@ export class HomePage {
       alert.present();
       this.navCtrl.setRoot(LoginPage);
     }
+    else
+    {
+      let alert = this.alertCtrl.create({
+        title: 'Service temporarily down!',
+        subTitle: 'Please contact machineQ support at machineq_support@comcast.com.',
+        buttons: ['Dismiss']
+      });
+      alert.present();
+      this.navCtrl.setRoot(LoginPage);
+    }
   });
 
     console.log(this.panel);
+  }
+
+  maxTempLocal(){
+    this.localNotifications.schedule({
+      text: 'Temperature is above the set limit of '+this.cookieService.get('tMax'),
+      title: 'mQApp',
+      trigger: {at: new Date(new Date().getTime() + 3600)},
+      led: 'FF0000',
+      sound: null
+   });
+  }
+
+  rainingLocal(){
+    this.localNotifications.schedule({
+      text: 'It is currently raining',
+      title: 'mQApp',
+      trigger: {at: new Date(new Date().getTime() + 3600)},
+      led: 'FF0000',
+      sound: null
+   });
+  }
+
+  floodingLocal(){
+    this.localNotifications.schedule({
+      text: 'It is currently flooding',
+      title: 'mQApp',
+      trigger: {at: new Date(new Date().getTime() + 3600)},
+      led: 'FF0000',
+      sound: null
+   });
+  }
+
+  minTempLocal(){
+    this.localNotifications.schedule({
+      text: 'Temperature is below the set limit of '+this.cookieService.get('tMin'),
+      title: 'mQApp',
+      trigger: {at: new Date(new Date().getTime() + 3600)},
+      led: 'FF0000',
+      sound: null
+   });
   }
 
   toogleAccordion(i)
@@ -276,7 +348,7 @@ export class HomePage {
   resetView(value)
   {
     value=this.defaultLevels;
-    this.mapReadyFun(value);
+    this.mapReadyFunTwo(value);
   }
 
   
