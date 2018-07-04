@@ -315,8 +315,9 @@ export class HomePage {
   deviceDataFireBase(){
     this.angularFireDatabase.object('/Devices/').valueChanges().subscribe((fireDevices:any[])=>{
       this.fireDevices=fireDevices;
+      var citylength = parseInt(this.cookieService.get('cities'));
       console.log(this.fireDevices)
-      for(var k=0; k<fireDevices.length;k++)
+      for(var k=0; k<citylength;k++)
       {
       let currentFirePanel = new DeviceInfo();
       currentFirePanel.name = fireDevices[k].Name;

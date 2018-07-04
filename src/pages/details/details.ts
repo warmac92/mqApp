@@ -19,6 +19,7 @@ import { AlertController } from 'ionic-angular';
 export class DetailsPage {
   tempKnobValues:any;
   humidityKnobValues:any;
+  citiesKnobValues: any;
   showCelsius:boolean;
   constructor(private alertCtrl: AlertController,private cookieService: CookieService,public navCtrl: NavController, public navParams: NavParams) {
   
@@ -34,13 +35,16 @@ export class DetailsPage {
     lower:null
   };
 
-
- 
+  this.citiesKnobValues = {
+    upper: null,
+    lower:0
+  }
 
   this.tempKnobValues.upper = this.cookieService.get('tMax');
   this.tempKnobValues.lower = this.cookieService.get('tMin');
-  
 
+  this.citiesKnobValues.upper = this.cookieService.get('cities');
+  
   this.humidityKnobValues.upper = this.cookieService.get('hMax');
   this.humidityKnobValues.lower = this.cookieService.get('hMin');
 
@@ -48,7 +52,6 @@ export class DetailsPage {
   {
     this.showCelsius = true;
   }
-
   }
 
   ionViewDidLoad() {
@@ -69,7 +72,11 @@ export class DetailsPage {
     this.showTempsLimitsAlert();
   }
 
-
+  saveCitiesLimits()
+  {
+    this.cookieService.set('cities',this.citiesKnobValues.upper);
+    this.showCitiesLimitsAlert();
+  }
   
   resetTempLimits()
   {
@@ -79,18 +86,14 @@ export class DetailsPage {
         upper: 38,
         lower:0
       }
-  
-
     }
     else
     {
-
     this.tempKnobValues = {
       upper: 100,
       lower:32
     }
   }
-
     this.cookieService.set('tMax',this.tempKnobValues.upper);
     this.cookieService.set('tMin',this.tempKnobValues.lower);
 
@@ -99,17 +102,23 @@ export class DetailsPage {
 
   resetHumidLimits()
   {
-
     this.humidityKnobValues = {
       upper:90,
       lower:10
     }
-
     this.cookieService.set('hMin',this.humidityKnobValues.lower);
     this.cookieService.set('hMax',this.humidityKnobValues.upper);
+    this.showHumidsResetAlert();  
+  }
 
-    this.showHumidsResetAlert();
-  
+  resetCitiesLimits()
+  {
+    this.citiesKnobValues = {
+      upper: 5,
+      lower:0
+    }
+    this.cookieService.set('cities',this.citiesKnobValues.upper);
+    this.showCitiesResetAlert();
   }
 
   showTempsLimitsAlert()
@@ -130,6 +139,14 @@ export class DetailsPage {
     alert.present();
   }
 
+  showCitiesLimitsAlert()
+  {
+    let alert = this.alertCtrl.create({
+      title: 'Cities limits saved!',
+      buttons: ['ok']
+    });
+    alert.present();
+  }
 
   showTempsResetAlert()
   {
@@ -138,7 +155,6 @@ export class DetailsPage {
       buttons: ['Ok']
     });
     alert.present();
-
   }
 
   showHumidsResetAlert()
@@ -148,14 +164,19 @@ export class DetailsPage {
       buttons: ['Ok']
     });
     alert.present();
-
   }
 
+  showCitiesResetAlert()
+  {
+    let alert = this.alertCtrl.create({
+      title: 'Number of Cities set to default!',
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
 
   logout()
   {
-    this.navCtrl.setRoot(LoginPage);
-    
+    this.navCtrl.setRoot(LoginPage); 
   }
-
 }
