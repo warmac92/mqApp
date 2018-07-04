@@ -315,7 +315,10 @@ export class HomePage {
   deviceDataFireBase(){
     this.angularFireDatabase.object('/Devices/').valueChanges().subscribe((fireDevices:any[])=>{
       this.fireDevices=fireDevices;
-      var citylength = parseInt(this.cookieService.get('cities'));
+      if(!this.cookieService.get('cities')){
+        var citylength = 5;
+      }else{
+      var citylength = parseInt(this.cookieService.get('cities'));}
       console.log(this.fireDevices)
       for(var k=0; k<citylength;k++)
       {
