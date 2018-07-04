@@ -60,7 +60,22 @@
             <button  (click)="saveHumidLimits()" ion-button color="danger">{{ 'SAVE LIMITS' }}</button>
             <button  (click)="resetHumidLimits()" ion-button color="danger">{{ 'SET TO DEFAULT' }}</button>
        </div>
-        <br>
+        <br><br><br>
+        <ion-item>
+                <ion-label><b>Simulated Sites</b></ion-label>
+                
+                <ion-range color="danger" dualKnobs="true" [(ngModel)]="citiesKnobValues" pin="true" min="0" max="10" step="1">
+                    <ion-icon color="danger" range-left small name="city"></ion-icon> <ion-label range-left>0</ion-label>
+                    <ion-icon color="danger" range-right large name="city"></ion-icon> <ion-label range-right>10</ion-label>
+                </ion-range>
+                <ion-label>Limit: {{citiesKnobValues.upper}} Cities</ion-label>
+      
+              </ion-item>
+              <div align="center">
+      
+                  <button  (click)="saveCitiesLimits()" ion-button color="danger">{{ 'SAVE LIMITS' }}</button>
+                  <button  (click)="resetCitiesLimits()" ion-button color="danger">{{ 'SET TO DEFAULT' }}</button>
+             </div>
         
 </ion-list>    
      
