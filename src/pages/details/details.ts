@@ -142,7 +142,7 @@ export class DetailsPage {
   showCitiesLimitsAlert()
   {
     let alert = this.alertCtrl.create({
-      title: 'Cities limits saved!',
+      title: 'Simulated Sites saved!',
       buttons: ['ok']
     });
     alert.present();
@@ -169,7 +169,7 @@ export class DetailsPage {
   showCitiesResetAlert()
   {
     let alert = this.alertCtrl.create({
-      title: 'Number of Cities set to default!',
+      title: 'Simulated Sites set to default!',
       buttons: ['Ok']
     });
     alert.present();
