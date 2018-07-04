@@ -1,6 +1,7 @@
 import { Component,OnDestroy,ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DeviceService } from '../../services/device.service';
+import { WeatherService } from '../../services/weather.service';
 import { DeviceInfo } from '../../model/DeviceInfo';
 import { AlertController } from 'ionic-angular';
 import {LoginPage} from '../login/login';
@@ -8,6 +9,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import {CookieService} from 'ngx-cookie-service';
 import { Geolocation } from '@ionic-native/geolocation';
 import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral} from '@agm/core';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 declare var google: any;
 
@@ -29,6 +31,7 @@ export class HomePage {
   hMax:number;
   userLat:number;
   userLong:number;
+  weatherData:any;
   iconObject:string;
   companyName:string;
   unit:string;
@@ -38,21 +41,21 @@ export class HomePage {
   defaultLat:number;
   defaultLong:number;
   defaultLevels:any;
+  Name: any[];
+  fireDevices:any;
   @ViewChild('AgmMap') agmMap: AgmMap;
 
-  constructor(private localNotifications: LocalNotifications, private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public angularFireDatabase: AngularFireDatabase, private localNotifications: LocalNotifications, private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private weatherService: WeatherService,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
    this.date = new Date();
    this.defaultLat=41.58;
    this.defaultLong=-72.545812;
    this.online = window.navigator.onLine;
-   console.log(this.online);
    this.defaultZoom=7;
    if(!this.cookieService.get('compaName')){
-         this.companyName = "Acme Inc.";
-        }else{
-         this.companyName = this.cookieService.get('compaName');
-         console.log("companyName");
-       }
+      this.companyName = "Acme Inc.";
+    }else{
+       this.companyName = this.cookieService.get('compaName');
+    }
 
    this.geolocation.getCurrentPosition().then((resp)=>{
     this.userLat = resp.coords.latitude;
@@ -66,21 +69,23 @@ export class HomePage {
   {
     this.cookieService.set('unit',"celsius");
   }
+
+  if(this.cookieService.get('unit')=="celsius"){
+  
+    this.unit="°C";
+  }else{
+    this.unit="°F";
+  }
     if(!this.cookieService.get('tMin') || !this.cookieService.get('tMax') || !this.cookieService.get('hMin') || !this.cookieService.get('hMax') || !this.cookieService.get('unit'))
     {
       this.cookieService.set('tMin',"32");
       this.cookieService.set('tMax',"100");
       this.cookieService.set('hMin',"10");
       this.cookieService.set('hMax',"90");
-
     }
-
-
-
       this.tMin = parseFloat(this.cookieService.get('tMin'));
       this.tMax = parseFloat(this.cookieService.get('tMax'));
     
-
   this.updateData();
 
   this.setIntervalId= setInterval(()=>{
@@ -106,7 +111,6 @@ export class HomePage {
       const bounds: LatLngBounds = new google.maps.LatLngBounds();
       setTimeout(()=>{
         for (var i=0;i<this.panel.length;i++) {
-          console.log("HELLO");
           bounds.extend(new google.maps.LatLng(this.panel[i].lat, this.panel[i].long));
           event.fitBounds(bounds);
           this.defaultLevels=event;
@@ -123,15 +127,11 @@ export class HomePage {
       const bounds: LatLngBounds = new google.maps.LatLngBounds();
         for (var i=0;i<this.panel.length;i++) 
         {
-          console.log("HELLO");
           bounds.extend(new google.maps.LatLng(this.panel[i].lat, this.panel[i].long));
           event.fitBounds(bounds);
           this.defaultLevels=event;
-
         }
-  
   }
-
 
   updateData()
   {
@@ -142,10 +142,10 @@ export class HomePage {
     this.deviceService.getAllGateways().subscribe((gatewaysFromApi:any[])=>{
       
       this.gateways=gatewaysFromApi['Gateways'];
-      console.log(this.gateways);
+      //console.log(this.gateways);
       this.deviceService.getAllDevices().subscribe((devicesFromApi:any[])=>{
         this.devices=devicesFromApi['Devices'];
-        console.log(this.devices);
+        //console.log(this.devices);
         for(var i=0;i<this.devices.length;i++)
         { let currentPanel = new DeviceInfo();
           this.show[i]=false;
@@ -172,13 +172,11 @@ export class HomePage {
             
             if(deviceInf.Payload[0].Data.temperature)
             {
-              console.log(this.cookieService.get('unit'));
+              //console.log(this.cookieService.get('unit'));
               if(this.cookieService.get('unit')=="celsius"){
                 currentPanel.temperature = deviceInf.Payload[0].Data.temperature;
-                this.unit="°C";
               }else{
                 currentPanel.temperature = ((deviceInf.Payload[0].Data.temperature)*(9/5) + (32) );
-                this.unit="°F";
               }
             }
             else
@@ -220,10 +218,9 @@ export class HomePage {
             currentPanel.downlink = deviceStats.Last24HDownlinkCount;
           })
           this.panel.push(currentPanel);
-        }     
-
+        } 
+        this.deviceDataFireBase();
       });
-
     },
   err=>{
     console.log(err.error.error);
@@ -257,11 +254,10 @@ export class HomePage {
       this.navCtrl.setRoot(LoginPage);
     }
   });
-
     console.log(this.panel);
   }
 
-  maxTempLocal(){
+  maxTempLocal(){//notification
     this.localNotifications.schedule({
       text: 'Temperature is above the set limit of '+this.cookieService.get('tMax'),
       title: 'mQApp',
@@ -312,17 +308,76 @@ export class HomePage {
       {
         this.show[j]=false;
       }
-
     }
   }
+  }
+
+  deviceDataFireBase(){
+    this.angularFireDatabase.object('/Devices/').valueChanges().subscribe((fireDevices:any[])=>{
+      this.fireDevices=fireDevices;
+      console.log(this.fireDevices)
+      for(var k=0; k<fireDevices.length;k++)
+      {
+      let currentFirePanel = new DeviceInfo();
+      currentFirePanel.name = fireDevices[k].Name;
+      currentFirePanel.id = fireDevices[k].Id;
+      currentFirePanel.batteryLevel = fireDevices[k].BatteryLevel;
+      currentFirePanel.healthStatus = fireDevices[k].HealthStatus;
+      currentFirePanel.lat =fireDevices[k].Lattitude;
+      currentFirePanel.long = fireDevices[k].Longitude;
+      currentFirePanel.uplink = fireDevices[k].UpLink;
+      currentFirePanel.water = Math.random();
+      if(currentFirePanel.water<0.45 && currentFirePanel.water>=0)
+      {
+        currentFirePanel.waterStatus="NO WATER";
+      }
+      else if(currentFirePanel.water>=0.45 && currentFirePanel.water<0.75)
+      {
+        currentFirePanel.waterStatus="RAIN";
+        this.rainingLocal();
+      }
+      else
+      {
+        currentFirePanel.waterStatus = "FLOODING";
+        this.floodingLocal();
+      }
+      currentFirePanel.downlink = fireDevices[k].DownLink;
+      console.log('NAMEEE'+' '+currentFirePanel.name);
+      var nameToApi = currentFirePanel.name.split(',')[0];
+      this.weatherService.getWeather(nameToApi).subscribe((data:any)=>{
+    
+        
+        if(this.cookieService.get('unit')=="celsius"){
+          currentFirePanel.temperature=data.main.temp;
+          currentFirePanel.humidity=data.main.humidity;
+        }else{
+          currentFirePanel.temperature = ((data.main.temp)*(9/5) + (32) );
+          currentFirePanel.humidity=data.main.humidity;
+        }
+        if(currentFirePanel.temperature > this.tMax)
+        {
+          currentFirePanel.color="salmon";
+          this.maxTempLocal();
+        }
+        else if(currentFirePanel.temperature < this.tMin)
+        {
+          currentFirePanel.color="lightblue";
+          this.minTempLocal();
+        }
+        else
+        {
+          currentFirePanel.color="white";
+        }
+      });
+    
+      this.panel.push(currentFirePanel);
+      }
+    });
   }
 
   showStats(id)
   {
     this.machineId=id;
-    // this.getPayloadData(id).subscribe((payloads)=>{
-    //   console.log(payloads);
-    // })
     this.cookieService.set('machineId',this.machineId);
     console.log(this.cookieService.get('machineId'));
     this.navCtrl.setRoot('StatsPage');
@@ -336,13 +391,11 @@ export class HomePage {
       buttons: ['Dismiss']
     });
     alert.present();
-
   }
 
   logout()
   {
-    this.navCtrl.setRoot(LoginPage);
-    
+    this.navCtrl.setRoot(LoginPage);   
   }
 
   resetView(value)
@@ -350,8 +403,4 @@ export class HomePage {
     value=this.defaultLevels;
     this.mapReadyFunTwo(value);
   }
-
-  
-
-
 }
