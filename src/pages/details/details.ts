@@ -35,15 +35,17 @@ export class DetailsPage {
     lower:null
   };
 
-  this.citiesKnobValues = {
-    upper: null,
-    lower:0
+  if(!this.cookieService.get('cities'))
+  {
+    this.citiesKnobValues=0;
   }
-
+  else
+  {
+    this.citiesKnobValues = this.cookieService.get('cities');
+  }
   this.tempKnobValues.upper = this.cookieService.get('tMax');
   this.tempKnobValues.lower = this.cookieService.get('tMin');
 
-  this.citiesKnobValues.upper = this.cookieService.get('cities');
   
   this.humidityKnobValues.upper = this.cookieService.get('hMax');
   this.humidityKnobValues.lower = this.cookieService.get('hMin');
@@ -74,7 +76,8 @@ export class DetailsPage {
 
   saveCitiesLimits()
   {
-    this.cookieService.set('cities',this.citiesKnobValues.upper);
+    console.log(this.citiesKnobValues);
+    this.cookieService.set('cities',this.citiesKnobValues);
     this.showCitiesLimitsAlert();
   }
   
@@ -113,11 +116,8 @@ export class DetailsPage {
 
   resetCitiesLimits()
   {
-    this.citiesKnobValues = {
-      upper: 5,
-      lower:0
-    }
-    this.cookieService.set('cities',this.citiesKnobValues.upper);
+    this.citiesKnobValues=0; 
+    this.cookieService.set('cities',this.citiesKnobValues);
     this.showCitiesResetAlert();
   }
 

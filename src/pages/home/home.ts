@@ -327,8 +327,8 @@ export class HomePage {
       currentFirePanel.id = fireDevices[k].Id;
       currentFirePanel.batteryLevel = fireDevices[k].BatteryLevel;
       currentFirePanel.healthStatus = fireDevices[k].HealthStatus;
-      currentFirePanel.lat =fireDevices[k].Lattitude;
-      currentFirePanel.long = fireDevices[k].Longitude;
+      currentFirePanel.lat =parseFloat(fireDevices[k].Lattitude);
+      currentFirePanel.long = parseFloat(fireDevices[k].Longitude);
       currentFirePanel.uplink = fireDevices[k].UpLink;
       currentFirePanel.water = Math.random();
       if(currentFirePanel.water<0.45 && currentFirePanel.water>=0)
