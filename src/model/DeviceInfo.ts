@@ -16,4 +16,6 @@ export class DeviceInfo
     downlink:string;
 
     color:string;
+
+    isSimulated:boolean;
 }
