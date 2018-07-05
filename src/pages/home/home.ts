@@ -299,7 +299,13 @@ export class HomePage {
   }
 
   toogleAccordion(i)
-  {if(i!=="doNotToggle")
+  { setTimeout(() => {
+    if (document.getElementById((i) + '')) {
+      document.getElementById((i) + '').scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+  }, 500);
+    if(i!=="doNotToggle")
   {
     this.show[i]=!this.show[i];
 
@@ -381,8 +387,9 @@ export class HomePage {
     });
   }
 
-  showStats(id,isSim)
+  showStats(i,id,isSim)
   {
+   
     if(!isSim)
     {
     this.machineId=id;
