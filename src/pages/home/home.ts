@@ -148,6 +148,7 @@ export class HomePage {
         //console.log(this.devices);
         for(var i=0;i<this.devices.length;i++)
         { let currentPanel = new DeviceInfo();
+          currentPanel.isSimulated =false;
           this.show[i]=false;
           currentPanel.lat = parseFloat(this.gateways[i].Coordinates.X);
           currentPanel.long = parseFloat(this.gateways[i].Coordinates.Y);
@@ -323,6 +324,7 @@ export class HomePage {
       for(var k=0; k<citylength;k++)
       {
       let currentFirePanel = new DeviceInfo();
+      currentFirePanel.isSimulated = true;
       currentFirePanel.name = fireDevices[k].Name;
       currentFirePanel.id = fireDevices[k].Id;
       currentFirePanel.batteryLevel = fireDevices[k].BatteryLevel;
@@ -379,12 +381,24 @@ export class HomePage {
     });
   }
 
-  showStats(id)
+  showStats(id,isSim)
   {
+    if(!isSim)
+    {
     this.machineId=id;
     this.cookieService.set('machineId',this.machineId);
     console.log(this.cookieService.get('machineId'));
     this.navCtrl.setRoot('StatsPage');
+    }
+    else
+    { //add code to retrieve 7 days data for simulated site
+      let alert = this.alertCtrl.create({
+        title: 'Simulated Site Data!',
+        subTitle: 'Functionality is coming soon.',
+        buttons: ['Dismiss']
+      });
+      alert.present();
+    }
   }
 
   openPage()
