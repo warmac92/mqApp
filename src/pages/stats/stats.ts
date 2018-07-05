@@ -39,14 +39,24 @@ export class StatsPage {
   payloadData: any[];
   temperatures: number[];
   constructor(public cookieService: CookieService,private deviceService: DeviceService, public navCtrl: NavController, public navParams: NavParams,public loadingCtrl: LoadingController) {
+    if(navParams.get('data')=="0"){
+      var simId ='0';
+      var macId = this.cookieService.get('machineId');
+      console.log("MacId : "+macId);
+      console.log("SimId : "+simId);
+    }
+    else
+    {
+      var simId = this.cookieService.get('simulatedId');
+      var macId='0';
+      console.log("MacId : "+macId);
+      console.log("SimId : "+simId);
+    }
+    console.log("devuda "+ navParams.get('data'));
     this.payloadData=[];
     this.temperatures=[];
     this.tmax = parseFloat(this.cookieService.get('tMax'));
-    console.log("tMax");
-    console.log(this.tmax);
     this.tmin = parseFloat(this.cookieService.get('tMin'));
-    console.log("tMin");
-    console.log(this.tmin);
     this.a=0;
     this.b=0;
     this.c=0;
@@ -55,7 +65,7 @@ export class StatsPage {
     this.f=0;
     this.showCenti=true;
     this.showFahr=true;
-    var macId = this.cookieService.get('machineId');
+    //var macId = this.cookieService.get('machineId');
     var dateMonthString;
     const date = new Date();
     date.setDate(date.getDate()-7);
@@ -197,7 +207,5 @@ export class StatsPage {
   goBack()
   {
     this.navCtrl.setRoot('HomePage');
-  }
-  // this is the place from where line is starting
-  
+  }  
 }

@@ -26,6 +26,7 @@ export class HomePage {
   date: Date;
   tMin:number;
   machineId:any;
+  simulatedId:any;
   tMax:number;
   hMin:number;
   hMax:number;
@@ -388,16 +389,18 @@ export class HomePage {
     this.machineId=id;
     this.cookieService.set('machineId',this.machineId);
     console.log(this.cookieService.get('machineId'));
-    this.navCtrl.setRoot('StatsPage');
+    this.navCtrl.setRoot('StatsPage', {
+      data: "0"
+    });
     }
     else
     { //add code to retrieve 7 days data for simulated site
-      let alert = this.alertCtrl.create({
-        title: 'Simulated Site Data!',
-        subTitle: 'Functionality is coming soon.',
-        buttons: ['Dismiss']
-      });
-      alert.present();
+      this.simulatedId=id;
+      this.cookieService.set('simulatedId',this.simulatedId);
+      console.log(this.cookieService.get('simulatedId'));
+      this.navCtrl.setRoot('StatsPage', {
+        data: "1"
+      });    
     }
   }
 
