@@ -10,6 +10,7 @@ import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login';
 import { LoginService } from '../services/login.service';
 import { DeviceService } from '../services/device.service';
+import { WeatherService } from '../services/weather.service';
 import { IonicStorageModule } from '@ionic/storage';
 import { Pipe, PipeTransform } from '@angular/core';
 import { DatePipe } from '@angular/common';
@@ -17,6 +18,17 @@ import { CookieService } from 'ngx-cookie-service';
 import { Util } from '../constants/util';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { ChartsModule } from 'ng2-charts';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
+
+var config = {
+  apiKey: "AIzaSyD0xSS0CXGv8Inld4r-HS34y8JsD0vTJG8",
+  authDomain: "macrosoft-iot.firebaseapp.com",
+  databaseURL: "https://macrosoft-iot.firebaseio.com",
+  projectId: "macrosoft-iot",
+  storageBucket: "macrosoft-iot.appspot.com",
+  messagingSenderId: "929714229376"
+};
 
 @NgModule({
   declarations: [
@@ -27,6 +39,9 @@ import { ChartsModule } from 'ng2-charts';
     AngularFontAwesomeModule,
     BrowserModule,
     HttpClientModule,
+    AngularFireDatabaseModule,
+    AngularFireModule,
+    AngularFireModule.initializeApp(config),
     ChartsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
@@ -41,6 +56,7 @@ import { ChartsModule } from 'ng2-charts';
     CookieService,
     LoginService,
     DeviceService,
+    WeatherService,
     LoadingController,
     LocalNotifications,
     DatePipe,
