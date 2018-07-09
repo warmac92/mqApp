@@ -5,6 +5,7 @@ import {CookieService} from 'ngx-cookie-service';
 import { Chart } from 'chart.js';
 import { LoadingController } from 'ionic-angular';
 import {LoginPage} from '../login/login';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 /**
  * Generated class for the StatsPage page.
@@ -36,48 +37,73 @@ export class StatsPage {
   g: number;
   showCenti: boolean;
   showFahr: boolean;
+  simDate:any;
+  currentDate:any;
   payloadData: any[];
+  sevenSimData: any[];
+  simData:any;
   temperatures: number[];
-  constructor(public cookieService: CookieService,private deviceService: DeviceService, public navCtrl: NavController, public navParams: NavParams,public loadingCtrl: LoadingController) {
-    if(navParams.get('data')=="0"){
-      var simId ='0';
-      var macId = this.cookieService.get('machineId');
-      console.log("MacId : "+macId);
-      console.log("SimId : "+simId);
-    }
-    else
-    {
-      var simId = this.cookieService.get('simulatedId');
-      var macId='0';
-      console.log("MacId : "+macId);
-      console.log("SimId : "+simId);
-    }
-    console.log("devuda "+ navParams.get('data'));
-    this.payloadData=[];
-    this.temperatures=[];
-    this.tmax = parseFloat(this.cookieService.get('tMax'));
-    this.tmin = parseFloat(this.cookieService.get('tMin'));
+  constructor(public angularFireDatabase: AngularFireDatabase, public cookieService: CookieService,private deviceService: DeviceService, public navCtrl: NavController, public navParams: NavParams,public loadingCtrl: LoadingController) {
     this.a=0;
     this.b=0;
     this.c=0;
     this.d=0;
     this.e=0;
     this.f=0;
+    this.payloadData=[];
+    this.temperatures=[];
     this.showCenti=true;
     this.showFahr=true;
-    //var macId = this.cookieService.get('machineId');
+    this.tmax = parseFloat(this.cookieService.get('tMax'));
+    this.tmin = parseFloat(this.cookieService.get('tMin'));
+    if(navParams.get('data')!="1"){
+      var simId ='0';
+      var macId = this.cookieService.get('machineId');
+      console.log("dhetadi");
+    }
+    else if(navParams.get('data')=="1")
+    {
+      var simId = this.cookieService.get('simulatedId');
+      var macId='0';
+      this.angularFireDatabase.object('/Device-Data/0/'+simId+'/').valueChanges().subscribe((fireData:any)=>{
+      this.simData=fireData;
+      console.log(fireData);
+      this.currentDate = new Date();
+      this.currentDate.setDate(this.currentDate.getDate()-7);
+      if(this.cookieService.get('unit')=="celsius"){
+      this.simCenti();
+      setTimeout(()=>{
+        this.doughnutCentigrade();
+      },1500);
+    }else if(this.cookieService.get('unit')=="fahrenheit"){
+      this.simFahren();
+      setTimeout(()=>{
+        this.doughnutFahrenheit();
+      },1500);
+    }
+    });
+    }
     var dateMonthString;
+    var dateDayString;
     const date = new Date();
     date.setDate(date.getDate()-7);
     date.setMonth(date.getUTCMonth()+1);
     if(date.getUTCMonth()<10)
     {
       dateMonthString = "0"+date.getUTCMonth().toString();
+      console.log("ikkada");
+      console.log(dateMonthString);
     }
-    const utcTime = date.getUTCFullYear().toString()+"-"+dateMonthString+"-"+date.getUTCDate().toString()+"T00:00:00.000Z";
+    if(date.getUTCDate()<=9){
+      dateDayString = "0"+date.getUTCDate().toString();
+    }
+    const utcTime = date.getUTCFullYear().toString()+"-"+dateMonthString+"-"+dateDayString+"T00:00:00.000Z";
     this.loading();
+    //if condition to check if request to mqserver should be made
+    if(macId!="0"){
     this.deviceService.getPayloadData(macId,utcTime).subscribe((payloads:any[])=>{
       this.payloadData=payloads['Payloads'];
+      console.log(this.payloadData);
       if(this.cookieService.get('unit')=="celsius")
       {
         this.showCenti=false;
@@ -93,9 +119,6 @@ export class StatsPage {
           this.c++;
         }
       }
-      console.log(this.a);
-      console.log(this.b);
-      console.log(this.c);
       this.doughnutCentigrade();
       }else if(this.cookieService.get('unit')=="fahrenheit"){
         this.showCenti=true;
@@ -117,14 +140,52 @@ export class StatsPage {
               this.f++;
             }
         }
-      console.log(this.d);
-      console.log(this.e);
-      console.log(this.f);
       this.doughnutFahrenheit();
       },2000);
-    }
-      
+    }    
     });
+  }
+  }
+
+  simFahren(){
+    this.showCenti=true;
+    this.showFahr=false;
+    for(var i=0;i<this.simData.length;i++)
+      {
+        this.g = 0;
+        this.g=(((parseFloat(this.simData[i].Temperature))*1.8)+32);
+        this.simDate = new Date(this.simData[i].DateTime);
+        if((this.g)<=this.tmin){
+          this.d++
+        }else if((this.g)>this.tmin && (this.g)<this.tmax){
+          this.e++;
+        }else if((this.g)>=this.tmax){
+          this.f++;
+        }
+      }
+      console.log("idi fahren");
+  }
+
+  simCenti(){
+    this.showCenti=false;
+    this.showFahr=true;
+    for(var i=0;i<this.simData.length;i++)
+      {
+        this.simDate = new Date(this.simData[i].DateTime);
+        console.log(this.simDate);
+        if(this.simDate >= this.currentDate)
+        {
+          //console.log(this.simData[i]);
+          if(parseFloat(this.simData[i].Temperature)>=parseFloat(this.cookieService.get('tMax'))){
+            this.a++;
+          }else if((parseFloat(this.simData[i].Temperature)<=parseFloat(this.cookieService.get('tMax')) && parseFloat(this.simData[i].Temperature)>=parseFloat(this.cookieService.get('tMin')))){
+            this.b++;
+          }else if(parseFloat(this.simData[i].Temperature)<=parseFloat(this.cookieService.get('tMin'))){
+            this.c++;
+          }
+        }
+      }
+      console.log("idi centi");
   }
 
   loading(){

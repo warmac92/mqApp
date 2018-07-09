@@ -40,6 +40,15 @@ export class BarPage {
   payloadData:any[];
   myCustomPayloadData:MyCustomPayload[];
   constructor(public cookieService: CookieService,private deviceService: DeviceService,public loadingCtrl: LoadingController,public navCtrl: NavController, public navParams: NavParams) {
+    if(navParams.get('data')!="1"){
+      var simId ='0';
+      var macId = this.cookieService.get('machineId');
+      console.log("dhetadi");
+    }
+    else if(navParams.get('data')=="1"){
+      var simId = this.cookieService.get('simulatedId');
+      var macId = '0';
+    }
     this.payloadData=[];
     this.myCustomPayloadData=[];
     this.fah7=[];
@@ -47,7 +56,6 @@ export class BarPage {
     this.showCenti=true;
     this.showFahr=true;
     this.macId;
-
     this.dateStringArray=[];
     for(var i=0;i<7;i++)
     {
@@ -68,6 +76,7 @@ export class BarPage {
       this.day7=parseInt(this.dateStringArray[6]);
       console.log(this.day1,this.day2,this.day3,this.day4,this.day5,this.day6,this.day7)
     },1000);
+    if(macId!="0"){
     if(this.cookieService.get('unit')=="celsius"){
       this.showFahr=true;
       this.showCenti=false;
@@ -84,9 +93,8 @@ export class BarPage {
         }, 1000);
       },4500);
     }
-
-      this.getMaxTemperatures();
-    
+    this.getMaxTemperatures();
+  }   
   }
 
   ionViewDidLoad() {
@@ -107,6 +115,7 @@ export class BarPage {
     this.macId = this.cookieService.get('machineId');
    //getting utc date 7 days before current date in users time zone to pass to payload api as starttime
     var dateMonthString;
+    var dateDayString;
     const date = new Date();
     date.setDate(date.getDate()-7);
     date.setMonth(date.getUTCMonth()+1);
@@ -114,7 +123,10 @@ export class BarPage {
     {
       dateMonthString = "0"+date.getUTCMonth().toString();
     }
-    const utcTime = date.getUTCFullYear().toString()+"-"+dateMonthString+"-"+date.getUTCDate().toString()+"T00:00:00.000Z";
+    if(date.getUTCDate()<=9){
+      dateDayString = "0"+date.getUTCDate().toString();
+    }
+    const utcTime = date.getUTCFullYear().toString()+"-"+dateMonthString+"-"+dateDayString+"T00:00:00.000Z";
     console.log(utcTime);
     this.deviceService.getPayloadData(this.macId,utcTime).subscribe((data)=>{
 
@@ -160,10 +172,10 @@ export class BarPage {
       
     });
 
-  setTimeout(()=>{
-    console.log(this.payloadData);
-    console.log(this,this.myCustomPayloadData);
-   },5000);
+  // setTimeout(()=>{
+  //   console.log(this.payloadData);
+  //   console.log(this,this.myCustomPayloadData);
+  //  },5000);
   }
 
   loading(){

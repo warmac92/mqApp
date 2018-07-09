@@ -349,11 +349,9 @@ export class HomePage {
         this.floodingLocal();
       }
       currentFirePanel.downlink = fireDevices[k].DownLink;
-      console.log('NAMEEE'+' '+currentFirePanel.name);
+      console.log('NAME'+' '+currentFirePanel.name);
       var nameToApi = currentFirePanel.name.split(',')[0];
       this.weatherService.getWeather(nameToApi).subscribe((data:any)=>{
-    
-        
         if(this.cookieService.get('unit')=="celsius"){
           currentFirePanel.temperature=data.main.temp;
           currentFirePanel.humidity=data.main.humidity;

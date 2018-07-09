@@ -22,12 +22,12 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 
 var config = {
-  apiKey: "AIzaSyD0xSS0CXGv8Inld4r-HS34y8JsD0vTJG8",
-  authDomain: "macrosoft-iot.firebaseapp.com",
-  databaseURL: "https://macrosoft-iot.firebaseio.com",
-  projectId: "macrosoft-iot",
-  storageBucket: "macrosoft-iot.appspot.com",
-  messagingSenderId: "929714229376"
+  apiKey: "AIzaSyAGOXVVn6m11aMbhP0XQrLSO3--0W_bnWI",
+  authDomain: "macrosoft-iot-4a200.firebaseapp.com",
+  databaseURL: "https://macrosoft-iot-4a200.firebaseio.com",
+  projectId: "macrosoft-iot-4a200",
+  storageBucket: "macrosoft-iot-4a200.appspot.com",
+  messagingSenderId: "574561697134"
 };
 
 @NgModule({
