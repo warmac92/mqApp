@@ -26,6 +26,7 @@ export class HomePage {
   date: Date;
   tMin:number;
   machineId:any;
+  simulatedId:any;
   tMax:number;
   hMin:number;
   hMax:number;
@@ -62,7 +63,6 @@ export class HomePage {
     this.userLong = resp.coords.longitude;
     this.iconObject= 'https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png';
   }).catch((error)=>{
-    console.log("error");
   })
 
   if(!this.cookieService.get('unit'))
@@ -354,11 +354,9 @@ export class HomePage {
         this.floodingLocal();
       }
       currentFirePanel.downlink = fireDevices[k].DownLink;
-      console.log('NAMEEE'+' '+currentFirePanel.name);
+      console.log('NAME'+' '+currentFirePanel.name);
       var nameToApi = currentFirePanel.name.split(',')[0];
       this.weatherService.getWeather(nameToApi).subscribe((data:any)=>{
-    
-        
         if(this.cookieService.get('unit')=="celsius"){
           currentFirePanel.temperature=data.main.temp;
           currentFirePanel.humidity=data.main.humidity;
@@ -395,16 +393,18 @@ export class HomePage {
     this.machineId=id;
     this.cookieService.set('machineId',this.machineId);
     console.log(this.cookieService.get('machineId'));
-    this.navCtrl.setRoot('StatsPage');
+    this.navCtrl.setRoot('StatsPage', {
+      data: "0"
+    });
     }
     else
     { //add code to retrieve 7 days data for simulated site
-      let alert = this.alertCtrl.create({
-        title: 'Simulated Site Data!',
-        subTitle: 'Functionality is coming soon.',
-        buttons: ['Dismiss']
-      });
-      alert.present();
+      this.simulatedId=id;
+      this.cookieService.set('simulatedId',this.simulatedId);
+      console.log(this.cookieService.get('simulatedId'));
+      this.navCtrl.setRoot('StatsPage', {
+        data: "1"
+      });    
     }
   }
 
