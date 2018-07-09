@@ -104,7 +104,6 @@ export class BarPage {
   getMaxTemperaturesFahrenheit(){
     //console.log(this.myCustomPayloadData[0].maxTemp);
     this.getMaxTemperatures();
-
     for(var j=0; j<7;j++){
     this.fah7[j]=(((this.myCustomPayloadData[j].maxTemp)*1.8)+32).toFixed(2);
     console.log(this.fah7[j]);
@@ -147,7 +146,6 @@ export class BarPage {
         this.myCustomPayloadData.push(myCurrentPayload);
       }
 
-
       for(var i=0;i<this.myCustomPayloadData.length;i++)
       {
         for(var j=0;j<this.payloadData.length;j++)
@@ -164,8 +162,7 @@ export class BarPage {
       }
 
       for(var i=0;i<this.myCustomPayloadData.length;i++)
-      {
-       
+      {       
          this.myCustomPayloadData[i].maxTemp = Math.max(...this.myCustomPayloadData[i].temperatures);
       }
       
