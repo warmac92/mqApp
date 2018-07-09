@@ -385,7 +385,7 @@ export class HomePage {
     });
   }
 
-  showStats(i,id,isSim)
+  showStats(id,isSim)
   {
    
     if(!isSim)
