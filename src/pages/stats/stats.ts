@@ -56,7 +56,8 @@ export class StatsPage {
     this.showFahr=true;
     this.tmax = parseFloat(this.cookieService.get('tMax'));
     this.tmin = parseFloat(this.cookieService.get('tMin'));
-    if(navParams.get('data')!="1"){
+    console.log(navParams.get('data'));
+    if(navParams.get('data')=="0"){
       var simId ='0';
       var macId = this.cookieService.get('machineId');
       console.log("dhetadi");
@@ -93,9 +94,13 @@ export class StatsPage {
       dateMonthString = "0"+date.getUTCMonth().toString();
       console.log("ikkada");
       console.log(dateMonthString);
+    }else{
+      dateMonthString = date.getUTCMonth().toString();
     }
     if(date.getUTCDate()<=9){
       dateDayString = "0"+date.getUTCDate().toString();
+    }else{
+      dateDayString = date.getUTCDate().toString();
     }
     const utcTime = date.getUTCFullYear().toString()+"-"+dateMonthString+"-"+dateDayString+"T00:00:00.000Z";
     this.loading();
@@ -111,14 +116,15 @@ export class StatsPage {
       for(var i=0;i<this.payloadData.length;i++)
       {
         //this.temperatures.push(this.payloadData[i].Data.temperature); 
-        if(parseFloat(this.payloadData[i].Data.temperature)<=this.tmin){
-          this.a++
-        }else if(parseFloat(this.payloadData[i].Data.temperature)>this.tmin && parseFloat(this.payloadData[i].Data.temperature)<this.tmax){
-          this.b++;
-        }else if(parseFloat(this.payloadData[i].Data.temperature)>=this.tmax){
+        if(parseFloat(this.payloadData[i].Data.temperature)>=parseFloat(this.cookieService.get('tMax'))){
           this.c++;
+        }else if((parseFloat(this.payloadData[i].Data.temperature)<parseFloat(this.cookieService.get('tMax')) && parseFloat(this.payloadData[i].Data.temperature)>parseFloat(this.cookieService.get('tMin')))){
+          this.b++;
+        }else if(parseFloat(this.payloadData[i].Data.temperature)<=parseFloat(this.cookieService.get('tMin'))){
+          this.a++;
         }
       }
+      console.log(this.a, this.b, this.c);
       this.doughnutCentigrade();
       }else if(this.cookieService.get('unit')=="fahrenheit"){
         this.showCenti=true;
@@ -172,16 +178,15 @@ export class StatsPage {
     for(var i=0;i<this.simData.length;i++)
       {
         this.simDate = new Date(this.simData[i].DateTime);
-        console.log(this.simDate);
         if(this.simDate >= this.currentDate)
         {
           //console.log(this.simData[i]);
           if(parseFloat(this.simData[i].Temperature)>=parseFloat(this.cookieService.get('tMax'))){
-            this.a++;
-          }else if((parseFloat(this.simData[i].Temperature)<=parseFloat(this.cookieService.get('tMax')) && parseFloat(this.simData[i].Temperature)>=parseFloat(this.cookieService.get('tMin')))){
+            this.c++;
+          }else if((parseFloat(this.simData[i].Temperature)<parseFloat(this.cookieService.get('tMax')) && parseFloat(this.simData[i].Temperature)>parseFloat(this.cookieService.get('tMin')))){
             this.b++;
           }else if(parseFloat(this.simData[i].Temperature)<=parseFloat(this.cookieService.get('tMin'))){
-            this.c++;
+            this.a++;
           }
         }
       }
@@ -206,6 +211,7 @@ export class StatsPage {
 
   doughnutCentigrade(){
     console.log("centi graph");
+    console.log(this.c);
     this.doughnutChart = new Chart(this.doughnutCentigradeCanvas.nativeElement, {
       type: 'doughnut',
       data:{
@@ -257,7 +263,17 @@ export class StatsPage {
   }
 
   goBar(){
+    if(!this.navParams.get('data')){
     this.navCtrl.setRoot('BarPage');
+    }else if(this.navParams.get('data')=="0"){
+      this.navCtrl.setRoot('BarPage', {
+        data: "0"
+      });
+    }else if(this.navParams.get('data')=="1"){
+      this.navCtrl.setRoot('BarPage', {
+        data: "1"
+      });
+    }
   }
 
   logout()

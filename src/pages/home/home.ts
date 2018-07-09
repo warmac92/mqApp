@@ -63,7 +63,6 @@ export class HomePage {
     this.userLong = resp.coords.longitude;
     this.iconObject= 'https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png';
   }).catch((error)=>{
-    console.log("error");
   })
 
   if(!this.cookieService.get('unit'))

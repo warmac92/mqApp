@@ -6,6 +6,7 @@ import { Chart } from 'chart.js';
 import { LoadingController } from 'ionic-angular';
 import {MyCustomPayload} from '../../model/MyCustomPayload';
 import {LoginPage} from '../login/login';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 /**
  * Generated class for the BarPage page.
@@ -35,19 +36,45 @@ export class BarPage {
   day7: number;
   fah7:any[];
   macId:any;
+  simData: any;
   showCenti: boolean;
   showFahr: boolean;
   payloadData:any[];
   myCustomPayloadData:MyCustomPayload[];
-  constructor(public cookieService: CookieService,private deviceService: DeviceService,public loadingCtrl: LoadingController,public navCtrl: NavController, public navParams: NavParams) {
-    if(navParams.get('data')!="1"){
+  constructor(public angularFireDatabase: AngularFireDatabase, public cookieService: CookieService,private deviceService: DeviceService,public loadingCtrl: LoadingController,public navCtrl: NavController, public navParams: NavParams) {
+    if(navParams.get('data')=="0"){
       var simId ='0';
       var macId = this.cookieService.get('machineId');
       console.log("dhetadi");
+      console.log(navParams.get('data'));
     }
-    else if(navParams.get('data')=="1"){
+    else if(navParams.get('data')=="1")
+    {
+      console.log("emaindi");
       var simId = this.cookieService.get('simulatedId');
-      var macId = '0';
+      var macId='0';
+      this.angularFireDatabase.object('/Device-Data/0/'+simId+'/').valueChanges().subscribe((fireData:any[])=>{
+      this.simData=fireData;
+      console.log(this.simData);
+      if(this.cookieService.get('unit')=="celsius"){
+        this.showFahr=true;
+        this.showCenti=false;
+        this.getSimMaxTemp();
+      setTimeout(() => {
+        this.barCentigrade();
+      }, 5000);
+      }else if(this.cookieService.get('unit')=="fahrenheit"){
+        this.showCenti=true;
+        this.showFahr=false;
+        this.getSimMaxTemp();
+        setTimeout(()=>{
+          this.getMaxTemperaturesFahrenheit();
+          setTimeout(() => {
+            this.barFahrenheit();
+          }, 1000);
+        },4500);
+      }
+      });
     }
     this.payloadData=[];
     this.myCustomPayloadData=[];
@@ -65,6 +92,7 @@ export class BarPage {
     console.log(this.dateStringArray);
     }
     this.dateStringArray.reverse();
+    if(macId!="0"){
     console.log(this.dateStringArray);
     setTimeout(()=>{
       this.day1=parseInt(this.dateStringArray[0]);
@@ -76,7 +104,6 @@ export class BarPage {
       this.day7=parseInt(this.dateStringArray[6]);
       console.log(this.day1,this.day2,this.day3,this.day4,this.day5,this.day6,this.day7)
     },1000);
-    if(macId!="0"){
     if(this.cookieService.get('unit')=="celsius"){
       this.showFahr=true;
       this.showCenti=false;
@@ -94,7 +121,46 @@ export class BarPage {
       },4500);
     }
     this.getMaxTemperatures();
-  }   
+  }
+  }
+
+  getSimMaxTemp(){
+    console.log("simmaxtemp");
+    for(var i=0;i<this.simData.length;i++)
+      {
+       var currentDate = new Date(this.simData[i].DateTime);
+       this.simData[i].DateTime = currentDate.getDate() + "-" + currentDate.getMonth();
+       //xconsole.log(this.payloadData[i].Time);
+      }
+
+      for(var i=0;i<this.dateStringArray.length;i++)
+      {
+        var myCurrentPayload = new MyCustomPayload();
+        myCurrentPayload.date=this.dateStringArray[i];
+        myCurrentPayload.temperatures= [0];
+        myCurrentPayload.maxTemp=0;
+        this.myCustomPayloadData.push(myCurrentPayload);
+      }
+
+      for(var i=0;i<this.myCustomPayloadData.length;i++)
+      {
+        for(var j=0;j<this.simData.length;j++)
+        {
+          if(this.simData[j].DateTime===this.myCustomPayloadData[i].date)
+          {
+            if(this.simData[j].Temperature==null || !this.simData[j].Temperature)
+            {
+              this.simData[j].Temperature=0;
+            }
+            this.myCustomPayloadData[i].temperatures.push(parseFloat(this.simData[j].Temperature));
+          }
+        }
+      }
+      for(var i=0;i<this.myCustomPayloadData.length;i++)
+      {       
+         this.myCustomPayloadData[i].maxTemp = Math.max(...this.myCustomPayloadData[i].temperatures);
+         console.log(this.myCustomPayloadData[i].maxTemp);
+      }
   }
 
   ionViewDidLoad() {
@@ -121,15 +187,20 @@ export class BarPage {
     if(date.getUTCMonth()<10)
     {
       dateMonthString = "0"+date.getUTCMonth().toString();
+    }else{
+      dateMonthString = date.getUTCMonth().toString();
     }
     if(date.getUTCDate()<=9){
       dateDayString = "0"+date.getUTCDate().toString();
+    }else{
+      dateDayString = date.getUTCDate().toString();
     }
     const utcTime = date.getUTCFullYear().toString()+"-"+dateMonthString+"-"+dateDayString+"T00:00:00.000Z";
     console.log(utcTime);
     this.deviceService.getPayloadData(this.macId,utcTime).subscribe((data)=>{
 
       this.payloadData = data['Payloads'];
+      console.log(this.payloadData);
       for(var i=0;i<this.payloadData.length;i++)
       {
        var currentDate = new Date(this.payloadData[i].Time);
@@ -164,9 +235,7 @@ export class BarPage {
       for(var i=0;i<this.myCustomPayloadData.length;i++)
       {       
          this.myCustomPayloadData[i].maxTemp = Math.max(...this.myCustomPayloadData[i].temperatures);
-      }
-      
-      
+      }    
     });
 
   // setTimeout(()=>{
