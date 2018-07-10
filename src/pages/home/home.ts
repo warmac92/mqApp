@@ -26,6 +26,7 @@ export class HomePage {
   date: Date;
   tMin:number;
   machineId:any;
+  simulatedId:any;
   tMax:number;
   hMin:number;
   hMax:number;
@@ -62,7 +63,6 @@ export class HomePage {
     this.userLong = resp.coords.longitude;
     this.iconObject= 'https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png';
   }).catch((error)=>{
-    console.log("error");
   })
 
   if(!this.cookieService.get('unit'))
@@ -71,11 +71,11 @@ export class HomePage {
   }
 
   if(this.cookieService.get('unit')=="celsius"){
-  
     this.unit="°C";
   }else{
     this.unit="°F";
   }
+
     if(!this.cookieService.get('tMin') || !this.cookieService.get('tMax') || !this.cookieService.get('hMin') || !this.cookieService.get('hMax') || !this.cookieService.get('unit'))
     {
       this.cookieService.set('tMin',"32");
@@ -142,15 +142,25 @@ export class HomePage {
     this.deviceService.getAllGateways().subscribe((gatewaysFromApi:any[])=>{
       
       this.gateways=gatewaysFromApi['Gateways'];
-      //console.log(this.gateways);
+      console.log(this.gateways[0].Coordinates);
+
       this.deviceService.getAllDevices().subscribe((devicesFromApi:any[])=>{
         this.devices=devicesFromApi['Devices'];
         //console.log(this.devices);
         for(var i=0;i<this.devices.length;i++)
         { let currentPanel = new DeviceInfo();
+          currentPanel.isSimulated =false;
           this.show[i]=false;
+          if(this.gateways[i] && this.gateways[i].Coordinates)
+          {
           currentPanel.lat = parseFloat(this.gateways[i].Coordinates.X);
           currentPanel.long = parseFloat(this.gateways[i].Coordinates.Y);
+          }
+          else
+          {
+            currentPanel.lat = 40.849468;
+            currentPanel.long = -74.455642;
+          }
           currentPanel.id = this.devices[i].DevEUI;
           currentPanel.name = this.devices[i].Name;
           currentPanel.water = Math.random();
@@ -161,12 +171,12 @@ export class HomePage {
           else if(currentPanel.water>=0.45 && currentPanel.water<0.75)
           {
             currentPanel.waterStatus="RAIN";
-            this.rainingLocal();
+            this.rainingLocal(currentPanel.name);
           }
           else
           {
             currentPanel.waterStatus = "FLOODING";
-            this.floodingLocal();
+            this.floodingLocal(currentPanel.name);
           }
           this.deviceService.getDevice(this.devices[i].DevEUI).subscribe((deviceInf:any)=>{
             
@@ -197,12 +207,12 @@ export class HomePage {
             if(currentPanel.temperature > this.tMax)
             {
               currentPanel.color="salmon";
-              this.maxTempLocal();
+              this.maxTempLocal(currentPanel.name);
             }
             else if(currentPanel.temperature < this.tMin)
             {
               currentPanel.color="lightblue";
-              this.minTempLocal();
+              this.minTempLocal(currentPanel.name);
             }
             else
             {
@@ -257,40 +267,40 @@ export class HomePage {
     console.log(this.panel);
   }
 
-  maxTempLocal(){//notification
+  maxTempLocal(name){//notification
     this.localNotifications.schedule({
-      text: 'Temperature is above the set limit of '+this.cookieService.get('tMax'),
-      title: 'mQApp',
+      text: 'Temperature is above the set limit of '+this.cookieService.get('tMax')+''+this.unit+' in '+name,
+      title: 'Macrosoft IOT',
       trigger: {at: new Date(new Date().getTime() + 3600)},
       led: 'FF0000',
       sound: null
    });
   }
 
-  rainingLocal(){
+  rainingLocal(name){
     this.localNotifications.schedule({
-      text: 'It is currently raining',
-      title: 'mQApp',
+      text: 'It is currently raining in '+name,
+      title: 'Macrosoft IOT',
       trigger: {at: new Date(new Date().getTime() + 3600)},
       led: 'FF0000',
       sound: null
    });
   }
 
-  floodingLocal(){
+  floodingLocal(name){
     this.localNotifications.schedule({
-      text: 'It is currently flooding',
-      title: 'mQApp',
+      text: 'It is currently flooding in '+name,
+      title: 'Macrosoft IOT',
       trigger: {at: new Date(new Date().getTime() + 3600)},
       led: 'FF0000',
       sound: null
    });
   }
 
-  minTempLocal(){
+  minTempLocal(name){
     this.localNotifications.schedule({
-      text: 'Temperature is below the set limit of '+this.cookieService.get('tMin'),
-      title: 'mQApp',
+      text: 'Temperature is below the set limit of '+this.cookieService.get('tMin')+''+this.unit+' in '+name,
+      title: 'Macrosoft IOT',
       trigger: {at: new Date(new Date().getTime() + 3600)},
       led: 'FF0000',
       sound: null
@@ -298,7 +308,13 @@ export class HomePage {
   }
 
   toogleAccordion(i)
-  {if(i!=="doNotToggle")
+  { setTimeout(() => {
+    if (document.getElementById((i) + '')) {
+      document.getElementById((i) + '').scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+  }, 500);
+    if(i!=="doNotToggle")
   {
     this.show[i]=!this.show[i];
 
@@ -323,6 +339,7 @@ export class HomePage {
       for(var k=0; k<citylength;k++)
       {
       let currentFirePanel = new DeviceInfo();
+      currentFirePanel.isSimulated = true;
       currentFirePanel.name = fireDevices[k].Name;
       currentFirePanel.id = fireDevices[k].Id;
       currentFirePanel.batteryLevel = fireDevices[k].BatteryLevel;
@@ -338,19 +355,17 @@ export class HomePage {
       else if(currentFirePanel.water>=0.45 && currentFirePanel.water<0.75)
       {
         currentFirePanel.waterStatus="RAIN";
-        this.rainingLocal();
+        this.rainingLocal(currentFirePanel.name);
       }
       else
       {
         currentFirePanel.waterStatus = "FLOODING";
-        this.floodingLocal();
+        this.floodingLocal(currentFirePanel.name);
       }
       currentFirePanel.downlink = fireDevices[k].DownLink;
-      console.log('NAMEEE'+' '+currentFirePanel.name);
+      console.log('NAME'+' '+currentFirePanel.name);
       var nameToApi = currentFirePanel.name.split(',')[0];
       this.weatherService.getWeather(nameToApi).subscribe((data:any)=>{
-    
-        
         if(this.cookieService.get('unit')=="celsius"){
           currentFirePanel.temperature=data.main.temp;
           currentFirePanel.humidity=data.main.humidity;
@@ -361,12 +376,12 @@ export class HomePage {
         if(currentFirePanel.temperature > this.tMax)
         {
           currentFirePanel.color="salmon";
-          this.maxTempLocal();
+          this.maxTempLocal(currentFirePanel.name);
         }
         else if(currentFirePanel.temperature < this.tMin)
         {
           currentFirePanel.color="lightblue";
-          this.minTempLocal();
+          this.minTempLocal(currentFirePanel.name);
         }
         else
         {
@@ -379,12 +394,27 @@ export class HomePage {
     });
   }
 
-  showStats(id)
+  showStats(id,isSim)
   {
+   
+    if(!isSim)
+    {
     this.machineId=id;
     this.cookieService.set('machineId',this.machineId);
     console.log(this.cookieService.get('machineId'));
-    this.navCtrl.setRoot('StatsPage');
+    this.navCtrl.setRoot('StatsPage', {
+      data: "0"
+    });
+    }
+    else
+    { //add code to retrieve 7 days data for simulated site
+      this.simulatedId=id;
+      this.cookieService.set('simulatedId',this.simulatedId);
+      console.log(this.cookieService.get('simulatedId'));
+      this.navCtrl.setRoot('StatsPage', {
+        data: "1"
+      });    
+    }
   }
 
   openPage()
