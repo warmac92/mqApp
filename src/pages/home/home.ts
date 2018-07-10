@@ -323,7 +323,7 @@ export class HomePage {
     this.angularFireDatabase.object('/Devices/').valueChanges().subscribe((fireDevices:any[])=>{
       this.fireDevices=fireDevices;
       if(!this.cookieService.get('cities')){
-        var citylength = 5;
+        var citylength = 0;
       }else{
       var citylength = parseInt(this.cookieService.get('cities'));}
       console.log(this.fireDevices)
