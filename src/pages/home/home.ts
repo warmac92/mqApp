@@ -142,7 +142,8 @@ export class HomePage {
     this.deviceService.getAllGateways().subscribe((gatewaysFromApi:any[])=>{
       
       this.gateways=gatewaysFromApi['Gateways'];
-      //console.log(this.gateways);
+      console.log(this.gateways[0].Coordinates);
+
       this.deviceService.getAllDevices().subscribe((devicesFromApi:any[])=>{
         this.devices=devicesFromApi['Devices'];
         //console.log(this.devices);
@@ -150,8 +151,16 @@ export class HomePage {
         { let currentPanel = new DeviceInfo();
           currentPanel.isSimulated =false;
           this.show[i]=false;
+          if(this.gateways[i] && this.gateways[i].Coordinates)
+          {
           currentPanel.lat = parseFloat(this.gateways[i].Coordinates.X);
           currentPanel.long = parseFloat(this.gateways[i].Coordinates.Y);
+          }
+          else
+          {
+            currentPanel.lat = 40.849468;
+            currentPanel.long = -74.455642;
+          }
           currentPanel.id = this.devices[i].DevEUI;
           currentPanel.name = this.devices[i].Name;
           currentPanel.water = Math.random();
