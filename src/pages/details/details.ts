@@ -37,7 +37,7 @@ export class DetailsPage {
 
   if(!this.cookieService.get('cities'))
   {
-    this.citiesKnobValues=0;
+    this.citiesKnobValues=5;
   }
   else
   {
@@ -116,7 +116,7 @@ export class DetailsPage {
 
   resetCitiesLimits()
   {
-    this.citiesKnobValues=0; 
+    this.citiesKnobValues=5; 
     this.cookieService.set('cities',this.citiesKnobValues);
     this.showCitiesResetAlert();
   }
