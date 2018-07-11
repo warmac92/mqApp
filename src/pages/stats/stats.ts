@@ -60,12 +60,13 @@ export class StatsPage {
     if(navParams.get('data')=="0"){
       var simId ='0';
       var macId = this.cookieService.get('machineId');
-      console.log("dhetadi");
+      console.log(macId);
     }
     else if(navParams.get('data')=="1")
     {
       var simId = this.cookieService.get('simulatedId');
       var macId='0';
+      console.log(simId);
       this.angularFireDatabase.object('/Device-Data/0/'+simId+'/').valueChanges().subscribe((fireData:any)=>{
       this.simData=fireData;
       console.log(fireData);
@@ -271,6 +272,20 @@ export class StatsPage {
       });
     }else if(this.navParams.get('data')=="1"){
       this.navCtrl.setRoot('BarPage', {
+        data: "1"
+      });
+    }
+  }
+
+  goScatter(){
+    if(!this.navParams.get('data')){
+    this.navCtrl.setRoot('ScatterPage');
+    }else if(this.navParams.get('data')=="0"){
+      this.navCtrl.setRoot('ScatterPage', {
+        data: "0"
+      });
+    }else if(this.navParams.get('data')=="1"){
+      this.navCtrl.setRoot('ScatterPage', {
         data: "1"
       });
     }
