@@ -23,7 +23,7 @@
 
   <ion-card [hidden]="showCenti" >
     <ion-card-header>
-      <h3 align="center">Shows the number of times temperature readings for the last 7 days were between a range. The range depends on the max and min values selected in preferences.</h3>
+      <h3 style="word-wrap: break-word;" align="center">Shows the number of times temperature readings for the last 7 days were between a range. The range depends on the max and min values selected in preferences.</h3>
     </ion-card-header>
     <ion-card-content>
       <canvas #doughnutCentigradeCanvas></canvas>
@@ -32,7 +32,7 @@
 
   <ion-card [hidden]="showFahr" >
       <ion-card-header>
-        <h3 align="center">Shows the number of times temperature readings for the last 7 days were between a range. The range depends on the values selected in preferences.</h3>
+        <h3 style="word-wrap: break-word;" align="center">Shows the number of times temperature readings for the last 7 days were between a range. The range depends on the values selected in preferences.</h3>
       </ion-card-header>
       <ion-card-content>
         <canvas #doughnutFahrenheitCanvas></canvas>
