@@ -64,26 +64,30 @@ export class ScatterPage {
         this.payloadData=payloads['Payloads'];
         if(this.cookieService.get('unit')=="celsius"){
           for(var i=0; i<this.payloadData.length; i++){
-            this.Temp[i] = this.payloadData[i].Data.temperature;
+            this.Temp[i] = parseFloat(this.payloadData[i].Data.temperature);
           }
           for(var j=0; j<this.payloadData.length; j++){
-            this.Humid[j] = this.payloadData[j].Data.humidity;
+            this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
-          for(var z=0; z<this.Humid.length; z++){
-            this.combined[z+1] = [this.Temp[z], this.Humid[z]];
-          }
+          setTimeout(()=>{
+            for(var z=0; z<this.Humid.length; z++){
+              this.combined[z+1] = [this.Temp[z], this.Humid[z]];
+            }
+          },1500);
         }else{
           for(var i=0; i<this.payloadData.length; i++){
             this.Temp[i] = (((parseFloat(this.payloadData[i].Data.temperature))*1.8)+32);
           }
           for(var j=0; j<this.payloadData.length; j++){
-            this.Humid[j] = this.payloadData[j].Data.humidity;
+            this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
-          for(var z=0; z<this.Humid.length; z++){
-            this.combined[z+1] = [this.Temp[z], this.Humid[z]];
-          }
+          setTimeout(()=>{
+            for(var z=0; z<this.Humid.length; z++){
+              this.combined[z+1] = [this.Temp[z], this.Humid[z]];
+            }
+          },1500);
         }
       });
     }else{
@@ -100,9 +104,11 @@ export class ScatterPage {
             this.Humid[j] = this.simData[j].Humidity;
           }
           this.combined[0] = ['Temperature','Humidity'];
-          for(var z=0; z<this.Humid.length; z++){
-            this.combined[z+1] = [this.Temp[z], this.Humid[z]];
-          }
+          setTimeout(()=>{
+            for(var z=0; z<this.Humid.length; z++){
+              this.combined[z+1] = [this.Temp[z], this.Humid[z]];
+            }
+          },1500);
         }else{
           for(var i=0; i<this.simData.length; i++){
             this.Temp[i] = (((parseFloat(this.simData[i].Temperature))*1.8)+32);
@@ -111,9 +117,11 @@ export class ScatterPage {
             this.Humid[j] = this.simData[j].Humidity;
           }
           this.combined[0] = ['Temperature','Humidity'];
-          for(var z=0; z<this.Humid.length; z++){
-            this.combined[z+1] = [this.Temp[z], this.Humid[z]];
-          }
+          setTimeout(()=>{
+            for(var z=0; z<this.Humid.length; z++){
+              this.combined[z+1] = [this.Temp[z], this.Humid[z]];
+            }
+          },1500);
         }
       });
     }
@@ -122,7 +130,7 @@ export class ScatterPage {
       this.showFahr=true;
       setTimeout(()=>{
         this.scatterCentigrade();
-      },4000);
+      },5000);
     }else{
       this.showCenti=true;
       this.showFahr=false;
@@ -139,25 +147,28 @@ export class ScatterPage {
   scatterCentigrade(){
     console.log("scatter centigrade");
     var data = google.visualization.arrayToDataTable(this.combined,false);
+    console.log(this.combined);
+    console.log(data);
     var options = {
       hAxis: {title: 'Temperature', minValue: 0, maxValue: 55,textStyle:{fontSize:15}},
       vAxis: {title: 'Humidity', minValue: 0, maxValue: 60,textStyle:{fontSize:15}},
       legend: 'none'
     };
-    var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+    var chart = new google.visualization.ScatterChart(document.getElementById('chart_cel'));
     chart.draw(data, options);
   }
 
   scatterFahrenheit(){
     console.log("scatter fahrenheit");
     var data = google.visualization.arrayToDataTable(this.combined,false);
+    console.log(this.combined);
+    console.log(data);
     var options = {
-      title: 'Temperature vs. Humidity',
-      hAxis: {title: 'Temperature', minValue: 0, maxValue: 120,textStyle:{fontSize:15}},
+      hAxis: {title: 'Temperature', minValue: 0, maxValue: 135,textStyle:{fontSize:15}},
       vAxis: {title: 'Humidity', minValue: 0, maxValue: 60,textStyle:{fontSize:15}},
       legend: 'none'
     };
-    var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+    var chart = new google.visualization.ScatterChart(document.getElementById('chart_fahr'));
     chart.draw(data, options);
   }
 
