@@ -66,18 +66,14 @@ export class ScatterPage {
           for(var i=0; i<this.payloadData.length; i++){
             this.Temp[i] = parseFloat(this.payloadData[i].Data.temperature);
           }
-          console.log(this.Temp);
           for(var j=0; j<this.payloadData.length; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
-          console.log(this.Humid);
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
             for(var z=0; z<this.Humid.length; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-            console.log(this.combined);
-            console.log("ikkada combine");
           },1000);
         }else{
           for(var i=0; i<this.payloadData.length; i++){
@@ -151,8 +147,6 @@ export class ScatterPage {
   scatterCentigrade(){
     console.log("scatter centigrade");
     var data = google.visualization.arrayToDataTable(this.combined,false);
-    console.log(this.combined);
-    console.log(data);
     var options = {
       hAxis: {title: 'Temperature', minValue: 0, maxValue: 60,textStyle:{fontSize:15}},
       vAxis: {title: 'Humidity', minValue: 0, maxValue: 80,textStyle:{fontSize:15}},
@@ -165,8 +159,6 @@ export class ScatterPage {
   scatterFahrenheit(){
     console.log("scatter fahrenheit");
     var data = google.visualization.arrayToDataTable(this.combined,false);
-    console.log(this.combined);
-    console.log(data);
     var options = {
       hAxis: {title: 'Temperature', minValue: 0, maxValue: 120,textStyle:{fontSize:15}},
       vAxis: {title: 'Humidity', minValue: 0, maxValue: 80,textStyle:{fontSize:15}},
