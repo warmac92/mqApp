@@ -168,8 +168,8 @@ export class ScatterPage {
     console.log(this.combined);
     console.log(data);
     var options = {
-      hAxis: {title: 'Temperature', minValue: 0, maxValue: 135,textStyle:{fontSize:15}},
-      vAxis: {title: 'Humidity', minValue: 0, maxValue: 100,textStyle:{fontSize:15}},
+      hAxis: {title: 'Temperature', minValue: 0, maxValue: 120,textStyle:{fontSize:15}},
+      vAxis: {title: 'Humidity', minValue: 0, maxValue: 80,textStyle:{fontSize:15}},
       legend: 'none'
     };
     var chart = new google.visualization.ScatterChart(document.getElementById('chart_fahr'));
