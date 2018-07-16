@@ -66,14 +66,18 @@ export class ScatterPage {
           for(var i=0; i<this.payloadData.length; i++){
             this.Temp[i] = parseFloat(this.payloadData[i].Data.temperature);
           }
+          console.log(this.Temp);
           for(var j=0; j<this.payloadData.length; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
+          console.log(this.Humid);
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
             for(var z=0; z<this.Humid.length; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
+            console.log(this.combined);
+            console.log("ikkada combine");
           },1500);
         }else{
           for(var i=0; i<this.payloadData.length; i++){
@@ -130,13 +134,13 @@ export class ScatterPage {
       this.showFahr=true;
       setTimeout(()=>{
         this.scatterCentigrade();
-      },5000);
+      },8000);
     }else{
       this.showCenti=true;
       this.showFahr=false;
       setTimeout(()=>{
         this.scatterFahrenheit();
-      },5000);
+      },8000);
     }
   }
 
@@ -190,13 +194,13 @@ export class ScatterPage {
     if(this.cookieService.get('unit')=="celsius"){
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 4000
+        duration: 7000
       });
       load.present();
     }else{
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 5000
+        duration: 7000
       });
       load.present();
     }
