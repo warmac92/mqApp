@@ -78,7 +78,7 @@ export class ScatterPage {
             }
             console.log(this.combined);
             console.log("ikkada combine");
-          },1500);
+          },1000);
         }else{
           for(var i=0; i<this.payloadData.length; i++){
             this.Temp[i] = (((parseFloat(this.payloadData[i].Data.temperature))*1.8)+32);
@@ -91,7 +91,7 @@ export class ScatterPage {
             for(var z=0; z<this.Humid.length; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1500);
+          },1000);
         }
       });
     }else{
@@ -112,7 +112,7 @@ export class ScatterPage {
             for(var z=0; z<this.Humid.length; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1500);
+          },1000);
         }else{
           for(var i=0; i<this.simData.length; i++){
             this.Temp[i] = (((parseFloat(this.simData[i].Temperature))*1.8)+32);
@@ -125,7 +125,7 @@ export class ScatterPage {
             for(var z=0; z<this.Humid.length; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1500);
+          },1000);
         }
       });
     }
@@ -134,13 +134,13 @@ export class ScatterPage {
       this.showFahr=true;
       setTimeout(()=>{
         this.scatterCentigrade();
-      },8000);
+      },7500);
     }else{
       this.showCenti=true;
       this.showFahr=false;
       setTimeout(()=>{
         this.scatterFahrenheit();
-      },8000);
+      },7500);
     }
   }
 
