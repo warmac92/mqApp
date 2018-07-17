@@ -130,7 +130,6 @@ export class BarPage {
       {
        var currentDate = new Date(this.simData[i].DateTime);
        this.simData[i].DateTime = currentDate.getDate() + "-" + currentDate.getMonth();
-       //xconsole.log(this.payloadData[i].Time);
       }
 
       for(var i=0;i<this.dateStringArray.length;i++)
@@ -156,6 +155,7 @@ export class BarPage {
           }
         }
       }
+      console.log(this.myCustomPayloadData);
       for(var i=0;i<this.myCustomPayloadData.length;i++)
       {       
          this.myCustomPayloadData[i].maxTemp = Math.max(...this.myCustomPayloadData[i].temperatures);
