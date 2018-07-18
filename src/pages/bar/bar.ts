@@ -130,7 +130,6 @@ export class BarPage {
       {
        var currentDate = new Date(this.simData[i].DateTime);
        this.simData[i].DateTime = currentDate.getDate() + "-" + currentDate.getMonth();
-       //xconsole.log(this.payloadData[i].Time);
       }
 
       for(var i=0;i<this.dateStringArray.length;i++)
@@ -156,6 +155,7 @@ export class BarPage {
           }
         }
       }
+      console.log(this.myCustomPayloadData);
       for(var i=0;i<this.myCustomPayloadData.length;i++)
       {       
          this.myCustomPayloadData[i].maxTemp = Math.max(...this.myCustomPayloadData[i].temperatures);
@@ -253,7 +253,17 @@ export class BarPage {
   }
 
   goStat(){
+    if(!this.navParams.get('data')){
     this.navCtrl.setRoot('StatsPage');
+    }else if(this.navParams.get('data')=="0"){
+      this.navCtrl.setRoot('StatsPage', {
+        data: "0"
+      });
+    }else if(this.navParams.get('data')=="1"){
+      this.navCtrl.setRoot('StatsPage', {
+        data: "1"
+      });
+    }
   }
 
   barCentigrade(){
@@ -359,14 +369,25 @@ export class BarPage {
         }
       }
     });
+  }
 
+  goScatter(){
+    if(!this.navParams.get('data')){
+    this.navCtrl.setRoot('ScatterPage');
+    }else if(this.navParams.get('data')=="0"){
+      this.navCtrl.setRoot('ScatterPage', {
+        data: "0"
+      });
+    }else if(this.navParams.get('data')=="1"){
+      this.navCtrl.setRoot('ScatterPage', {
+        data: "1"
+      });
+    }
   }
 
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
-
-
   }
 
   goBack()

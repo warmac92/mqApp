@@ -1,0 +1,41 @@
+<!--
+  Generated template for the ScatterPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <div align="center">   
+    <ion-navbar >
+      <ion-title>Analytics Chart</ion-title>
+      <ion-buttons round outline left> <button color="danger" ion-button (click)="goBack()"><ion-icon name="arrow-back" color="danger"></ion-icon></button> </ion-buttons>
+      <ion-buttons round outline end> <button color="danger" ion-button round outline (click)="logout()"> Logout </button> </ion-buttons>
+    </ion-navbar>
+  </div>
+</ion-header>
+
+<ion-content padding>
+  <div align="center">
+    <button ion-button round outline color="danger" (click)="goStat()">Temperature Range Stats</button>
+    <button ion-button round outline color="danger" (click)="goBar()">Maximum Temperature Stats</button>
+    <button ion-button round  color="danger">Temperature vs Humidity</button>
+  </div>
+
+  <ion-card [hidden]="showCenti" >
+      <ion-card-header>
+        <h3 align="center">Temperature vs Humidity in Centigrade</h3>
+      </ion-card-header>
+      <ion-card-content>
+          <div id="chart_cel"></div>
+      </ion-card-content>
+    </ion-card>
+  
+    <ion-card [hidden]="showFahr" >
+      <ion-card-header>
+        <h3 align="center">Temperature vs Humidity in Fahrenheit</h3>
+      </ion-card-header>
+      <ion-card-content>
+          <div id="chart_fahr"></div>
+      </ion-card-content>
+    </ion-card>
+</ion-content>

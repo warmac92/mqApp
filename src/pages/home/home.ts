@@ -180,7 +180,7 @@ export class HomePage {
           }
           this.deviceService.getDevice(this.devices[i].DevEUI).subscribe((deviceInf:any)=>{
             
-            if(deviceInf.Payload[0].Data.temperature)
+            if(deviceInf.Payload && deviceInf.Payload[0].Data.temperature)
             {
               //console.log(this.cookieService.get('unit'));
               if(this.cookieService.get('unit')=="celsius"){
