@@ -354,6 +354,8 @@ export class StatsPage {
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
+    this.cookieService.delete('xAuthToken'); 
+
   }
 
   goBack()

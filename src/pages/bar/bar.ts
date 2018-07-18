@@ -388,6 +388,8 @@ export class BarPage {
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
+    this.cookieService.delete('xAuthToken'); 
+
   }
 
   goBack()

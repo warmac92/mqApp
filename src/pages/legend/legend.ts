@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import {LoginPage} from '../login/login';
+import {CookieService} from 'ngx-cookie-service';
 /**
  * Generated class for the LegendPage page.
  *
@@ -15,7 +16,7 @@ import {LoginPage} from '../login/login';
 })
 export class LegendPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public cookieService: CookieService, public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
@@ -25,6 +26,7 @@ export class LegendPage {
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
+    this.cookieService.delete('xAuthToken'); 
 
 
   }
