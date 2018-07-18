@@ -206,6 +206,8 @@ export class ScatterPage {
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
+    this.cookieService.delete('xAuthToken'); 
+
   }
 
   goStat(){

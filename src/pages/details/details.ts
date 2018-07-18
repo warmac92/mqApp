@@ -178,5 +178,6 @@ export class DetailsPage {
   logout()
   {
     this.navCtrl.setRoot(LoginPage); 
+    this.cookieService.delete('xAuthToken'); 
   }
 }
