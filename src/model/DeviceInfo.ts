@@ -14,6 +14,11 @@ export class DeviceInfo
     batteryLevel:string;
     uplink:string;
     downlink:string;
+    date:Date;
+    barometer:any;
+    x:any;
+    y:any;
+    z:any;
 
     color:string;
 
