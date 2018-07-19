@@ -28,6 +28,8 @@
           <ion-label (click)="showForgot()" style="color:white;">Forgot your password? Click here to reset.</ion-label>
       <div padding>
         <button ion-button color="secondary" block>{{ 'LOGIN' }}</button>
+        <ion-label *ngIf="touchIdAvail" (click)="signinWithTouchId()"style="color:white;">Sign-In with Face/Touch-ID </ion-label>
+
       </div>
     </ion-list>
   </form>

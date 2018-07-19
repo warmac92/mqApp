@@ -5,6 +5,8 @@ import {LoginService} from '../../services/login.service';
 import { AlertController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import {CookieService} from 'ngx-cookie-service';
+import { TouchID } from '@ionic-native/touch-id';
+import { Platform } from 'ionic-angular';
 
 @Component({
   selector: 'page-login',
@@ -17,12 +19,21 @@ export class LoginPage {
   account: UserLogin;
   stayLoggedIn : boolean;
   showForgotPassword : boolean;
-
-  constructor(private cookieService: CookieService,private toastCtrl: ToastController,private alertCtrl: AlertController,private loginService: LoginService, public navCtrl: NavController, public navParams: NavParams) {
+  touchIdAvail:boolean;
+  constructor(public plt: Platform,private touchId: TouchID,private cookieService: CookieService,private toastCtrl: ToastController,private alertCtrl: AlertController,private loginService: LoginService, public navCtrl: NavController, public navParams: NavParams) {
+    if(this.plt.is('ios'))
+    {
+      this.touchIdAvail=true;
+    }
+    else
+    {
+      this.touchIdAvail=false;
+    }
     this.account = {
       username: '',
       password: ''
     }
+
     this.showForgotPassword = false;
 
     if(this.cookieService.get('stayLoggedIn'))
@@ -76,6 +87,15 @@ export class LoginPage {
     alert.present();
   }
 
+  presentFailedAlertTouchID(){
+    let alert = this.alertCtrl.create({
+      title: 'Invalid Login',
+      subTitle: 'Username and password are required for using touch-id/face-id for the first time',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
+
   presentToast() {
     let toast = this.toastCtrl.create({
       message: 'Logged in successfully',
@@ -90,6 +110,60 @@ export class LoginPage {
     toast.present();
   }
 
+  presentTouchIdNotAvailableAlert()
+  {
+    let alert = this.alertCtrl.create({
+      title: 'Touch/Face-ID Not Supported',
+      subTitle: 'Touch and Face-ID is only supported by iOS devices',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+    
+  }
+
+  signinWithTouchId()
+  {
+
+      if(this.account.username=='' || this.account.password=='')
+      {
+        this.presentFailedAlertTouchID();
+      }
+      else
+      {
+      this.touchId.verifyFingerprint('Scan your fingerprint please')
+      .then(
+        res => {
+          this.loginService.login(this.account).subscribe((data:any)=>{
+            if(data && data.token)
+            {
+              this.cookieService.set('username',this.account.username);
+              this.cookieService.set('password',this.account.password);
+              this.cookieService.set('xAuthToken',data.token);
+              this.presentToast();
+              this.navCtrl.setRoot('HomePage');
+            }
+          },
+        err=>{
+          console.log(err);
+          if(err.error.error=="Invalid login attempt")
+          {
+            this.presentFailedAlert();
+          }
+          else
+          {
+            this.showError();
+          }
+          
+        })
+      },
+        err => console.error('Error', err)
+      );
+       
+      }
+    }
+    
+
+ 
 
   doLogin() {
     if(this.stayLoggedIn==true)
