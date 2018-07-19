@@ -29,6 +29,8 @@ export class LoginPage {
     {
       this.touchIdAvail=false;
     }
+
+    console.log(this.plt);
     this.account = {
       username: '',
       password: ''
@@ -130,12 +132,13 @@ export class LoginPage {
       }
       else
       {
-      this.touchId.verifyFingerprint('Scan your fingerprint please')
+      this.touchId.verifyFingerprint('Scan your Face/Touch-ID please')
       .then(
         res => {
           this.loginService.login(this.account).subscribe((data:any)=>{
             if(data && data.token)
             {
+              this.cookieService.set('stayLoggedIn',"true");
               this.cookieService.set('username',this.account.username);
               this.cookieService.set('password',this.account.password);
               this.cookieService.set('xAuthToken',data.token);
