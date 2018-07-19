@@ -150,6 +150,13 @@ export class ScatterPage {
     var options = {
       hAxis: {title: 'Temperature', minValue: 0, maxValue: 60,textStyle:{fontSize:15}},
       vAxis: {title: 'Humidity', minValue: 0, maxValue: 80,textStyle:{fontSize:15}},
+      height: 475,
+      pointSize: 7,
+      animation: {
+        duration: 200,
+        easing: 'inAndOut',
+      },
+      pointShape: 'star',
       legend: 'none'
     };
     var chart = new google.visualization.ScatterChart(document.getElementById('chart_cel'));
@@ -160,12 +167,19 @@ export class ScatterPage {
     console.log("scatter fahrenheit");
     var data = google.visualization.arrayToDataTable(this.combined,false);
     var options = {
-      hAxis: {title: 'Temperature', minValue: 0, maxValue: 120,textStyle:{fontSize:15}},
+      hAxis: {title: 'Temperature', minValue: 0, maxValue: 130,textStyle:{fontSize:15}},
       vAxis: {title: 'Humidity', minValue: 0, maxValue: 80,textStyle:{fontSize:15}},
+      height: 475,
+      pointSize: 7,
+      animation: {
+        duration: 200,
+        easing: 'inAndOut',
+      },
+      pointShape: 'star',
       legend: 'none'
     };
-    var chart = new google.visualization.ScatterChart(document.getElementById('chart_fahr'));
-    chart.draw(data, options);
+      var chart = new google.visualization.ScatterChart(document.getElementById('chart_fahr'));
+      chart.draw(data, options);
   }
 
   goBar(){
