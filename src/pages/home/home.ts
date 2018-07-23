@@ -452,12 +452,8 @@ export class HomePage {
       if(!this.cookieService.get('cities')){
         citylength = 5;
       }else{
-<<<<<<< HEAD
       citylength = parseInt(this.cookieService.get('cities'));}
       console.log(this.fireDevices)
-=======
-      var citylength = parseInt(this.cookieService.get('cities'));}
->>>>>>> origin/developer
       for(var k=0; k<citylength;k++)
       {
       let currentFirePanel = new DeviceInfo();
