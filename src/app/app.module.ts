@@ -18,12 +18,8 @@ import { Util } from '../constants/util';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { ChartsModule } from 'ng2-charts';
 import { AngularFireModule } from 'angularfire2';
-<<<<<<< HEAD
 import { AngularFireDatabaseModule } from 'angularfire2/database';
-=======
-import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
 import { TouchID } from '@ionic-native/touch-id';
->>>>>>> origin/developer
 
 var config = {
   apiKey: "AIzaSyAGOXVVn6m11aMbhP0XQrLSO3--0W_bnWI",
