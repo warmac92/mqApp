@@ -74,7 +74,7 @@ export class BarPage {
           setTimeout(() => {
             this.barFahrenheit();
           }, 1000);
-        },4500);
+        },5000);
       }
       });
     }
@@ -120,7 +120,7 @@ export class BarPage {
         setTimeout(() => {
           this.barFahrenheit();
         }, 1000);
-      },4500);
+      },5000);
     }
     this.getMaxTemperatures();
   }

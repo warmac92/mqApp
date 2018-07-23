@@ -21,7 +21,7 @@
       <div class="card-title">{{device.name}}</div>
       <div class="card-subtitle">{{device.temperature}}°C</div>
     </ion-card> -->
-    <div  style="height:70px;width:1500px;overflow: auto;">
+    <div  style="height:70px;overflow: auto;">
       <ion-card *ngFor="let device of discoveryPanel; let i = index" (click)="toogleDiscoveryAccordion(i)">
         <ion-card-header [ngStyle]="{'background':device.color}" style="font-size: 0.9em">
           <b>{{device.name}} &nbsp;&nbsp; {{device.temperature | number:'1.0-1'}}{{unit}} &nbsp;&nbsp; {{device.humidity}}% &nbsp;&nbsp;&nbsp;&nbsp;<i *ngIf="device.water<0.45 && device.water>=0" class="fa fa-tint"></i> <i *ngIf="device.water<=1 && device.water>=0.75" class="fa fa-tint" style="color:red"></i><i *ngIf="device.water>=0.45 && device.water<0.75" class="fa fa-tint" style="color:blue"></i>&nbsp;&nbsp;&nbsp;&nbsp;

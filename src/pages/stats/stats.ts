@@ -61,6 +61,8 @@ export class StatsPage {
     this.showFahr=true;
     this.tmax = parseFloat(this.cookieService.get('tMax'));
     this.tmin = parseFloat(this.cookieService.get('tMin'));
+    console.log(this.tmin);
+    console.log(this.tmax);
     console.log(navParams.get('data'));
     var simId;
     var macId;
@@ -120,6 +122,7 @@ export class StatsPage {
     if(macId!="0"){
     this.deviceService.getPayloadData(macId,utcTime).subscribe((payloads:any[])=>{
       this.payloadData=payloads['Payloads'];
+      console.log(this.payloadData);
       if(this.cookieService.get('unit')=="celsius")
       {
         this.showCenti=false;
@@ -127,14 +130,15 @@ export class StatsPage {
       for(var i=0;i<this.payloadData.length;i++)
       {
         //this.temperatures.push(this.payloadData[i].Data.temperature); 
-        if(parseFloat(this.payloadData[i].Data.temperature)>=parseFloat(this.cookieService.get('tMax'))){
+        if(parseFloat(this.payloadData[i].Data.temperature)>=this.tmax){
           this.c++;
-        }else if((parseFloat(this.payloadData[i].Data.temperature)<parseFloat(this.cookieService.get('tMax')) && parseFloat(this.payloadData[i].Data.temperature)>parseFloat(this.cookieService.get('tMin')))){
+        }else if((parseFloat(this.payloadData[i].Data.temperature)<this.tmax && parseFloat(this.payloadData[i].Data.temperature)>this.tmin)){
           this.b++;
-        }else if(parseFloat(this.payloadData[i].Data.temperature)<=parseFloat(this.cookieService.get('tMin'))){
+        }else if(parseFloat(this.payloadData[i].Data.temperature)<=this.tmin){
           this.a++;
         }
       }
+      console.log(this.a, this.b, this.c);
       this.doughnutCentigrade();
       }else if(this.cookieService.get('unit')=="fahrenheit"){
         this.showCenti=true;
@@ -200,11 +204,11 @@ export class StatsPage {
       {
         this.g = 0;
         this.g=(((this.myCustomPayloadData[i].temperatures[y])*1.8)+32);       
-        if(this.g>=parseFloat(this.cookieService.get('tMax'))){
+        if(this.g>=this.tmax){
           this.f++;
-        }else if((this.g<parseFloat(this.cookieService.get('tMax')) && this.g>parseFloat(this.cookieService.get('tMin')))){
+        }else if((this.g<this.tmax && this.g>this.tmin)){
           this.e++;
-        }else if(this.g<=parseFloat(this.cookieService.get('tMin'))){
+        }else if(this.g<=this.tmin){
           this.d++;
         }
       }
@@ -247,11 +251,11 @@ export class StatsPage {
     {
       for(var y=0; y<this.myCustomPayloadData[i].temperatures.length; y++)
       {       
-        if(parseFloat(this.myCustomPayloadData[i].temperatures[y])>=parseFloat(this.cookieService.get('tMax'))){
+        if(parseFloat(this.myCustomPayloadData[i].temperatures[y])>=this.tmin){
           this.c++;
-        }else if((parseFloat(this.myCustomPayloadData[i].temperatures[y])<parseFloat(this.cookieService.get('tMax')) && parseFloat(this.myCustomPayloadData[i].temperatures[y])>parseFloat(this.cookieService.get('tMin')))){
+        }else if((parseFloat(this.myCustomPayloadData[i].temperatures[y])<this.tmax && parseFloat(this.myCustomPayloadData[i].temperatures[y])>this.tmin)){
           this.b++;
-        }else if(parseFloat(this.myCustomPayloadData[i].temperatures[y])<=parseFloat(this.cookieService.get('tMin'))){
+        }else if(parseFloat(this.myCustomPayloadData[i].temperatures[y])<=this.tmin){
           this.a++;
         }
       }
