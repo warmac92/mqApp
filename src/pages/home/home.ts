@@ -22,7 +22,9 @@ export class HomePage {
   devices:any[];
   gateways:any[];
   panel:DeviceInfo[];
+  discoveryPanel:DeviceInfo[];
   show:boolean[];
+  showD:boolean[];
   date: Date;
   tMin:number;
   machineId:any;
@@ -30,6 +32,7 @@ export class HomePage {
   tMax:number;
   hMin:number;
   hMax:number;
+  discoveryArray:any[];
   userLat:number;
   userLong:number;
   weatherData:any;
@@ -49,6 +52,7 @@ export class HomePage {
   constructor(public angularFireDatabase: AngularFireDatabase, private localNotifications: LocalNotifications, private geolocation: Geolocation,private cookieService: CookieService,private alertCtrl: AlertController,private weatherService: WeatherService,private deviceService: DeviceService,public navCtrl: NavController, public navParams: NavParams) {
    this.date = new Date();
    this.defaultLat=41.58;
+   this.discoveryArray=[];
    this.defaultLong=-72.545812;
    this.online = window.navigator.onLine;
    this.defaultZoom=7;
@@ -137,16 +141,12 @@ export class HomePage {
   {
     this.date = new Date();
     this.panel=[];
+    this.discoveryArray=[];
     this.show=[];
-
     this.deviceService.getAllGateways().subscribe((gatewaysFromApi:any[])=>{
-      
       this.gateways=gatewaysFromApi['Gateways'];
-      console.log(this.gateways[0].Coordinates);
-
       this.deviceService.getAllDevices().subscribe((devicesFromApi:any[])=>{
         this.devices=devicesFromApi['Devices'];
-        //console.log(this.devices);
         for(var i=0;i<this.devices.length;i++)
         { let currentPanel = new DeviceInfo();
           currentPanel.isSimulated =false;
@@ -178,31 +178,31 @@ export class HomePage {
             currentPanel.waterStatus = "FLOODING";
             this.floodingLocal(currentPanel.name);
           }
+          if(this.devices[i].Name.indexOf('Discovery')<=0){
           this.deviceService.getDevice(this.devices[i].DevEUI).subscribe((deviceInf:any)=>{
-            
-            if(deviceInf.Payload && deviceInf.Payload[0].Data.temperature)
-            {
-              //console.log(this.cookieService.get('unit'));
-              if(this.cookieService.get('unit')=="celsius"){
-                currentPanel.temperature = deviceInf.Payload[0].Data.temperature;
-              }else{
-                currentPanel.temperature = ((deviceInf.Payload[0].Data.temperature)*(9/5) + (32) );
+              if(deviceInf.Payload && deviceInf.Payload[0].Data.temperature)
+              {
+                if(this.cookieService.get('unit')=="celsius"){
+                  currentPanel.temperature = deviceInf.Payload[0].Data.temperature;
+                }else{
+                  currentPanel.temperature = ((deviceInf.Payload[0].Data.temperature)*(9/5) + (32) );
+                }
               }
-            }
-            else
-            {
-              currentPanel.temperature = 0;
-            }
+              else
+              {
+                currentPanel.temperature = 0;
+              }
+              if(deviceInf.Payload[0].Data.humidity)
+              {
+                currentPanel.humidity= deviceInf.Payload[0].Data.humidity;
+              }
+              else
+              {
+                currentPanel.humidity = 0;
+              }
 
-            if(deviceInf.Payload[0].Data.humidity)
-            {
-              currentPanel.humidity= deviceInf.Payload[0].Data.humidity;
-            }
-            else
-            {
-              currentPanel.humidity = 0;
-            }
-            // currentPanel.lat= this.gateways[i].Coordinates.X;
+            var localDate = new Date(deviceInf.Payload[0].Time);
+            currentPanel.date = localDate;
 
             if(currentPanel.temperature > this.tMax)
             {
@@ -226,9 +226,13 @@ export class HomePage {
             currentPanel.batteryLevel=deviceStats.BatteryLevel;
             currentPanel.uplink=deviceStats.Last24HUplinkCount;
             currentPanel.downlink = deviceStats.Last24HDownlinkCount;
-          })
+          });
           this.panel.push(currentPanel);
-        } 
+        }else{
+          this.discoveryArray.push(this.devices[i].DevEUI);
+          this.discoveryData();
+        }
+        }
         this.deviceDataFireBase();
       });
     },
@@ -264,8 +268,100 @@ export class HomePage {
       this.navCtrl.setRoot(LoginPage);
     }
   });
-    console.log(this.panel);
   }
+
+  discoveryData(){
+    this.showD=[];
+    this.discoveryPanel=[];
+    for(var q=0; q<this.discoveryArray.length; q++){
+      let currentPanel = new DeviceInfo();
+      this.deviceService.getDevice(this.discoveryArray[q]).subscribe((deviceInf:any)=>{
+        currentPanel.water = Math.random();
+          if(currentPanel.water<0.45 && currentPanel.water>=0)
+           {
+               currentPanel.waterStatus="NO WATER";
+           }
+          else if(currentPanel.water>=0.45 && currentPanel.water<0.75)
+          {
+            currentPanel.waterStatus="RAIN";
+            this.rainingLocal(currentPanel.name);
+          }
+          else
+          {
+            currentPanel.waterStatus = "FLOODING";
+            this.floodingLocal(currentPanel.name);
+          }
+          if(deviceInf.Payload && deviceInf.Payload[0].Data.x){
+            currentPanel.x = deviceInf.Payload[0].Data.x;
+          }else{
+            currentPanel.x = 0;
+          }
+          if(deviceInf.Payload && deviceInf.Payload[0].Data.y){
+            currentPanel.y = deviceInf.Payload[0].Data.y;
+          }else{
+            currentPanel.y = 0;
+          }
+          if(deviceInf.Payload && deviceInf.Payload[0].Data.z){
+            currentPanel.z = deviceInf.Payload[0].Data.z;
+          }else{
+            currentPanel.z = 0;
+          }if(deviceInf.Payload && deviceInf.Payload[0].Data.barometer){
+            currentPanel.barometer = deviceInf.Payload[0].Data.barometer;
+          }else{
+            currentPanel.barometer = 0;
+          }
+        currentPanel.name = deviceInf.Name;
+        currentPanel.id = deviceInf.DevEUI;
+        if(deviceInf.Payload && deviceInf.Payload[0].Data.temperature)
+          {
+            if(this.cookieService.get('unit')=="celsius"){
+              currentPanel.temperature = deviceInf.Payload[0].Data.temperature;
+            }else{
+              currentPanel.temperature = ((deviceInf.Payload[0].Data.temperature)*(9/5) + (32) );
+            }
+          }
+          else
+          {
+            currentPanel.temperature = 0;
+          }
+          if(deviceInf.Payload[0].Data.humidity)
+          {
+            currentPanel.humidity= deviceInf.Payload[0].Data.humidity;
+          }
+          else
+          {
+            currentPanel.humidity = 0;
+          }
+
+        var localDate = new Date(deviceInf.Payload[0].Time);
+        currentPanel.date = localDate;
+
+        if(currentPanel.temperature > this.tMax)
+        {
+          currentPanel.color="salmon";
+          this.maxTempLocal(currentPanel.name);
+        }
+        else if(currentPanel.temperature < this.tMin)
+        {
+          currentPanel.color="lightblue";
+          this.minTempLocal(currentPanel.name);
+        }
+        else
+        {
+          currentPanel.color="white";
+        }
+        
+      });
+
+          this.deviceService.getDeviceStats(this.discoveryArray[q]).subscribe((deviceStats:any)=>{
+            currentPanel.healthStatus=deviceStats.HealthState;
+            currentPanel.batteryLevel=deviceStats.BatteryLevel;
+            currentPanel.uplink=deviceStats.Last24HUplinkCount;
+            currentPanel.downlink = deviceStats.Last24HDownlinkCount;
+          });
+          this.discoveryPanel.push(currentPanel);
+      }
+    }
 
   maxTempLocal(name){//notification
     this.localNotifications.schedule({
@@ -328,6 +424,27 @@ export class HomePage {
   }
   }
 
+  toogleDiscoveryAccordion(i)
+  { setTimeout(() => {
+    if (document.getElementById((i) + '')) {
+      document.getElementById((i) + '').scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+  }, 500);
+    if(i!=="doNotToggle")
+  {
+    this.showD[i]=!this.showD[i];
+
+    for(var j=0;j<this.showD.length;j++)
+    {
+      if(j!=i)
+      {
+        this.showD[j]=false;
+      }
+    }
+  }
+  }
+
   deviceDataFireBase(){
     this.angularFireDatabase.object('/Devices/').valueChanges().subscribe((fireDevices:any[])=>{
       this.fireDevices=fireDevices;
@@ -335,8 +452,12 @@ export class HomePage {
       if(!this.cookieService.get('cities')){
         citylength = 5;
       }else{
+<<<<<<< HEAD
       citylength = parseInt(this.cookieService.get('cities'));}
       console.log(this.fireDevices)
+=======
+      var citylength = parseInt(this.cookieService.get('cities'));}
+>>>>>>> origin/developer
       for(var k=0; k<citylength;k++)
       {
       let currentFirePanel = new DeviceInfo();
@@ -364,7 +485,6 @@ export class HomePage {
         this.floodingLocal(currentFirePanel.name);
       }
       currentFirePanel.downlink = fireDevices[k].DownLink;
-      console.log('NAME'+' '+currentFirePanel.name);
       var nameToApi = currentFirePanel.name.split(',')[0];
       this.weatherService.getWeather(nameToApi).subscribe((data:any)=>{
         if(this.cookieService.get('unit')=="celsius"){
@@ -374,6 +494,7 @@ export class HomePage {
           currentFirePanel.temperature = ((data.main.temp)*(9/5) + (32) );
           currentFirePanel.humidity=data.main.humidity;
         }
+        currentFirePanel.date = new Date();
         if(currentFirePanel.temperature > this.tMax)
         {
           currentFirePanel.color="salmon";
@@ -384,6 +505,7 @@ export class HomePage {
           currentFirePanel.color="lightblue";
           this.minTempLocal(currentFirePanel.name);
         }
+
         else
         {
           currentFirePanel.color="white";
