@@ -42,17 +42,19 @@ export class BarPage {
   payloadData:any[];
   myCustomPayloadData:MyCustomPayload[];
   constructor(public angularFireDatabase: AngularFireDatabase, public cookieService: CookieService,private deviceService: DeviceService,public loadingCtrl: LoadingController,public navCtrl: NavController, public navParams: NavParams) {
+    var simId;
+    var macId;
     if(navParams.get('data')=="0"){
-      var simId ='0';
-      var macId = this.cookieService.get('machineId');
+      simId ='0';
+      macId = this.cookieService.get('machineId');
       console.log("dhetadi");
       console.log(navParams.get('data'));
     }
     else if(navParams.get('data')=="1")
     {
       console.log("emaindi");
-      var simId = this.cookieService.get('simulatedId');
-      var macId='0';
+      simId = this.cookieService.get('simulatedId');
+      macId='0';
       this.angularFireDatabase.object('/Device-Data/0/'+simId+'/').valueChanges().subscribe((fireData:any[])=>{
       this.simData=fireData;
       console.log(this.simData);
@@ -125,14 +127,14 @@ export class BarPage {
   }
 
   getSimMaxTemp(){
-    console.log("simmaxtemp");
-    for(var i=0;i<this.simData.length;i++)
+    var i;
+    for(i=0;i<this.simData.length;i++)
       {
        var currentDate = new Date(this.simData[i].DateTime);
        this.simData[i].DateTime = currentDate.getDate() + "-" + currentDate.getMonth();
       }
 
-      for(var i=0;i<this.dateStringArray.length;i++)
+      for(i=0;i<this.dateStringArray.length;i++)
       {
         var myCurrentPayload = new MyCustomPayload();
         myCurrentPayload.date=this.dateStringArray[i];
@@ -141,7 +143,7 @@ export class BarPage {
         this.myCustomPayloadData.push(myCurrentPayload);
       }
 
-      for(var i=0;i<this.myCustomPayloadData.length;i++)
+      for(i=0;i<this.myCustomPayloadData.length;i++)
       {
         for(var j=0;j<this.simData.length;j++)
         {
@@ -156,7 +158,7 @@ export class BarPage {
         }
       }
       console.log(this.myCustomPayloadData);
-      for(var i=0;i<this.myCustomPayloadData.length;i++)
+      for(i=0;i<this.myCustomPayloadData.length;i++)
       {       
          this.myCustomPayloadData[i].maxTemp = Math.max(...this.myCustomPayloadData[i].temperatures);
          console.log(this.myCustomPayloadData[i].maxTemp);
@@ -198,17 +200,17 @@ export class BarPage {
     const utcTime = date.getUTCFullYear().toString()+"-"+dateMonthString+"-"+dateDayString+"T00:00:00.000Z";
     console.log(utcTime);
     this.deviceService.getPayloadData(this.macId,utcTime).subscribe((data)=>{
-
+      var i;
       this.payloadData = data['Payloads'];
       console.log(this.payloadData);
-      for(var i=0;i<this.payloadData.length;i++)
+      for(i=0;i<this.payloadData.length;i++)
       {
        var currentDate = new Date(this.payloadData[i].Time);
        this.payloadData[i].Time = currentDate.getDate() + "-" + currentDate.getMonth();
        //xconsole.log(this.payloadData[i].Time);
       }
 
-      for(var i=0;i<this.dateStringArray.length;i++)
+      for(i=0;i<this.dateStringArray.length;i++)
       {
         var myCurrentPayload = new MyCustomPayload();
         myCurrentPayload.date=this.dateStringArray[i];
@@ -217,7 +219,7 @@ export class BarPage {
         this.myCustomPayloadData.push(myCurrentPayload);
       }
 
-      for(var i=0;i<this.myCustomPayloadData.length;i++)
+      for(i=0;i<this.myCustomPayloadData.length;i++)
       {
         for(var j=0;j<this.payloadData.length;j++)
         {
@@ -232,7 +234,7 @@ export class BarPage {
         }
       }
 
-      for(var i=0;i<this.myCustomPayloadData.length;i++)
+      for(i=0;i<this.myCustomPayloadData.length;i++)
       {       
          this.myCustomPayloadData[i].maxTemp = Math.max(...this.myCustomPayloadData[i].temperatures);
       }    

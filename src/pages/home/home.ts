@@ -1,4 +1,4 @@
-import { Component,OnDestroy,ViewChild } from '@angular/core';
+import { Component,ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { DeviceService } from '../../services/device.service';
 import { WeatherService } from '../../services/weather.service';
@@ -8,7 +8,7 @@ import {LoginPage} from '../login/login';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import {CookieService} from 'ngx-cookie-service';
 import { Geolocation } from '@ionic-native/geolocation';
-import { GoogleMapsAPIWrapper, AgmMap, LatLngBounds, LatLngBoundsLiteral} from '@agm/core';
+import { AgmMap, LatLngBounds} from '@agm/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 
 declare var google: any;
@@ -331,10 +331,11 @@ export class HomePage {
   deviceDataFireBase(){
     this.angularFireDatabase.object('/Devices/').valueChanges().subscribe((fireDevices:any[])=>{
       this.fireDevices=fireDevices;
+      var citylength;
       if(!this.cookieService.get('cities')){
-        var citylength = 5;
+        citylength = 5;
       }else{
-      var citylength = parseInt(this.cookieService.get('cities'));}
+      citylength = parseInt(this.cookieService.get('cities'));}
       console.log(this.fireDevices)
       for(var k=0; k<citylength;k++)
       {

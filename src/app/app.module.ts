@@ -12,14 +12,13 @@ import { LoginService } from '../services/login.service';
 import { DeviceService } from '../services/device.service';
 import { WeatherService } from '../services/weather.service';
 import { IonicStorageModule } from '@ionic/storage';
-import { Pipe, PipeTransform } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
 import { Util } from '../constants/util';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { ChartsModule } from 'ng2-charts';
 import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 var config = {
   apiKey: "AIzaSyAGOXVVn6m11aMbhP0XQrLSO3--0W_bnWI",

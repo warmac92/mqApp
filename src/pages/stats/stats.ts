@@ -62,9 +62,11 @@ export class StatsPage {
     this.tmax = parseFloat(this.cookieService.get('tMax'));
     this.tmin = parseFloat(this.cookieService.get('tMin'));
     console.log(navParams.get('data'));
+    var simId;
+    var macId;
     if(navParams.get('data')=="0"){
-      var simId ='0';
-      var macId = this.cookieService.get('machineId');
+       simId ='0';
+       macId = this.cookieService.get('machineId');
       console.log(macId);
     }
     else if(navParams.get('data')=="1")
@@ -76,8 +78,8 @@ export class StatsPage {
         this.dateStringArray.push(dateForPopArry.getDate().toString()+"-"+dateForPopArry.getMonth().toString());
       }
       this.dateStringArray.reverse();
-      var simId = this.cookieService.get('simulatedId');
-      var macId='0';
+       simId = this.cookieService.get('simulatedId');
+       macId='0';
       console.log(simId);
       this.angularFireDatabase.object('/Device-Data/0/'+simId+'/').valueChanges().subscribe((fireData:any)=>{
       this.simData=fireData;
@@ -164,12 +166,13 @@ export class StatsPage {
   simFahren(){
     this.showCenti=true;
     this.showFahr=false;
-    for(var i=0;i<this.simData.length;i++)
+    var i;
+    for(i=0;i<this.simData.length;i++)
       {
       var currentDate = new Date(this.simData[i].DateTime);
       this.simData[i].DateTime = currentDate.getDate() + "-" + currentDate.getMonth();
       }
-    for(var i=0;i<this.dateStringArray.length;i++)
+    for(i=0;i<this.dateStringArray.length;i++)
       {
         var myCurrentPayload = new MyCustomPayload();
         myCurrentPayload.date=this.dateStringArray[i];
@@ -177,7 +180,7 @@ export class StatsPage {
         myCurrentPayload.maxTemp=0;
         this.myCustomPayloadData.push(myCurrentPayload);
       }
-    for(var i=0;i<this.myCustomPayloadData.length;i++)
+    for( i=0;i<this.myCustomPayloadData.length;i++)
     {
       for(var j=0;j<this.simData.length;j++)
       {
@@ -191,7 +194,7 @@ export class StatsPage {
         }
       }
     }
-    for(var i=0;i<this.myCustomPayloadData.length;i++)
+    for( i=0;i<this.myCustomPayloadData.length;i++)
     {
       for(var y=0; y<this.myCustomPayloadData[i].temperatures.length; y++)
       {
@@ -212,12 +215,13 @@ export class StatsPage {
   simCenti(){
     this.showCenti=false;
     this.showFahr=true;
-    for(var i=0;i<this.simData.length;i++)
+    var i;
+    for(i=0;i<this.simData.length;i++)
     {
      var currentDate = new Date(this.simData[i].DateTime);
      this.simData[i].DateTime = currentDate.getDate() + "-" + currentDate.getMonth();
     }
-    for(var i=0;i<this.dateStringArray.length;i++)
+    for(i=0;i<this.dateStringArray.length;i++)
     {
       var myCurrentPayload = new MyCustomPayload();
       myCurrentPayload.date=this.dateStringArray[i];
@@ -225,7 +229,7 @@ export class StatsPage {
       myCurrentPayload.maxTemp=0;
       this.myCustomPayloadData.push(myCurrentPayload);
     }
-    for(var i=0;i<this.myCustomPayloadData.length;i++)
+    for(i=0;i<this.myCustomPayloadData.length;i++)
     {
       for(var j=0;j<this.simData.length;j++)
       {
@@ -239,7 +243,7 @@ export class StatsPage {
         }
       }
     }
-    for(var i=0;i<this.myCustomPayloadData.length;i++)
+    for(i=0;i<this.myCustomPayloadData.length;i++)
     {
       for(var y=0; y<this.myCustomPayloadData[i].temperatures.length; y++)
       {       

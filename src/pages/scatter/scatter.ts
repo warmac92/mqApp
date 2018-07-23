@@ -56,17 +56,21 @@ export class ScatterPage {
     }
     const utcTime = date.getUTCFullYear().toString()+"-"+dateMonthString+"-"+dateDayString+"T00:00:00.000Z";
     console.log(utcTime);
+    var macId;
+    var simId;
     if(navParams.get('data')=="0"){
-      var simId = '0';
-      var macId = this.cookieService.get('machineId');
+       simId = '0';
+       macId = this.cookieService.get('machineId');
       console.log(macId);
       this.deviceService.getPayloadData(macId,utcTime).subscribe((payloads:any[])=>{
         this.payloadData=payloads['Payloads'];
+        var i;
+        var j;
         if(this.cookieService.get('unit')=="celsius"){
-          for(var i=0; i<this.payloadData.length; i++){
+          for( i=0; i<this.payloadData.length; i++){
             this.Temp[i] = parseFloat(this.payloadData[i].Data.temperature);
           }
-          for(var j=0; j<this.payloadData.length; j++){
+          for( j=0; j<this.payloadData.length; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
@@ -76,10 +80,10 @@ export class ScatterPage {
             }
           },1000);
         }else{
-          for(var i=0; i<this.payloadData.length; i++){
+          for( i=0; i<this.payloadData.length; i++){
             this.Temp[i] = (((parseFloat(this.payloadData[i].Data.temperature))*1.8)+32);
           }
-          for(var j=0; j<this.payloadData.length; j++){
+          for( j=0; j<this.payloadData.length; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
@@ -91,16 +95,18 @@ export class ScatterPage {
         }
       });
     }else{
-      var macId = '0';
-      var simId = this.cookieService.get('simulatedId');
+       macId = '0';
+       simId = this.cookieService.get('simulatedId');
       console.log(simId);
       this.angularFireDatabase.object('/Device-Data/0/'+simId+'/').valueChanges().subscribe((fireData:any)=>{
         this.simData = fireData;
+        var i;
+        var j;
         if(this.cookieService.get('unit')=="celsius"){
-          for(var i=0; i<this.simData.length; i++){
+          for( i=0; i<this.simData.length; i++){
             this.Temp[i] = this.simData[i].Temperature;
           }
-          for(var j=0; j<this.simData.length; j++){
+          for(j=0; j<this.simData.length; j++){
             this.Humid[j] = this.simData[j].Humidity;
           }
           this.combined[0] = ['Temperature','Humidity'];
@@ -110,10 +116,10 @@ export class ScatterPage {
             }
           },1000);
         }else{
-          for(var i=0; i<this.simData.length; i++){
+          for(i=0; i<this.simData.length; i++){
             this.Temp[i] = (((parseFloat(this.simData[i].Temperature))*1.8)+32);
           }
-          for(var j=0; j<this.simData.length; j++){
+          for(j=0; j<this.simData.length; j++){
             this.Humid[j] = this.simData[j].Humidity;
           }
           this.combined[0] = ['Temperature','Humidity'];
