@@ -239,11 +239,6 @@ export class BarPage {
          this.myCustomPayloadData[i].maxTemp = Math.max(...this.myCustomPayloadData[i].temperatures);
       }    
     });
-
-  // setTimeout(()=>{
-  //   console.log(this.payloadData);
-  //   console.log(this,this.myCustomPayloadData);
-  //  },5000);
   }
 
   loading(){

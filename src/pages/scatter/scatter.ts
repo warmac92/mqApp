@@ -26,6 +26,7 @@ export class ScatterPage {
   payloadData: any[];
   Temp: number[];
   Humid: number[];
+  len: number;
   combined: any[];
   showCenti: boolean;
   showFahr: boolean;
@@ -35,6 +36,7 @@ export class ScatterPage {
     this.payloadData=[];
     this.Temp=[];
     this.Humid=[];
+    this.len=0;
     this.combined=[];
     var dateMonthString;
     var dateDayString;
@@ -74,11 +76,13 @@ export class ScatterPage {
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
+          this.len = this.Humid.length;
           setTimeout(()=>{
-            for(var z=0; z<this.Humid.length; z++){
+            for(var z=0; z<8000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1000);
+            console.log(this.combined);
+          },1500);
         }else{
           for( i=0; i<this.payloadData.length; i++){
             this.Temp[i] = (((parseFloat(this.payloadData[i].Data.temperature))*1.8)+32);
@@ -87,11 +91,13 @@ export class ScatterPage {
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
+          this.len=this.Humid.length;
           setTimeout(()=>{
-            for(var z=0; z<this.Humid.length; z++){
+            for(var z=0; z<8000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1000);
+            console.log(this.combined);
+          },1500);
         }
       });
     }else{
@@ -111,10 +117,10 @@ export class ScatterPage {
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<this.Humid.length; z++){
+            for(var z=0; z<8000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1000);
+          },1500);
         }else{
           for(i=0; i<this.simData.length; i++){
             this.Temp[i] = (((parseFloat(this.simData[i].Temperature))*1.8)+32);
@@ -123,11 +129,12 @@ export class ScatterPage {
             this.Humid[j] = this.simData[j].Humidity;
           }
           this.combined[0] = ['Temperature','Humidity'];
+          this.len=this.Humid.length;
           setTimeout(()=>{
-            for(var z=0; z<this.Humid.length; z++){
+            for(var z=0; z<8000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1000);
+          },1500);
         }
       });
     }
@@ -153,15 +160,12 @@ export class ScatterPage {
   scatterCentigrade(){
     console.log("scatter centigrade");
     var data = google.visualization.arrayToDataTable(this.combined,false);
+    console.log(data);
     var options = {
       hAxis: {title: 'Temperature', minValue: 0, maxValue: 60,textStyle:{fontSize:15}},
-      vAxis: {title: 'Humidity', minValue: 0, maxValue: 80,textStyle:{fontSize:15}},
+      vAxis: {title: 'Humidity', minValue: 0, maxValue: 100,textStyle:{fontSize:15}},
       height: 475,
       pointSize: 7,
-      animation: {
-        duration: 200,
-        easing: 'inAndOut',
-      },
       pointShape: 'star',
       legend: 'none'
     };
@@ -173,14 +177,10 @@ export class ScatterPage {
     console.log("scatter fahrenheit");
     var data = google.visualization.arrayToDataTable(this.combined,false);
     var options = {
-      hAxis: {title: 'Temperature', minValue: 0, maxValue: 130,textStyle:{fontSize:15}},
+      hAxis: {title: 'Temperature', minValue: 0, maxValue: 135,textStyle:{fontSize:15}},
       vAxis: {title: 'Humidity', minValue: 0, maxValue: 80,textStyle:{fontSize:15}},
       height: 475,
       pointSize: 7,
-      animation: {
-        duration: 200,
-        easing: 'inAndOut',
-      },
       pointShape: 'star',
       legend: 'none'
     };
@@ -206,13 +206,13 @@ export class ScatterPage {
     if(this.cookieService.get('unit')=="celsius"){
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 7000
+        duration: 7500
       });
       load.present();
     }else{
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 7000
+        duration: 7500
       });
       load.present();
     }
