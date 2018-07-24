@@ -78,7 +78,7 @@ export class ScatterPage {
           this.combined[0] = ['Temperature','Humidity'];
           this.len = this.Humid.length;
           setTimeout(()=>{
-            for(var z=0; z<8000; z++){
+            for(var z=0; z<5000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
             console.log(this.combined);
@@ -93,7 +93,7 @@ export class ScatterPage {
           this.combined[0] = ['Temperature','Humidity'];
           this.len=this.Humid.length;
           setTimeout(()=>{
-            for(var z=0; z<8000; z++){
+            for(var z=0; z<5000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
             console.log(this.combined);
@@ -117,7 +117,7 @@ export class ScatterPage {
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<8000; z++){
+            for(var z=0; z<5000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
           },1500);
@@ -131,7 +131,7 @@ export class ScatterPage {
           this.combined[0] = ['Temperature','Humidity'];
           this.len=this.Humid.length;
           setTimeout(()=>{
-            for(var z=0; z<8000; z++){
+            for(var z=0; z<5000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
           },1500);
@@ -206,13 +206,13 @@ export class ScatterPage {
     if(this.cookieService.get('unit')=="celsius"){
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 7500
+        duration: 9000
       });
       load.present();
     }else{
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 7500
+        duration: 9000
       });
       load.present();
     }
