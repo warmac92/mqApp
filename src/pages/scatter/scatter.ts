@@ -26,7 +26,6 @@ export class ScatterPage {
   payloadData: any[];
   Temp: number[];
   Humid: number[];
-  len: number;
   combined: any[];
   showCenti: boolean;
   showFahr: boolean;
@@ -36,7 +35,6 @@ export class ScatterPage {
     this.payloadData=[];
     this.Temp=[];
     this.Humid=[];
-    this.len=0;
     this.combined=[];
     var dateMonthString;
     var dateDayString;
@@ -69,14 +67,13 @@ export class ScatterPage {
         var i;
         var j;
         if(this.cookieService.get('unit')=="celsius"){
-          for( i=0; i<this.payloadData.length; i++){
+          for( i=0; i<5000; i++){
             this.Temp[i] = parseFloat(this.payloadData[i].Data.temperature);
           }
-          for( j=0; j<this.payloadData.length; j++){
+          for( j=0; j<5000; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
-          this.len = this.Humid.length;
           setTimeout(()=>{
             for(var z=0; z<5000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
@@ -84,14 +81,13 @@ export class ScatterPage {
             console.log(this.combined);
           },1500);
         }else{
-          for( i=0; i<this.payloadData.length; i++){
+          for( i=0; i<5000; i++){
             this.Temp[i] = (((parseFloat(this.payloadData[i].Data.temperature))*1.8)+32);
           }
-          for( j=0; j<this.payloadData.length; j++){
+          for( j=0; j<5000; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
-          this.len=this.Humid.length;
           setTimeout(()=>{
             for(var z=0; z<5000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
@@ -110,10 +106,10 @@ export class ScatterPage {
         var j;
         if(this.cookieService.get('unit')=="celsius"){
           for( i=0; i<this.simData.length; i++){
-            this.Temp[i] = this.simData[i].Temperature;
+            this.Temp[i] = parseFloat(this.simData[i].Temperature);
           }
           for(j=0; j<this.simData.length; j++){
-            this.Humid[j] = this.simData[j].Humidity;
+            this.Humid[j] = parseFloat(this.simData[j].Humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
@@ -126,10 +122,9 @@ export class ScatterPage {
             this.Temp[i] = (((parseFloat(this.simData[i].Temperature))*1.8)+32);
           }
           for(j=0; j<this.simData.length; j++){
-            this.Humid[j] = this.simData[j].Humidity;
+            this.Humid[j] = parseFloat(this.simData[j].Humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
-          this.len=this.Humid.length;
           setTimeout(()=>{
             for(var z=0; z<5000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
@@ -143,13 +138,13 @@ export class ScatterPage {
       this.showFahr=true;
       setTimeout(()=>{
         this.scatterCentigrade();
-      },7500);
+      },7000);
     }else{
       this.showCenti=true;
       this.showFahr=false;
       setTimeout(()=>{
         this.scatterFahrenheit();
-      },7500);
+      },7000);
     }
   }
 
