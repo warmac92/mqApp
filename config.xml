@@ -88,7 +88,7 @@
         <string>We want your location! Best regards NSA</string>
     </edit-config>
     <plugin name="cordova-plugin-local-notification" spec="^0.9.0-beta.2" />
+    <plugin name="cordova-plugin-touch-id" spec="~3.3.1" />
     <engine name="ios" spec="4.5.4" />
     <engine name="android" spec="^6.4.0" />
-    <plugin name="cordova-plugin-touch-id" spec="~3.3.1" />
 </widget>

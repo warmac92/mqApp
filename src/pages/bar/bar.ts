@@ -64,7 +64,7 @@ export class BarPage {
         this.getSimMaxTemp();
       setTimeout(() => {
         this.barCentigrade();
-      }, 5000);
+      }, 6000);
       }else if(this.cookieService.get('unit')=="fahrenheit"){
         this.showCenti=true;
         this.showFahr=false;
@@ -74,7 +74,7 @@ export class BarPage {
           setTimeout(() => {
             this.barFahrenheit();
           }, 1000);
-        },4500);
+        },6000);
       }
       });
     }
@@ -111,7 +111,7 @@ export class BarPage {
       this.showCenti=false;
     setTimeout(() => {
       this.barCentigrade();
-    }, 5000);
+    }, 6000);
     }else if(this.cookieService.get('unit')=="fahrenheit"){
       this.showCenti=true;
       this.showFahr=false;
@@ -119,8 +119,8 @@ export class BarPage {
         this.getMaxTemperaturesFahrenheit();
         setTimeout(() => {
           this.barFahrenheit();
-        }, 1000);
-      },4500);
+        }, 1500);
+      },6000);
     }
     this.getMaxTemperatures();
   }
@@ -239,17 +239,12 @@ export class BarPage {
          this.myCustomPayloadData[i].maxTemp = Math.max(...this.myCustomPayloadData[i].temperatures);
       }    
     });
-
-  // setTimeout(()=>{
-  //   console.log(this.payloadData);
-  //   console.log(this,this.myCustomPayloadData);
-  //  },5000);
   }
 
   loading(){
     let load = this.loadingCtrl.create({
       content:'Loading Please Wait....',
-      duration: 5000
+      duration: 6000
     });
     load.present();
   }

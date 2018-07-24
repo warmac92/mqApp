@@ -67,31 +67,33 @@ export class ScatterPage {
         var i;
         var j;
         if(this.cookieService.get('unit')=="celsius"){
-          for( i=0; i<this.payloadData.length; i++){
+          for( i=0; i<5000; i++){
             this.Temp[i] = parseFloat(this.payloadData[i].Data.temperature);
           }
-          for( j=0; j<this.payloadData.length; j++){
+          for( j=0; j<5000; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<this.Humid.length; z++){
+            for(var z=0; z<5000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1000);
+            console.log(this.combined);
+          },1500);
         }else{
-          for( i=0; i<this.payloadData.length; i++){
+          for( i=0; i<5000; i++){
             this.Temp[i] = (((parseFloat(this.payloadData[i].Data.temperature))*1.8)+32);
           }
-          for( j=0; j<this.payloadData.length; j++){
+          for( j=0; j<5000; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<this.Humid.length; z++){
+            for(var z=0; z<5000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1000);
+            console.log(this.combined);
+          },1500);
         }
       });
     }else{
@@ -104,30 +106,30 @@ export class ScatterPage {
         var j;
         if(this.cookieService.get('unit')=="celsius"){
           for( i=0; i<this.simData.length; i++){
-            this.Temp[i] = this.simData[i].Temperature;
+            this.Temp[i] = parseFloat(this.simData[i].Temperature);
           }
           for(j=0; j<this.simData.length; j++){
-            this.Humid[j] = this.simData[j].Humidity;
+            this.Humid[j] = parseFloat(this.simData[j].Humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<this.Humid.length; z++){
+            for(var z=0; z<5000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1000);
+          },1500);
         }else{
           for(i=0; i<this.simData.length; i++){
             this.Temp[i] = (((parseFloat(this.simData[i].Temperature))*1.8)+32);
           }
           for(j=0; j<this.simData.length; j++){
-            this.Humid[j] = this.simData[j].Humidity;
+            this.Humid[j] = parseFloat(this.simData[j].Humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<this.Humid.length; z++){
+            for(var z=0; z<5000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1000);
+          },1500);
         }
       });
     }
@@ -136,13 +138,13 @@ export class ScatterPage {
       this.showFahr=true;
       setTimeout(()=>{
         this.scatterCentigrade();
-      },7500);
+      },7000);
     }else{
       this.showCenti=true;
       this.showFahr=false;
       setTimeout(()=>{
         this.scatterFahrenheit();
-      },7500);
+      },7000);
     }
   }
 
@@ -153,15 +155,12 @@ export class ScatterPage {
   scatterCentigrade(){
     console.log("scatter centigrade");
     var data = google.visualization.arrayToDataTable(this.combined,false);
+    console.log(data);
     var options = {
       hAxis: {title: 'Temperature', minValue: 0, maxValue: 60,textStyle:{fontSize:15}},
-      vAxis: {title: 'Humidity', minValue: 0, maxValue: 80,textStyle:{fontSize:15}},
+      vAxis: {title: 'Humidity', minValue: 0, maxValue: 100,textStyle:{fontSize:15}},
       height: 475,
       pointSize: 7,
-      animation: {
-        duration: 200,
-        easing: 'inAndOut',
-      },
       pointShape: 'star',
       legend: 'none'
     };
@@ -173,14 +172,10 @@ export class ScatterPage {
     console.log("scatter fahrenheit");
     var data = google.visualization.arrayToDataTable(this.combined,false);
     var options = {
-      hAxis: {title: 'Temperature', minValue: 0, maxValue: 130,textStyle:{fontSize:15}},
+      hAxis: {title: 'Temperature', minValue: 0, maxValue: 135,textStyle:{fontSize:15}},
       vAxis: {title: 'Humidity', minValue: 0, maxValue: 80,textStyle:{fontSize:15}},
       height: 475,
       pointSize: 7,
-      animation: {
-        duration: 200,
-        easing: 'inAndOut',
-      },
       pointShape: 'star',
       legend: 'none'
     };
@@ -206,13 +201,13 @@ export class ScatterPage {
     if(this.cookieService.get('unit')=="celsius"){
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 7000
+        duration: 9000
       });
       load.present();
     }else{
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 7000
+        duration: 9000
       });
       load.present();
     }
