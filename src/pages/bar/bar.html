@@ -15,11 +15,7 @@
   </ion-header>
 
 <ion-content padding>
-    <div align="center">
-      <button ion-button round outline color="danger" (click)="goStat()">Temperature Range Stats</button>
-      <button ion-button round  color="danger">Maximum Temperature Stats</button>
-      <button ion-button round outline color="danger" (click)="goScatter()">Temperature vs Humidity</button>
-    </div>
+    
     <ion-card [hidden]="showFahr" >
         <ion-card-header>
           <h3 style="word-wrap: break-word;"align="center">Shows the maximum temperature reading for each day in the last 7 days.</h3>

@@ -25,7 +25,7 @@
       <ion-card *ngFor="let device of discoveryPanel; let i = index" (click)="toogleDiscoveryAccordion(i)">
         <ion-card-header [ngStyle]="{'background':device.color}" style="font-size: 0.9em">
           <b>{{device.name}} &nbsp;&nbsp; {{device.temperature | number:'1.0-1'}}{{unit}} &nbsp;&nbsp; {{device.humidity}}% &nbsp;&nbsp;&nbsp;&nbsp;<i *ngIf="device.water<0.45 && device.water>=0" class="fa fa-tint"></i> <i *ngIf="device.water<=1 && device.water>=0.75" class="fa fa-tint" style="color:red"></i><i *ngIf="device.water>=0.45 && device.water<0.75" class="fa fa-tint" style="color:blue"></i>&nbsp;&nbsp;&nbsp;&nbsp;
-            <i (click)="showStats(device.id,device.isSimulated) && toogleDiscoveryAccordion('doNotToggle')" class="fa fa-line-chart" style="color:red" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+            <i (click)="showStats(device.name,device.id,device.isSimulated) && toogleDiscoveryAccordion('doNotToggle')" class="fa fa-line-chart" style="color:red" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;
             <i *ngIf="device.healthStatus==='ACTIVE'" class="fa fa-check" style="color:green"></i><i *ngIf="device.healthStatus && device.healthStatus!=='ACTIVE'" class="fa fa-times" style="color:red"></i></b>
         </ion-card-header>
   
@@ -42,7 +42,7 @@
     <ion-card *ngFor="let device of panel; let i = index">
       <ion-card-header [ngStyle]="{'background':device.color}" style="font-size: 0.9em" (click)="toogleAccordion(i)">
         <b>{{device.name}} &nbsp;&nbsp; {{device.temperature | number:'1.0-1'}}{{unit}} &nbsp;&nbsp; {{device.humidity}}% &nbsp;&nbsp;&nbsp;&nbsp;<i *ngIf="device.water<0.45 && device.water>=0" class="fa fa-tint"></i> <i *ngIf="device.water<=1 && device.water>=0.75" class="fa fa-tint" style="color:red"></i><i *ngIf="device.water>=0.45 && device.water<0.75" class="fa fa-tint" style="color:blue"></i>&nbsp;&nbsp;&nbsp;&nbsp;
-          <i (click)="showStats(device.id,device.isSimulated) && toogleAccordion('doNotToggle')" class="fa fa-line-chart" style="color:red" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+          <i (click)="showStats(device.name,device.id,device.isSimulated) && toogleAccordion('doNotToggle')" class="fa fa-line-chart" style="color:red" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;
           <i *ngIf="device.healthStatus==='ACTIVE'" class="fa fa-check" style="color:green"></i><i *ngIf="device.healthStatus && device.healthStatus!=='ACTIVE'" class="fa fa-times" style="color:red"></i></b>
       </ion-card-header>
 

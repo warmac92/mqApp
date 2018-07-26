@@ -38,6 +38,7 @@ export class HomePage {
   weatherData:any;
   iconObject:string;
   companyName:string;
+  deviceName:string;
   unit:string;
   online:boolean;
   setIntervalId:any;
@@ -513,24 +514,30 @@ export class HomePage {
     });
   }
 
-  showStats(id,isSim)
+  showStats(name,id,isSim)
   {
    
     if(!isSim)
     {
     this.machineId=id;
+    this.deviceName=name;
     this.cookieService.set('machineId',this.machineId);
     console.log(this.cookieService.get('machineId'));
-    this.navCtrl.setRoot('StatsPage', {
+    this.cookieService.set('deviceName',this.deviceName);
+    console.log(this.cookieService.get('deviceName'));
+    this.navCtrl.setRoot('AnalyticsPage', {
       data: "0"
     });
     }
     else
     { //add code to retrieve 7 days data for simulated site
       this.simulatedId=id;
+      this.deviceName=name;
       this.cookieService.set('simulatedId',this.simulatedId);
+      this.cookieService.set('deviceName',this.deviceName);
+      console.log('deviceName');
       console.log(this.cookieService.get('simulatedId'));
-      this.navCtrl.setRoot('StatsPage', {
+      this.navCtrl.setRoot('AnalyticsPage', {
         data: "1"
       });    
     }

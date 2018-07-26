@@ -273,7 +273,7 @@ export class StatsPage {
     }else{
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 5000
+        duration: 4000
       });
       load.present();
     }
@@ -331,43 +331,24 @@ export class StatsPage {
     console.log('ionViewDidLoad StatsPage');
   }
 
-  goBar(){
-    if(!this.navParams.get('data')){
-    this.navCtrl.setRoot('BarPage');
-    }else if(this.navParams.get('data')=="0"){
-      this.navCtrl.setRoot('BarPage', {
-        data: "0"
-      });
-    }else if(this.navParams.get('data')=="1"){
-      this.navCtrl.setRoot('BarPage', {
-        data: "1"
-      });
-    }
-  }
-
-  goScatter(){
-    if(!this.navParams.get('data')){
-    this.navCtrl.setRoot('ScatterPage');
-    }else if(this.navParams.get('data')=="0"){
-      this.navCtrl.setRoot('ScatterPage', {
-        data: "0"
-      });
-    }else if(this.navParams.get('data')=="1"){
-      this.navCtrl.setRoot('ScatterPage', {
-        data: "1"
-      });
-    }
-  }
-
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
     this.cookieService.delete('xAuthToken'); 
-
   }
 
   goBack()
   {
-    this.navCtrl.setRoot('HomePage');
+    if(!this.navParams.get('data')){
+      this.navCtrl.setRoot('AnalyticsPage');
+      }else if(this.navParams.get('data')=="0"){
+        this.navCtrl.setRoot('AnalyticsPage', {
+          data: "0"
+        });
+      }else if(this.navParams.get('data')=="1"){
+        this.navCtrl.setRoot('AnalyticsPage', {
+          data: "1"
+        });
+      }
   }  
 }
