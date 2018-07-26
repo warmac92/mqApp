@@ -68,29 +68,29 @@ export class ScatterPage {
         var i;
         var j;
         if(this.cookieService.get('unit')=="celsius"){
-          for( i=0; i<4500; i++){
+          for( i=0; i<4000; i++){
             this.Temp[i] = parseFloat(this.payloadData[i].Data.temperature);
           }
-          for( j=0; j<4500; j++){
+          for( j=0; j<4000; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<4500; z++){
+            for(var z=0; z<4000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
             console.log(this.combined);
           },1000);
         }else{
-          for( i=0; i<4500; i++){
+          for( i=0; i<4000; i++){
             this.Temp[i] = (((parseFloat(this.payloadData[i].Data.temperature))*1.8)+32);
           }
-          for( j=0; j<4500; j++){
+          for( j=0; j<4000; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<4500; z++){
+            for(var z=0; z<4000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
             console.log(this.combined);
@@ -114,7 +114,7 @@ export class ScatterPage {
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<4500; z++){
+            for(var z=0; z<4000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
           },1000);
@@ -127,7 +127,7 @@ export class ScatterPage {
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<5000; z++){
+            for(var z=0; z<4000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
           },1000);
