@@ -145,7 +145,7 @@ export class ScatterPage {
       this.showFahr=false;
       setTimeout(()=>{
         this.scatterFahrenheit();
-      },5500);
+      },6000);
     }
   }
 
