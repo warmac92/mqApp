@@ -31,6 +31,7 @@ export class ScatterPage {
   showFahr: boolean;
 
   constructor(public loadingCtrl: LoadingController, private deviceService: DeviceService, public angularFireDatabase: AngularFireDatabase, public navCtrl: NavController, public cookieService: CookieService, public navParams: NavParams) {
+    console.log("baby");
     this.loading();
     this.payloadData=[];
     this.Temp=[];
@@ -67,33 +68,33 @@ export class ScatterPage {
         var i;
         var j;
         if(this.cookieService.get('unit')=="celsius"){
-          for( i=0; i<5000; i++){
+          for( i=0; i<4500; i++){
             this.Temp[i] = parseFloat(this.payloadData[i].Data.temperature);
           }
-          for( j=0; j<5000; j++){
+          for( j=0; j<4500; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<5000; z++){
+            for(var z=0; z<4500; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
             console.log(this.combined);
-          },1500);
+          },1000);
         }else{
-          for( i=0; i<5000; i++){
+          for( i=0; i<4500; i++){
             this.Temp[i] = (((parseFloat(this.payloadData[i].Data.temperature))*1.8)+32);
           }
-          for( j=0; j<5000; j++){
+          for( j=0; j<4500; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<5000; z++){
+            for(var z=0; z<4500; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
             console.log(this.combined);
-          },1500);
+          },1000);
         }
       });
     }else{
@@ -113,10 +114,10 @@ export class ScatterPage {
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<5000; z++){
+            for(var z=0; z<4500; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1500);
+          },1000);
         }else{
           for(i=0; i<this.simData.length; i++){
             this.Temp[i] = (((parseFloat(this.simData[i].Temperature))*1.8)+32);
@@ -129,7 +130,7 @@ export class ScatterPage {
             for(var z=0; z<5000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
-          },1500);
+          },1000);
         }
       });
     }
@@ -138,13 +139,13 @@ export class ScatterPage {
       this.showFahr=true;
       setTimeout(()=>{
         this.scatterCentigrade();
-      },7000);
+      },5000);
     }else{
       this.showCenti=true;
       this.showFahr=false;
       setTimeout(()=>{
         this.scatterFahrenheit();
-      },7000);
+      },5500);
     }
   }
 
@@ -183,31 +184,17 @@ export class ScatterPage {
       chart.draw(data, options);
   }
 
-  goBar(){
-    if(!this.navParams.get('data')){
-    this.navCtrl.setRoot('BarPage');
-    }else if(this.navParams.get('data')=="0"){
-      this.navCtrl.setRoot('BarPage', {
-        data: "0"
-      });
-    }else if(this.navParams.get('data')=="1"){
-      this.navCtrl.setRoot('BarPage', {
-        data: "1"
-      });
-    }
-  }
-
   loading(){
     if(this.cookieService.get('unit')=="celsius"){
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 9000
+        duration: 5000
       });
       load.present();
     }else{
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 9000
+        duration: 5000
       });
       load.present();
     }
@@ -215,28 +202,22 @@ export class ScatterPage {
 
   goBack()
   {
-    this.navCtrl.setRoot('HomePage');
+    if(!this.navParams.get('data')){
+      this.navCtrl.setRoot('AnalyticsPage');
+      }else if(this.navParams.get('data')=="0"){
+        this.navCtrl.setRoot('AnalyticsPage', {
+          data: "0"
+        });
+      }else if(this.navParams.get('data')=="1"){
+        this.navCtrl.setRoot('AnalyticsPage', {
+          data: "1"
+        });
+      }
   }
 
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
-    this.cookieService.delete('xAuthToken'); 
-
+    this.cookieService.delete('xAuthToken');
   }
-
-  goStat(){
-    if(!this.navParams.get('data')){
-    this.navCtrl.setRoot('StatsPage');
-    }else if(this.navParams.get('data')=="0"){
-      this.navCtrl.setRoot('StatsPage', {
-        data: "0"
-      });
-    }else if(this.navParams.get('data')=="1"){
-      this.navCtrl.setRoot('StatsPage', {
-        data: "1"
-      });
-    }
-  }
-
 }

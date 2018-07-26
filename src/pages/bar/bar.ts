@@ -249,20 +249,6 @@ export class BarPage {
     load.present();
   }
 
-  goStat(){
-    if(!this.navParams.get('data')){
-    this.navCtrl.setRoot('StatsPage');
-    }else if(this.navParams.get('data')=="0"){
-      this.navCtrl.setRoot('StatsPage', {
-        data: "0"
-      });
-    }else if(this.navParams.get('data')=="1"){
-      this.navCtrl.setRoot('StatsPage', {
-        data: "1"
-      });
-    }
-  }
-
   barCentigrade(){
     console.log("bar centi");
     this.barChart = new Chart(this.barCentigradeCanvas.nativeElement, {
@@ -368,20 +354,6 @@ export class BarPage {
     });
   }
 
-  goScatter(){
-    if(!this.navParams.get('data')){
-    this.navCtrl.setRoot('ScatterPage');
-    }else if(this.navParams.get('data')=="0"){
-      this.navCtrl.setRoot('ScatterPage', {
-        data: "0"
-      });
-    }else if(this.navParams.get('data')=="1"){
-      this.navCtrl.setRoot('ScatterPage', {
-        data: "1"
-      });
-    }
-  }
-
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
@@ -391,7 +363,17 @@ export class BarPage {
 
   goBack()
   {
-    this.navCtrl.setRoot('HomePage');
+    if(!this.navParams.get('data')){
+      this.navCtrl.setRoot('AnalyticsPage');
+      }else if(this.navParams.get('data')=="0"){
+        this.navCtrl.setRoot('AnalyticsPage', {
+          data: "0"
+        });
+      }else if(this.navParams.get('data')=="1"){
+        this.navCtrl.setRoot('AnalyticsPage', {
+          data: "1"
+        });
+      }
   }
 
 }
