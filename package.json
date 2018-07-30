@@ -68,7 +68,7 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "cordova-plugin-geolocation": {
-        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
+        "GEOLOCATION_USAGE_DESCRIPTION": "We want your location! Best regards NSA"
       },
       "cordova-plugin-local-notification": {},
       "cordova-plugin-touch-id": {}
