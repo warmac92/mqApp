@@ -112,18 +112,34 @@ export class VariationsPage {
       this.showNonAC=false;
       this.showAC=true;
       if(Math.max(...this.tempChange)>Math.abs(Math.min(...this.tempChange))){
-        this.tempChangeDisplay = Math.max(...this.tempChange);
+        if(this.cookieService.get('unit')=="celsius"){
+          this.tempChangeDisplay = Math.max(...this.tempChange)+"°C";
+        }else{
+          this.tempChangeDisplay = (((Math.max(...this.tempChange)*1.8)+32));
+        }
       }else{
-        this.tempChangeDisplay = Math.min(...this.tempChange);
+        if(this.cookieService.get('unit')=="celsius"){
+          this.tempChangeDisplay = Math.min(...this.tempChange);
+        }else{
+          this.tempChangeDisplay = (((Math.min(...this.tempChange))*1.8)+32)+"°F";
+        }
       }
       this.deviceName = this.cookieService.get('deviceName');
     }else{
       this.showAC=false;
       this.showNonAC=true;
       if(Math.max(...this.tempChange)>Math.abs(Math.min(...this.tempChange))){
-        this.tempChangeDisplay = Math.max(...this.tempChange);
+        if(this.cookieService.get('unit')=="celsius"){
+          this.tempChangeDisplay = Math.max(...this.tempChange)+"°C";
+        }else{
+          this.tempChangeDisplay = (((Math.max(...this.tempChange))*1.8)+32)+"°F";
+        }
       }else{
-        this.tempChangeDisplay = Math.min(...this.tempChange);
+        if(this.cookieService.get('unit')=="celsius"){
+          this.tempChangeDisplay = Math.min(...this.tempChange)+"°C";
+        }else{
+          this.tempChangeDisplay = (((Math.max(...this.tempChange))*1.8)+32)+"°F";
+        }
       }
       this.deviceName = this.cookieService.get('deviceName');
     }
@@ -145,6 +161,7 @@ export class VariationsPage {
       if(Math.max(...this.tempChange)>=5 || Math.min(...this.tempChange)<=-5){
         this.showAC=true;
         this.showNonAC=false;
+        this.deviceName = this.cookieService.get('deviceName');
         if(Math.max(...this.tempChange)>Math.abs(Math.min(...this.tempChange))){
           if(this.cookieService.get('unit')=="celsius"){
             this.tempChangeDisplay = Math.max(...this.tempChange)+"°C";
@@ -158,7 +175,6 @@ export class VariationsPage {
               this.tempChangeDisplay = (((Math.min(...this.tempChange))*1.8)+32)+"°F";
             }
           }
-        this.deviceName = this.cookieService.get('deviceName');
       }else{
         this.showAC=false;
         this.showNonAC=true;
@@ -175,7 +191,6 @@ export class VariationsPage {
             this.tempChangeDisplay = (((Math.min(...this.tempChange))*1.8)+32)+"°F";
           }
         }
-        this.deviceName = this.cookieService.get('deviceName');
       }
   }
 
