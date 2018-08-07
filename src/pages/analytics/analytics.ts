@@ -78,6 +78,20 @@ export class AnalyticsPage {
     }
   }
 
+  goVariations(){
+    if(!this.navParams.get('data')){
+    this.navCtrl.setRoot('VariationsPage');
+    }else if(this.navParams.get('data')=="0"){
+      this.navCtrl.setRoot('VariationsPage', {
+        data: "0"
+      });
+    }else if(this.navParams.get('data')=="1"){
+      this.navCtrl.setRoot('VariationsPage', {
+        data: "1"
+      });
+    }
+  }
+
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
