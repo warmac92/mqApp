@@ -26,6 +26,7 @@ export class BarPage {
   @ViewChild('barFahrenheitCanvas') barFahrenheitCanvas;
 
   dateStringArray:string[];
+  dateStringArray1:string[];
   barChart: any;
   day1: number;
   day2: number;
@@ -85,16 +86,24 @@ export class BarPage {
     this.showFahr=true;
     this.macId;
     this.dateStringArray=[];
+    this.dateStringArray1=[];
     for(var i=0;i<7;i++)
     {
     var dateForPopArry = new Date();
     dateForPopArry.setDate(dateForPopArry.getDate()-i);
-    this.dateStringArray.push(dateForPopArry.getDate().toString()+"-"+dateForPopArry.getMonth().toString());
-    console.log(this.dateStringArray);
+    this.dateStringArray.push(dateForPopArry.getDate().toString()+"-"+(dateForPopArry.getMonth()).toString());
     }
     this.dateStringArray.reverse();
+    for(var i=0;i<7;i++)
+    {
+    var dateForPopArry1 = new Date();
+    dateForPopArry1.setDate(dateForPopArry1.getDate()-i);
+    this.dateStringArray1.push(dateForPopArry1.getDate().toString()+"-"+(dateForPopArry1.getMonth()+1).toString());
+    }
+    this.dateStringArray1.reverse();
     if(macId!="0"){
     console.log(this.dateStringArray);
+    console.log(this.dateStringArray1);
     setTimeout(()=>{
       this.day1=parseInt(this.dateStringArray[0]);
       this.day2=parseInt(this.dateStringArray[1]);
@@ -253,7 +262,7 @@ export class BarPage {
     this.barChart = new Chart(this.barCentigradeCanvas.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.dateStringArray,
+        labels: this.dateStringArray1,
         datasets: [{
           label: 'Max Temperature',
           data: [this.myCustomPayloadData[0].maxTemp.toFixed(2),this.myCustomPayloadData[1].maxTemp.toFixed(2),this.myCustomPayloadData[2].maxTemp.toFixed(2),this.myCustomPayloadData[3].maxTemp.toFixed(2),this.myCustomPayloadData[4].maxTemp.toFixed(2),this.myCustomPayloadData[5].maxTemp.toFixed(2),this.myCustomPayloadData[6].maxTemp.toFixed(2)],
@@ -306,7 +315,7 @@ export class BarPage {
     this.barChart = new Chart(this.barFahrenheitCanvas.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.dateStringArray,
+        labels: this.dateStringArray1,
         datasets: [{
           label: 'Max Temperature',
           data: [this.fah7[0],this.fah7[1],this.fah7[2],this.fah7[3],this.fah7[4],this.fah7[5],this.fah7[6]],
