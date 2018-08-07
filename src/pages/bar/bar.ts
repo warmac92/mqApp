@@ -47,7 +47,6 @@ export class BarPage {
     if(navParams.get('data')=="0"){
       simId ='0';
       macId = this.cookieService.get('machineId');
-      console.log("dhetadi");
       console.log(navParams.get('data'));
     }
     else if(navParams.get('data')=="1")
