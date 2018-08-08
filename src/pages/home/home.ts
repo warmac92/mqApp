@@ -167,7 +167,7 @@ export class HomePage {
           currentPanel.water = Math.random();
           if(currentPanel.water<0.45 && currentPanel.water>=0)
            {
-               currentPanel.waterStatus="NO WATER";
+            currentPanel.waterStatus="NO WATER";
            }
           else if(currentPanel.water>=0.45 && currentPanel.water<0.75)
           {
