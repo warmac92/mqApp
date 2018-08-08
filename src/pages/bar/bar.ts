@@ -181,7 +181,11 @@ export class BarPage {
     //console.log(this.myCustomPayloadData[0].maxTemp);
     this.getMaxTemperatures();
     for(var j=0; j<7;j++){
-    this.fah7[j]=(((this.myCustomPayloadData[j].maxTemp)*1.8)+32).toFixed(2);
+      if(this.myCustomPayloadData[j].maxTemp==0){
+        this.fah7[j]=0;
+      }else{
+        this.fah7[j]=(((this.myCustomPayloadData[j].maxTemp)*1.8)+32).toFixed(2);
+      }
     console.log(this.fah7[j]);
     }
   }
