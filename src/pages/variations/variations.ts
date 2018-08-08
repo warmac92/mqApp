@@ -23,6 +23,7 @@ export class VariationsPage {
   simData : any;
   deviceName : string;
   tempChangeDisplay : any;
+  humidChangeDisplay : any;
   showAC : boolean;
   showNonAC : boolean;
   payloadData : any[];
@@ -31,6 +32,7 @@ export class VariationsPage {
   temp : any[];
   humid : any[];
   tempChange : any[];
+  humidChange: any[];
   dateStringArray : string[];
 
   constructor(public angularFireDatabase: AngularFireDatabase, public loadingCtrl: LoadingController, private deviceService: DeviceService, public navCtrl: NavController, public navParams: NavParams, public cookieService: CookieService) {
@@ -41,9 +43,10 @@ export class VariationsPage {
     this.showNonAC=true;
     this.combined=[];
     this.temp=[];
-    this.devices=[];
     this.humid=[];
+    this.devices=[];
     this.tempChange=[];
+    this.humidChange=[];
     this.dateStringArray=[];
     this.payloadData=[];
     this.loading();
@@ -97,20 +100,26 @@ export class VariationsPage {
 
   sim(){
     var i;
-    console.log("Sim Centi");
+    console.log("Sim");
     for(i=12;i<this.simData.length;i++){
       if((parseFloat(this.simData[i].Temperature)-parseFloat(this.simData[i-11].Temperature))>=3 || (parseFloat(this.simData[i].Temperature)-parseFloat(this.simData[i-11].Temperature))<=3){
         this.temp.push(this.simData[i].Temperature);
         this.temp.push(this.simData[i-11].Temperature);
+        this.humid.push(this.simData[i].Humidity);
+        this.humid.push(this.simData[i-11].Humidity);
+        this.humidChange.push(parseFloat(this.simData[i].Humidity)-parseFloat(this.simData[i-11].Humidity));
         this.tempChange.push(parseFloat(this.simData[i].Temperature)-parseFloat(this.simData[i-11].Temperature));
       }
       i++;
     }
-    // console.log(Math.max(...this.tempChange));
-    // console.log(Math.min(...this.tempChange), Math.abs(Math.min(...this.tempChange)));
     if(Math.max(...this.tempChange)>=5 || Math.min(...this.tempChange)<=-5){
       this.showNonAC=false;
       this.showAC=true;
+      if(Math.max(...this.humidChange)>Math.abs(Math.min(...this.humidChange))){
+        this.humidChangeDisplay = Math.max(...this.humidChange).toFixed(2);
+      }else{
+        this.humidChangeDisplay = Math.min(...this.humidChange).toFixed(2);
+      }
       if(Math.max(...this.tempChange)>Math.abs(Math.min(...this.tempChange))){
         if(this.cookieService.get('unit')=="celsius"){
           this.tempChangeDisplay = Math.max(...this.tempChange)+"°C";
@@ -128,6 +137,11 @@ export class VariationsPage {
     }else{
       this.showAC=false;
       this.showNonAC=true;
+      if(Math.max(...this.humidChange)>Math.abs(Math.min(...this.humidChange))){
+        this.humidChangeDisplay = Math.max(...this.humidChange).toFixed(2);
+      }else{
+        this.humidChangeDisplay = Math.min(...this.humidChange).toFixed(2);
+      }
       if(Math.max(...this.tempChange)>Math.abs(Math.min(...this.tempChange))){
         if(this.cookieService.get('unit')=="celsius"){
           this.tempChangeDisplay = Math.max(...this.tempChange)+"°C";
@@ -147,48 +161,60 @@ export class VariationsPage {
 
   mac(){
     var i;
-    console.log("Mac Centi");
+    console.log("Mac");
       for(i=12;i<this.payloadData.length;i++){
         if((parseFloat(this.payloadData[i].Data.temperature)-parseFloat(this.payloadData[i-11].Data.temperature))>=3 || (parseFloat(this.payloadData[i].Data.temperature)-parseFloat(this.payloadData[i-11].Data.temperature))<=3){
           this.temp.push(this.payloadData[i].Data.temperature);
           this.temp.push(this.payloadData[i-11].Data.temperature);
+          this.humid.push(this.payloadData[i].Data.humidity);
+          this.humid.push(this.payloadData[i-11].Data.humidity);
+          this.humidChange.push(parseFloat(this.payloadData[i].Data.humidity)-parseFloat(this.payloadData[i-11].Data.humidity));
           this.tempChange.push(parseFloat(this.payloadData[i].Data.temperature)-parseFloat(this.payloadData[i-11].Data.temperature));
         }
         i++;
       }
-      // console.log(Math.max(...this.tempChange));
-      // console.log(Math.min(...this.tempChange), Math.abs(Math.min(...this.tempChange)));
       if(Math.max(...this.tempChange)>=5 || Math.min(...this.tempChange)<=-5){
         this.showAC=true;
         this.showNonAC=false;
         this.deviceName = this.cookieService.get('deviceName');
+        if(Math.max(...this.humidChange)>Math.abs(Math.min(...this.humidChange))){
+          this.humidChangeDisplay = Math.max(...this.humidChange).toFixed(2);
+        }else{
+          this.humidChangeDisplay = Math.min(...this.humidChange).toFixed(2);
+        }
+        console.log(this.humidChangeDisplay);
         if(Math.max(...this.tempChange)>Math.abs(Math.min(...this.tempChange))){
           if(this.cookieService.get('unit')=="celsius"){
-            this.tempChangeDisplay = Math.max(...this.tempChange)+"°C";
+            this.tempChangeDisplay = Math.max(...this.tempChange).toFixed(2)+"°C";
           }else{
-            this.tempChangeDisplay = (((Math.max(...this.tempChange))*1.8)+32)+"°F";
+            this.tempChangeDisplay = (((Math.max(...this.tempChange))*1.8)+32).toFixed(2)+"°F";
           }
           }else{
             if(this.cookieService.get('unit')=="celsius"){
-            this.tempChangeDisplay = Math.min(...this.tempChange)+"°C";
+            this.tempChangeDisplay = Math.min(...this.tempChange).toFixed(2)+"°C";
             }else{
-              this.tempChangeDisplay = (((Math.min(...this.tempChange))*1.8)+32)+"°F";
+              this.tempChangeDisplay = (((Math.min(...this.tempChange))*1.8)+32).toFixed(2)+"°F";
             }
           }
       }else{
         this.showAC=false;
         this.showNonAC=true;
+        if(Math.max(...this.humidChange)>Math.abs(Math.min(...this.humidChange))){
+          this.humidChangeDisplay = Math.max(...this.humidChange).toFixed(2);
+        }else{
+          this.humidChangeDisplay = Math.min(...this.humidChange).toFixed(2);
+        }
         if(Math.max(...this.tempChange)>Math.abs(Math.min(...this.tempChange))){
           if(this.cookieService.get('unit')=="celsius"){
-            this.tempChangeDisplay = Math.max(...this.tempChange)+"°C";
+            this.tempChangeDisplay = Math.max(...this.tempChange).toFixed(2)+"°C";
           }else{
-            this.tempChangeDisplay = (((Math.max(...this.tempChange))*1.8)+32)+"°F";
+            this.tempChangeDisplay = (((Math.max(...this.tempChange))*1.8)+32).toFixed(2)+"°F";
           }
         }else{
           if(this.cookieService.get('unit')=="celsius"){
-            this.tempChangeDisplay = Math.min(...this.tempChange)+"°C";
+            this.tempChangeDisplay = Math.min(...this.tempChange).toFixed(2)+"°C";
           }else{
-            this.tempChangeDisplay = (((Math.min(...this.tempChange))*1.8)+32)+"°F";
+            this.tempChangeDisplay = (((Math.min(...this.tempChange))*1.8)+32).toFixed(2)+"°F";
           }
         }
       }
