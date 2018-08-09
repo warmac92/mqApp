@@ -61,10 +61,14 @@ export class StatsPage {
     this.showFahr=true;
     this.tmax = parseFloat(this.cookieService.get('tMax'));
     this.tmin = parseFloat(this.cookieService.get('tMin'));
+    console.log(this.tmin);
+    console.log(this.tmax);
     console.log(navParams.get('data'));
+    var simId;
+    var macId;
     if(navParams.get('data')=="0"){
-      var simId ='0';
-      var macId = this.cookieService.get('machineId');
+       simId ='0';
+       macId = this.cookieService.get('machineId');
       console.log(macId);
     }
     else if(navParams.get('data')=="1")
@@ -76,8 +80,8 @@ export class StatsPage {
         this.dateStringArray.push(dateForPopArry.getDate().toString()+"-"+dateForPopArry.getMonth().toString());
       }
       this.dateStringArray.reverse();
-      var simId = this.cookieService.get('simulatedId');
-      var macId='0';
+       simId = this.cookieService.get('simulatedId');
+       macId='0';
       console.log(simId);
       this.angularFireDatabase.object('/Device-Data/0/'+simId+'/').valueChanges().subscribe((fireData:any)=>{
       this.simData=fireData;
@@ -118,6 +122,7 @@ export class StatsPage {
     if(macId!="0"){
     this.deviceService.getPayloadData(macId,utcTime).subscribe((payloads:any[])=>{
       this.payloadData=payloads['Payloads'];
+      console.log(this.payloadData);
       if(this.cookieService.get('unit')=="celsius")
       {
         this.showCenti=false;
@@ -125,14 +130,15 @@ export class StatsPage {
       for(var i=0;i<this.payloadData.length;i++)
       {
         //this.temperatures.push(this.payloadData[i].Data.temperature); 
-        if(parseFloat(this.payloadData[i].Data.temperature)>=parseFloat(this.cookieService.get('tMax'))){
+        if(parseFloat(this.payloadData[i].Data.temperature)>=this.tmax){
           this.c++;
-        }else if((parseFloat(this.payloadData[i].Data.temperature)<parseFloat(this.cookieService.get('tMax')) && parseFloat(this.payloadData[i].Data.temperature)>parseFloat(this.cookieService.get('tMin')))){
+        }else if((parseFloat(this.payloadData[i].Data.temperature)<this.tmax && parseFloat(this.payloadData[i].Data.temperature)>this.tmin)){
           this.b++;
-        }else if(parseFloat(this.payloadData[i].Data.temperature)<=parseFloat(this.cookieService.get('tMin'))){
+        }else if(parseFloat(this.payloadData[i].Data.temperature)<=this.tmin){
           this.a++;
         }
       }
+      console.log(this.a, this.b, this.c);
       this.doughnutCentigrade();
       }else if(this.cookieService.get('unit')=="fahrenheit"){
         this.showCenti=true;
@@ -164,12 +170,13 @@ export class StatsPage {
   simFahren(){
     this.showCenti=true;
     this.showFahr=false;
-    for(var i=0;i<this.simData.length;i++)
+    var i;
+    for(i=0;i<this.simData.length;i++)
       {
       var currentDate = new Date(this.simData[i].DateTime);
       this.simData[i].DateTime = currentDate.getDate() + "-" + currentDate.getMonth();
       }
-    for(var i=0;i<this.dateStringArray.length;i++)
+    for(i=0;i<this.dateStringArray.length;i++)
       {
         var myCurrentPayload = new MyCustomPayload();
         myCurrentPayload.date=this.dateStringArray[i];
@@ -177,7 +184,7 @@ export class StatsPage {
         myCurrentPayload.maxTemp=0;
         this.myCustomPayloadData.push(myCurrentPayload);
       }
-    for(var i=0;i<this.myCustomPayloadData.length;i++)
+    for( i=0;i<this.myCustomPayloadData.length;i++)
     {
       for(var j=0;j<this.simData.length;j++)
       {
@@ -191,17 +198,17 @@ export class StatsPage {
         }
       }
     }
-    for(var i=0;i<this.myCustomPayloadData.length;i++)
+    for( i=0;i<this.myCustomPayloadData.length;i++)
     {
       for(var y=0; y<this.myCustomPayloadData[i].temperatures.length; y++)
       {
         this.g = 0;
         this.g=(((this.myCustomPayloadData[i].temperatures[y])*1.8)+32);       
-        if(this.g>=parseFloat(this.cookieService.get('tMax'))){
+        if(this.g>=this.tmax){
           this.f++;
-        }else if((this.g<parseFloat(this.cookieService.get('tMax')) && this.g>parseFloat(this.cookieService.get('tMin')))){
+        }else if((this.g<this.tmax && this.g>this.tmin)){
           this.e++;
-        }else if(this.g<=parseFloat(this.cookieService.get('tMin'))){
+        }else if(this.g<=this.tmin){
           this.d++;
         }
       }
@@ -212,12 +219,13 @@ export class StatsPage {
   simCenti(){
     this.showCenti=false;
     this.showFahr=true;
-    for(var i=0;i<this.simData.length;i++)
+    var i;
+    for(i=0;i<this.simData.length;i++)
     {
      var currentDate = new Date(this.simData[i].DateTime);
      this.simData[i].DateTime = currentDate.getDate() + "-" + currentDate.getMonth();
     }
-    for(var i=0;i<this.dateStringArray.length;i++)
+    for(i=0;i<this.dateStringArray.length;i++)
     {
       var myCurrentPayload = new MyCustomPayload();
       myCurrentPayload.date=this.dateStringArray[i];
@@ -225,7 +233,7 @@ export class StatsPage {
       myCurrentPayload.maxTemp=0;
       this.myCustomPayloadData.push(myCurrentPayload);
     }
-    for(var i=0;i<this.myCustomPayloadData.length;i++)
+    for(i=0;i<this.myCustomPayloadData.length;i++)
     {
       for(var j=0;j<this.simData.length;j++)
       {
@@ -239,15 +247,15 @@ export class StatsPage {
         }
       }
     }
-    for(var i=0;i<this.myCustomPayloadData.length;i++)
+    for(i=0;i<this.myCustomPayloadData.length;i++)
     {
       for(var y=0; y<this.myCustomPayloadData[i].temperatures.length; y++)
       {       
-        if(parseFloat(this.myCustomPayloadData[i].temperatures[y])>=parseFloat(this.cookieService.get('tMax'))){
+        if(parseFloat(this.myCustomPayloadData[i].temperatures[y])>=this.tmin){
           this.c++;
-        }else if((parseFloat(this.myCustomPayloadData[i].temperatures[y])<parseFloat(this.cookieService.get('tMax')) && parseFloat(this.myCustomPayloadData[i].temperatures[y])>parseFloat(this.cookieService.get('tMin')))){
+        }else if((parseFloat(this.myCustomPayloadData[i].temperatures[y])<this.tmax && parseFloat(this.myCustomPayloadData[i].temperatures[y])>this.tmin)){
           this.b++;
-        }else if(parseFloat(this.myCustomPayloadData[i].temperatures[y])<=parseFloat(this.cookieService.get('tMin'))){
+        }else if(parseFloat(this.myCustomPayloadData[i].temperatures[y])<=this.tmin){
           this.a++;
         }
       }
@@ -265,7 +273,7 @@ export class StatsPage {
     }else{
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 5000
+        duration: 4000
       });
       load.present();
     }
@@ -323,41 +331,24 @@ export class StatsPage {
     console.log('ionViewDidLoad StatsPage');
   }
 
-  goBar(){
-    if(!this.navParams.get('data')){
-    this.navCtrl.setRoot('BarPage');
-    }else if(this.navParams.get('data')=="0"){
-      this.navCtrl.setRoot('BarPage', {
-        data: "0"
-      });
-    }else if(this.navParams.get('data')=="1"){
-      this.navCtrl.setRoot('BarPage', {
-        data: "1"
-      });
-    }
-  }
-
-  goScatter(){
-    if(!this.navParams.get('data')){
-    this.navCtrl.setRoot('ScatterPage');
-    }else if(this.navParams.get('data')=="0"){
-      this.navCtrl.setRoot('ScatterPage', {
-        data: "0"
-      });
-    }else if(this.navParams.get('data')=="1"){
-      this.navCtrl.setRoot('ScatterPage', {
-        data: "1"
-      });
-    }
-  }
-
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
+    this.cookieService.delete('xAuthToken'); 
   }
 
   goBack()
   {
-    this.navCtrl.setRoot('HomePage');
+    if(!this.navParams.get('data')){
+      this.navCtrl.setRoot('AnalyticsPage');
+      }else if(this.navParams.get('data')=="0"){
+        this.navCtrl.setRoot('AnalyticsPage', {
+          data: "0"
+        });
+      }else if(this.navParams.get('data')=="1"){
+        this.navCtrl.setRoot('AnalyticsPage', {
+          data: "1"
+        });
+      }
   }  
 }

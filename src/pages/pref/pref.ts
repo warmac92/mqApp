@@ -61,6 +61,8 @@ export class PrefPage {
   }
 
   saveChanges(){
+    var tmin;
+    var tmax;
     if(this.companyName=='' || this.companyName==null)
     {
       this.showEmptyValuesAlert();
@@ -73,16 +75,16 @@ export class PrefPage {
     console.log(this.cookieService.get('unit'));
     if(this.unit=='celsius')
     {
-      var tmin = Math.round(((parseFloat(this.cookieService.get('tMin')) - 32)*(5/9))).toString();
-      var tmax = Math.round(((parseFloat(this.cookieService.get('tMax'))- 32)*(5/9))).toString();
+       tmin = Math.round(((parseFloat(this.cookieService.get('tMin')) - 32)*(5/9))).toString();
+       tmax = Math.round(((parseFloat(this.cookieService.get('tMax'))- 32)*(5/9))).toString();
       this.cookieService.set('tMin',tmin);
       this.cookieService.set('tMax',tmax);
     }
     else if(this.unit==="fahrenheit" && this.cookieService.get('unit'))
     {
       this.cookieService.set('unit',this.unit);
-      var tmin = Math.round(((parseFloat(this.cookieService.get('tMin')))*(9/5))+32).toString();
-      var tmax = Math.round(((parseFloat(this.cookieService.get('tMax'))) *(9/5))+32).toString();
+       tmin = Math.round(((parseFloat(this.cookieService.get('tMin')))*(9/5))+32).toString();
+       tmax = Math.round(((parseFloat(this.cookieService.get('tMax'))) *(9/5))+32).toString();
       this.cookieService.set('tMin',tmin);
       this.cookieService.set('tMax',tmax);
     }
@@ -118,8 +120,7 @@ export class PrefPage {
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
-
-
+    this.cookieService.delete('xAuthToken'); 
   }
 
 }

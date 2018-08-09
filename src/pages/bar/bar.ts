@@ -26,6 +26,7 @@ export class BarPage {
   @ViewChild('barFahrenheitCanvas') barFahrenheitCanvas;
 
   dateStringArray:string[];
+  dateStringArray1:string[];
   barChart: any;
   day1: number;
   day2: number;
@@ -42,17 +43,18 @@ export class BarPage {
   payloadData:any[];
   myCustomPayloadData:MyCustomPayload[];
   constructor(public angularFireDatabase: AngularFireDatabase, public cookieService: CookieService,private deviceService: DeviceService,public loadingCtrl: LoadingController,public navCtrl: NavController, public navParams: NavParams) {
+    var simId;
+    var macId;
     if(navParams.get('data')=="0"){
-      var simId ='0';
-      var macId = this.cookieService.get('machineId');
-      console.log("dhetadi");
+      simId ='0';
+      macId = this.cookieService.get('machineId');
       console.log(navParams.get('data'));
     }
     else if(navParams.get('data')=="1")
     {
       console.log("emaindi");
-      var simId = this.cookieService.get('simulatedId');
-      var macId='0';
+      simId = this.cookieService.get('simulatedId');
+      macId='0';
       this.angularFireDatabase.object('/Device-Data/0/'+simId+'/').valueChanges().subscribe((fireData:any[])=>{
       this.simData=fireData;
       console.log(this.simData);
@@ -62,7 +64,7 @@ export class BarPage {
         this.getSimMaxTemp();
       setTimeout(() => {
         this.barCentigrade();
-      }, 5000);
+      }, 6000);
       }else if(this.cookieService.get('unit')=="fahrenheit"){
         this.showCenti=true;
         this.showFahr=false;
@@ -72,7 +74,7 @@ export class BarPage {
           setTimeout(() => {
             this.barFahrenheit();
           }, 1000);
-        },4500);
+        },6000);
       }
       });
     }
@@ -84,16 +86,24 @@ export class BarPage {
     this.showFahr=true;
     this.macId;
     this.dateStringArray=[];
+    this.dateStringArray1=[];
     for(var i=0;i<7;i++)
     {
     var dateForPopArry = new Date();
     dateForPopArry.setDate(dateForPopArry.getDate()-i);
-    this.dateStringArray.push(dateForPopArry.getDate().toString()+"-"+dateForPopArry.getMonth().toString());
-    console.log(this.dateStringArray);
+    this.dateStringArray.push(dateForPopArry.getDate().toString()+"-"+(dateForPopArry.getMonth()).toString());
     }
     this.dateStringArray.reverse();
+    for(var i=0;i<7;i++)
+    {
+    var dateForPopArry1 = new Date();
+    dateForPopArry1.setDate(dateForPopArry1.getDate()-i);
+    this.dateStringArray1.push(dateForPopArry1.getDate().toString()+"-"+(dateForPopArry1.getMonth()+1).toString());
+    }
+    this.dateStringArray1.reverse();
     if(macId!="0"){
     console.log(this.dateStringArray);
+    console.log(this.dateStringArray1);
     setTimeout(()=>{
       this.day1=parseInt(this.dateStringArray[0]);
       this.day2=parseInt(this.dateStringArray[1]);
@@ -109,7 +119,7 @@ export class BarPage {
       this.showCenti=false;
     setTimeout(() => {
       this.barCentigrade();
-    }, 5000);
+    }, 6000);
     }else if(this.cookieService.get('unit')=="fahrenheit"){
       this.showCenti=true;
       this.showFahr=false;
@@ -117,22 +127,22 @@ export class BarPage {
         this.getMaxTemperaturesFahrenheit();
         setTimeout(() => {
           this.barFahrenheit();
-        }, 1000);
-      },4500);
+        }, 1500);
+      },6000);
     }
     this.getMaxTemperatures();
   }
   }
 
   getSimMaxTemp(){
-    console.log("simmaxtemp");
-    for(var i=0;i<this.simData.length;i++)
+    var i;
+    for(i=0;i<this.simData.length;i++)
       {
        var currentDate = new Date(this.simData[i].DateTime);
        this.simData[i].DateTime = currentDate.getDate() + "-" + currentDate.getMonth();
       }
 
-      for(var i=0;i<this.dateStringArray.length;i++)
+      for(i=0;i<this.dateStringArray.length;i++)
       {
         var myCurrentPayload = new MyCustomPayload();
         myCurrentPayload.date=this.dateStringArray[i];
@@ -141,7 +151,7 @@ export class BarPage {
         this.myCustomPayloadData.push(myCurrentPayload);
       }
 
-      for(var i=0;i<this.myCustomPayloadData.length;i++)
+      for(i=0;i<this.myCustomPayloadData.length;i++)
       {
         for(var j=0;j<this.simData.length;j++)
         {
@@ -156,7 +166,7 @@ export class BarPage {
         }
       }
       console.log(this.myCustomPayloadData);
-      for(var i=0;i<this.myCustomPayloadData.length;i++)
+      for(i=0;i<this.myCustomPayloadData.length;i++)
       {       
          this.myCustomPayloadData[i].maxTemp = Math.max(...this.myCustomPayloadData[i].temperatures);
          console.log(this.myCustomPayloadData[i].maxTemp);
@@ -171,7 +181,11 @@ export class BarPage {
     //console.log(this.myCustomPayloadData[0].maxTemp);
     this.getMaxTemperatures();
     for(var j=0; j<7;j++){
-    this.fah7[j]=(((this.myCustomPayloadData[j].maxTemp)*1.8)+32).toFixed(2);
+      if(this.myCustomPayloadData[j].maxTemp==0){
+        this.fah7[j]=0;
+      }else{
+        this.fah7[j]=(((this.myCustomPayloadData[j].maxTemp)*1.8)+32).toFixed(2);
+      }
     console.log(this.fah7[j]);
     }
   }
@@ -198,17 +212,17 @@ export class BarPage {
     const utcTime = date.getUTCFullYear().toString()+"-"+dateMonthString+"-"+dateDayString+"T00:00:00.000Z";
     console.log(utcTime);
     this.deviceService.getPayloadData(this.macId,utcTime).subscribe((data)=>{
-
+      var i;
       this.payloadData = data['Payloads'];
       console.log(this.payloadData);
-      for(var i=0;i<this.payloadData.length;i++)
+      for(i=0;i<this.payloadData.length;i++)
       {
        var currentDate = new Date(this.payloadData[i].Time);
        this.payloadData[i].Time = currentDate.getDate() + "-" + currentDate.getMonth();
        //xconsole.log(this.payloadData[i].Time);
       }
 
-      for(var i=0;i<this.dateStringArray.length;i++)
+      for(i=0;i<this.dateStringArray.length;i++)
       {
         var myCurrentPayload = new MyCustomPayload();
         myCurrentPayload.date=this.dateStringArray[i];
@@ -217,7 +231,7 @@ export class BarPage {
         this.myCustomPayloadData.push(myCurrentPayload);
       }
 
-      for(var i=0;i<this.myCustomPayloadData.length;i++)
+      for(i=0;i<this.myCustomPayloadData.length;i++)
       {
         for(var j=0;j<this.payloadData.length;j++)
         {
@@ -232,38 +246,19 @@ export class BarPage {
         }
       }
 
-      for(var i=0;i<this.myCustomPayloadData.length;i++)
+      for(i=0;i<this.myCustomPayloadData.length;i++)
       {       
          this.myCustomPayloadData[i].maxTemp = Math.max(...this.myCustomPayloadData[i].temperatures);
       }    
     });
-
-  // setTimeout(()=>{
-  //   console.log(this.payloadData);
-  //   console.log(this,this.myCustomPayloadData);
-  //  },5000);
   }
 
   loading(){
     let load = this.loadingCtrl.create({
       content:'Loading Please Wait....',
-      duration: 5000
+      duration: 6000
     });
     load.present();
-  }
-
-  goStat(){
-    if(!this.navParams.get('data')){
-    this.navCtrl.setRoot('StatsPage');
-    }else if(this.navParams.get('data')=="0"){
-      this.navCtrl.setRoot('StatsPage', {
-        data: "0"
-      });
-    }else if(this.navParams.get('data')=="1"){
-      this.navCtrl.setRoot('StatsPage', {
-        data: "1"
-      });
-    }
   }
 
   barCentigrade(){
@@ -271,7 +266,7 @@ export class BarPage {
     this.barChart = new Chart(this.barCentigradeCanvas.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.dateStringArray,
+        labels: this.dateStringArray1,
         datasets: [{
           label: 'Max Temperature',
           data: [this.myCustomPayloadData[0].maxTemp.toFixed(2),this.myCustomPayloadData[1].maxTemp.toFixed(2),this.myCustomPayloadData[2].maxTemp.toFixed(2),this.myCustomPayloadData[3].maxTemp.toFixed(2),this.myCustomPayloadData[4].maxTemp.toFixed(2),this.myCustomPayloadData[5].maxTemp.toFixed(2),this.myCustomPayloadData[6].maxTemp.toFixed(2)],
@@ -324,7 +319,7 @@ export class BarPage {
     this.barChart = new Chart(this.barFahrenheitCanvas.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.dateStringArray,
+        labels: this.dateStringArray1,
         datasets: [{
           label: 'Max Temperature',
           data: [this.fah7[0],this.fah7[1],this.fah7[2],this.fah7[3],this.fah7[4],this.fah7[5],this.fah7[6]],
@@ -371,28 +366,26 @@ export class BarPage {
     });
   }
 
-  goScatter(){
-    if(!this.navParams.get('data')){
-    this.navCtrl.setRoot('ScatterPage');
-    }else if(this.navParams.get('data')=="0"){
-      this.navCtrl.setRoot('ScatterPage', {
-        data: "0"
-      });
-    }else if(this.navParams.get('data')=="1"){
-      this.navCtrl.setRoot('ScatterPage', {
-        data: "1"
-      });
-    }
-  }
-
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
+    this.cookieService.delete('xAuthToken'); 
+
   }
 
   goBack()
   {
-    this.navCtrl.setRoot('HomePage');
+    if(!this.navParams.get('data')){
+      this.navCtrl.setRoot('AnalyticsPage');
+      }else if(this.navParams.get('data')=="0"){
+        this.navCtrl.setRoot('AnalyticsPage', {
+          data: "0"
+        });
+      }else if(this.navParams.get('data')=="1"){
+        this.navCtrl.setRoot('AnalyticsPage', {
+          data: "1"
+        });
+      }
   }
 
 }

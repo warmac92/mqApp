@@ -31,6 +31,7 @@ export class ScatterPage {
   showFahr: boolean;
 
   constructor(public loadingCtrl: LoadingController, private deviceService: DeviceService, public angularFireDatabase: AngularFireDatabase, public navCtrl: NavController, public cookieService: CookieService, public navParams: NavParams) {
+    console.log("baby");
     this.loading();
     this.payloadData=[];
     this.Temp=[];
@@ -56,69 +57,77 @@ export class ScatterPage {
     }
     const utcTime = date.getUTCFullYear().toString()+"-"+dateMonthString+"-"+dateDayString+"T00:00:00.000Z";
     console.log(utcTime);
+    var macId;
+    var simId;
     if(navParams.get('data')=="0"){
-      var simId = '0';
-      var macId = this.cookieService.get('machineId');
+       simId = '0';
+       macId = this.cookieService.get('machineId');
       console.log(macId);
       this.deviceService.getPayloadData(macId,utcTime).subscribe((payloads:any[])=>{
         this.payloadData=payloads['Payloads'];
+        var i;
+        var j;
         if(this.cookieService.get('unit')=="celsius"){
-          for(var i=0; i<this.payloadData.length; i++){
+          for( i=0; i<4000; i++){
             this.Temp[i] = parseFloat(this.payloadData[i].Data.temperature);
           }
-          for(var j=0; j<this.payloadData.length; j++){
+          for( j=0; j<4000; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<this.Humid.length; z++){
+            for(var z=0; z<4000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
+            console.log(this.combined);
           },1000);
         }else{
-          for(var i=0; i<this.payloadData.length; i++){
+          for( i=0; i<4000; i++){
             this.Temp[i] = (((parseFloat(this.payloadData[i].Data.temperature))*1.8)+32);
           }
-          for(var j=0; j<this.payloadData.length; j++){
+          for( j=0; j<4000; j++){
             this.Humid[j] = parseFloat(this.payloadData[j].Data.humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<this.Humid.length; z++){
+            for(var z=0; z<4000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
+            console.log(this.combined);
           },1000);
         }
       });
     }else{
-      var macId = '0';
-      var simId = this.cookieService.get('simulatedId');
+       macId = '0';
+       simId = this.cookieService.get('simulatedId');
       console.log(simId);
       this.angularFireDatabase.object('/Device-Data/0/'+simId+'/').valueChanges().subscribe((fireData:any)=>{
         this.simData = fireData;
+        var i;
+        var j;
         if(this.cookieService.get('unit')=="celsius"){
-          for(var i=0; i<this.simData.length; i++){
-            this.Temp[i] = this.simData[i].Temperature;
+          for( i=0; i<this.simData.length; i++){
+            this.Temp[i] = parseFloat(this.simData[i].Temperature);
           }
-          for(var j=0; j<this.simData.length; j++){
-            this.Humid[j] = this.simData[j].Humidity;
+          for(j=0; j<this.simData.length; j++){
+            this.Humid[j] = parseFloat(this.simData[j].Humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<this.Humid.length; z++){
+            for(var z=0; z<4000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
           },1000);
         }else{
-          for(var i=0; i<this.simData.length; i++){
+          for(i=0; i<this.simData.length; i++){
             this.Temp[i] = (((parseFloat(this.simData[i].Temperature))*1.8)+32);
           }
-          for(var j=0; j<this.simData.length; j++){
-            this.Humid[j] = this.simData[j].Humidity;
+          for(j=0; j<this.simData.length; j++){
+            this.Humid[j] = parseFloat(this.simData[j].Humidity);
           }
           this.combined[0] = ['Temperature','Humidity'];
           setTimeout(()=>{
-            for(var z=0; z<this.Humid.length; z++){
+            for(var z=0; z<4000; z++){
               this.combined[z+1] = [this.Temp[z], this.Humid[z]];
             }
           },1000);
@@ -130,13 +139,13 @@ export class ScatterPage {
       this.showFahr=true;
       setTimeout(()=>{
         this.scatterCentigrade();
-      },7500);
+      },5000);
     }else{
       this.showCenti=true;
       this.showFahr=false;
       setTimeout(()=>{
         this.scatterFahrenheit();
-      },7500);
+      },6000);
     }
   }
 
@@ -147,9 +156,13 @@ export class ScatterPage {
   scatterCentigrade(){
     console.log("scatter centigrade");
     var data = google.visualization.arrayToDataTable(this.combined,false);
+    console.log(data);
     var options = {
       hAxis: {title: 'Temperature', minValue: 0, maxValue: 60,textStyle:{fontSize:15}},
-      vAxis: {title: 'Humidity', minValue: 0, maxValue: 80,textStyle:{fontSize:15}},
+      vAxis: {title: 'Humidity', minValue: 0, maxValue: 100,textStyle:{fontSize:15}},
+      height: 475,
+      pointSize: 7,
+      pointShape: 'star',
       legend: 'none'
     };
     var chart = new google.visualization.ScatterChart(document.getElementById('chart_cel'));
@@ -160,39 +173,28 @@ export class ScatterPage {
     console.log("scatter fahrenheit");
     var data = google.visualization.arrayToDataTable(this.combined,false);
     var options = {
-      hAxis: {title: 'Temperature', minValue: 0, maxValue: 120,textStyle:{fontSize:15}},
+      hAxis: {title: 'Temperature', minValue: 0, maxValue: 135,textStyle:{fontSize:15}},
       vAxis: {title: 'Humidity', minValue: 0, maxValue: 80,textStyle:{fontSize:15}},
+      height: 475,
+      pointSize: 7,
+      pointShape: 'star',
       legend: 'none'
     };
-    var chart = new google.visualization.ScatterChart(document.getElementById('chart_fahr'));
-    chart.draw(data, options);
-  }
-
-  goBar(){
-    if(!this.navParams.get('data')){
-    this.navCtrl.setRoot('BarPage');
-    }else if(this.navParams.get('data')=="0"){
-      this.navCtrl.setRoot('BarPage', {
-        data: "0"
-      });
-    }else if(this.navParams.get('data')=="1"){
-      this.navCtrl.setRoot('BarPage', {
-        data: "1"
-      });
-    }
+      var chart = new google.visualization.ScatterChart(document.getElementById('chart_fahr'));
+      chart.draw(data, options);
   }
 
   loading(){
     if(this.cookieService.get('unit')=="celsius"){
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 7000
+        duration: 5000
       });
       load.present();
     }else{
       let load = this.loadingCtrl.create({
         content:'Loading Please Wait....',
-        duration: 7000
+        duration: 5000
       });
       load.present();
     }
@@ -200,26 +202,22 @@ export class ScatterPage {
 
   goBack()
   {
-    this.navCtrl.setRoot('HomePage');
+    if(!this.navParams.get('data')){
+      this.navCtrl.setRoot('AnalyticsPage');
+      }else if(this.navParams.get('data')=="0"){
+        this.navCtrl.setRoot('AnalyticsPage', {
+          data: "0"
+        });
+      }else if(this.navParams.get('data')=="1"){
+        this.navCtrl.setRoot('AnalyticsPage', {
+          data: "1"
+        });
+      }
   }
 
   logout()
   {
     this.navCtrl.setRoot(LoginPage);
+    this.cookieService.delete('xAuthToken');
   }
-
-  goStat(){
-    if(!this.navParams.get('data')){
-    this.navCtrl.setRoot('StatsPage');
-    }else if(this.navParams.get('data')=="0"){
-      this.navCtrl.setRoot('StatsPage', {
-        data: "0"
-      });
-    }else if(this.navParams.get('data')=="1"){
-      this.navCtrl.setRoot('StatsPage', {
-        data: "1"
-      });
-    }
-  }
-
 }

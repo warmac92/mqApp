@@ -18,4 +18,10 @@ export class DeviceInfo
     color:string;
 
     isSimulated:boolean;
+
+    date:Date;
+    barometer:any;
+    x:any;
+    y:any;
+    z:any;
 }
